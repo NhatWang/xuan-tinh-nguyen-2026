@@ -1,0 +1,25 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>RESET MẬT KHẨU</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>ĐẶT MẬT KHẨU MỚI</h2>
+    <div class="input-group">
+      <div class="input-group password-wrapper">
+        <input id="newPassword" type="password" placeholder="Mật khẩu mới">
+        <span class="toggle-password" onclick="togglePassword()">
+          <img id="passwordIcon" src="icons/eye-slash.svg" alt="toggle">
+        </span>
+      </div>
+    </div>
+
+    <button onclick="resetPassword()">CẬP NHẬT MẬT KHẨU</button>
+  </div>
+  <div id="toast"></div>
+</body>
+</html>

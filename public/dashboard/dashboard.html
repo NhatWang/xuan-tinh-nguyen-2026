@@ -1,0 +1,185 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Dashboard - Xuân Tình Nguyện</title>
+    <link rel="stylesheet" href="dashboard.css">
+    <script src="dashboard.js" defer></script>
+</head>
+
+<body>
+    <div id="toast"></div>
+
+    <div class="dashboard-container">
+
+        <div class="left-menu">
+            <button class="menu-btn active" onclick="showTab('profile')">HỒ SƠ TÀI KHOẢN</button>
+            <button class="menu-btn" onclick="showTab('registration')">ĐĂNG KÝ ĐỘI HÌNH</button>
+            <button class="logout-btn" onclick="logout()">ĐĂNG XUẤT</button>
+        </div>
+
+        <div class="content">
+
+            <!-- TAB: PROFILE -->
+            <div id="profile" class="tab active">
+                <h2>HỒ SƠ TÀI KHOẢN</h2>
+
+                <div class="profile-field"><label>Họ và tên:</label><span id="pf_name"></span></div>
+                <div class="profile-field"><label>MSSV:</label><span id="pf_studentId"></span></div>
+                <div class="profile-field"><label>Lớp:</label><span id="pf_class"></span></div>
+                <div class="profile-field"><label>Khoa:</label><span id="pf_faculty"></span></div>
+                <div class="profile-field"><label>Trường:</label><span id="pf_university"></span></div>
+                <div class="profile-field"><label>Email:</label><span id="pf_email"></span></div>
+                <div class="profile-field"><label>Số điện thoại:</label><span id="pf_phone"></span></div>
+
+                <hr style="margin: 20px 0; border: none; border-top: 1px solid #e6c184;">
+
+                <h3 style="margin-bottom: 15px; color: #8f4e00;">KẾT QUẢ PHỎNG VẤN</h3>
+
+                <div class="profile-field"><label>Trạng thái phỏng vấn:</label><span id="pf_interviewResult"></span></div>
+
+                <div class="profile-field"><label>Ghi chú phỏng vấn:</label></div>
+                <p id="pf_interviewNote" style="
+                    background:#fff3dc;
+                    padding:12px;
+                    border-radius:12px;
+                    border:1px solid #e8c389;
+                    white-space:pre-line;">
+                </p>
+                <div class="profile-field"><label>Người phỏng vấn:</label><span id="pf_interviewer"></span></div>
+            </div>
+
+            <!-- TAB: REGISTRATION -->
+            <div id="registration" class="tab">
+                <h2>ĐĂNG KÝ THAM GIA ĐỘI HÌNH</h2>
+
+                <label>Giới tính</label>
+                <select id="gender" class="input" required>
+                    <option value="">Chọn giới tính</option>
+                    <option>Nam</option>
+                    <option>Nữ</option>
+                    <option>Khác</option>
+                </select>
+
+                <label>Ngày tháng năm sinh</label>
+                <input type="date" id="dob" class="input" required>
+
+                 <label>Link Facebook</label>
+                <input type="text" id="facebook" placeholder="https://facebook.com/tenban" class="input" required>
+
+                <!-- NƠI Ở HIỆN TẠI -->
+                <label>Nơi ở hiện tại</label>
+                <input type="text" id="address" placeholder="Ghi rõ địa chỉ hiện tại" class="input" required>
+
+                <!-- NGUYỆN VỌNG -->
+                <label>Nguyện vọng 1</label>
+                <select id="nv1" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option>Sức Xuân</option>
+                    <option>Tết Bản Sắc</option>
+                    <option>Xuân Chiến Sĩ</option>
+                    <option>Xuân Cho Em</option>
+                    <option>Tết Vùng Cao</option>
+                </select>
+
+                <label>Nguyện vọng 2</label>
+                <select id="nv2" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option>Sức Xuân</option>
+                    <option>Tết Bản Sắc</option>
+                    <option>Xuân Chiến Sĩ</option>
+                    <option>Xuân Cho Em</option>
+                    <option>Tết Vùng Cao</option>
+                    <option>Không</option>
+                </select>
+
+                <label>Nguyện vọng 3</label>
+                <select id="nv3" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option>Sức Xuân</option>
+                    <option>Tết Bản Sắc</option>
+                    <option>Xuân Chiến Sĩ</option>
+                    <option>Xuân Cho Em</option>
+                    <option>Tết Vùng Cao</option>
+                    <option>Không</option>
+                </select>
+
+                <label>Nguyện vọng 4</label>
+                <select id="nv4" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option>Sức Xuân</option>
+                    <option>Tết Bản Sắc</option>
+                    <option>Xuân Chiến Sĩ</option>
+                    <option>Xuân Cho Em</option>
+                    <option>Tết Vùng Cao</option>
+                    <option>Không</option>
+                </select>
+
+                <label>Nguyện vọng 5</label>
+                <select id="nv5" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option>Sức Xuân</option>
+                    <option>Tết Bản Sắc</option>
+                    <option>Xuân Chiến Sĩ</option>
+                    <option>Xuân Cho Em</option>
+                    <option>Tết Vùng Cao</option>
+                    <option>Không</option>
+                </select>
+
+                <label>Kỹ năng</label>
+                <div class="checkboxes">
+                    <label><input type="checkbox" value="MC"> Dẫn chương trình</label>
+                    <label><input type="checkbox" value="Hoạt náo"> Hoạt náo</label>
+                    <label><input type="checkbox" value="Thí nghiệm"> Thực hiện thí nghiệm</label>
+                    <label><input type="checkbox" value="Gói bánh"> Gói bánh</label>
+                    <label><input type="checkbox" value="Vẽ tường"> Vẽ tường</label>
+                    <label><input type="checkbox" value="Handmade"> Handmade</label>
+                </div>
+
+                <label>Size áo</label>
+                <select id="size" class="input" required>
+                    <option value="">Chọn size</option>
+                    <option>S</option><option>M</option><option>L</option>
+                    <option>XL</option><option>XXL</option>
+                </select>
+
+                <label>Giới thiệu bản thân</label>
+                <textarea id="bio" required></textarea>
+
+                <label>Tình trạng sức khỏe</label>
+                <textarea id="health" required></textarea>
+                <!-- CÂU HỎI: ĐÃ TỪNG THAM GIA CHƯA -->
+                <label>Đã từng tham gia CDTN Xuân tình nguyện?</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="cdtn" value="Đã từng" required> Đã từng tham gia</label>
+                    <label><input type="radio" name="cdtn" value="Chưa từng" required> Chưa từng tham gia</label>
+                </div>
+
+                <!-- PHƯƠNG TIỆN DI CHUYỂN -->
+                <label>Phương tiện di chuyển cá nhân</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="vehicle" value="Xe máy 50cc" required> Xe máy 50cc</label>
+                    <label><input type="radio" name="vehicle" value="Xe máy trên 50cc" required> Xe máy trên 50cc</label>
+                    <label><input type="radio" name="vehicle" value="Không" required> Không</label>
+                </div>
+
+                <!-- BẰNG LÁI -->
+                <label>Bằng lái xe</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="license" value="Có" required> Có</label>
+                    <label><input type="radio" name="license" value="Không" required> Không</label>
+                </div>
+
+                <!-- THỰC TẬP HÓA ĐẠI CƯƠNG -->
+                <label>Đã học học phần Thực tập Hóa đại cương?</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="lab" value="Đã học" required> Đã học</label>
+                    <label><input type="radio" name="lab" value="Chưa học" required> Chưa học</label>
+                </div>
+
+                <button onclick="submitRegistration()">Gửi đăng ký</button>
+            </div>
+
+        </div>
+    </div>
+</body>
+</html>

@@ -1,0 +1,36 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ĐĂNG NHẬP</title>
+  <link rel="stylesheet" href="style.css" />
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <div class="container">
+    <h2>ĐĂNG NHẬP</h2>
+    <div class="input-group">
+      <input type="email" id="email" placeholder="Email" />
+    </div>
+    <div class="input-group">
+      <div class="input-group password-wrapper">
+        <input id="password" type="password" placeholder="Mật khẩu">
+        <span class="toggle-password" onclick="togglePassword()">
+          <img id="passwordIcon" src="icons/eye-slash.svg" alt="toggle">
+        </span>
+      </div>
+    </div>
+
+    <div id="errorBox" class="error-message"></div>
+
+    <button onclick="login()">ĐĂNG NHẬP</button>
+
+    <br><br>
+
+    <br>
+    <a class="link" href="forgot.html">Quên mật khẩu?</a>
+    <a class="link" href="register.html">Bạn chưa có tài khoản?</a>
+  </div>
+  <div id="toast"></div>
+</body>
+</html>

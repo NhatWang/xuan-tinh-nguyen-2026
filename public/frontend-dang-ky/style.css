@@ -1,0 +1,203 @@
+@import url('https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600&display=swap');
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+  font-family: "Inter", sans-serif;
+}
+
+/* ===== BACKGROUND ===== */
+body {
+  background-image: url("images/bg.png");  /* nền bạn gửi */
+  background-size: cover;
+  background-position: center;
+  background-repeat: no-repeat;
+  min-height: 100vh;
+
+  /* lớp làm mờ nhẹ tạo độ sâu */
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  padding: 40px;
+  position: relative;
+}
+
+body::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  background: rgba(255, 245, 225, 0.45); 
+  backdrop-filter: blur(2px);
+}
+
+/* ===== FORM CONTAINER ===== */
+.container {
+  position: relative;
+  z-index: 10;
+  width: 100%;
+  max-width: 450px;
+  padding: 40px 38px;
+  border-radius: 24px;
+  background: rgba(255, 248, 231, 0.85);
+  box-shadow: 0 10px 40px rgba(140, 80, 0, 0.18);
+  border: 1px solid rgba(255, 210, 160, 0.5);
+  animation: fadeIn 0.4s ease;
+}
+
+@keyframes fadeIn {
+  from { opacity: 0; transform: translateY(15px); }
+  to { opacity: 1; transform: translateY(0); }
+}
+
+/* ===== TEXT ===== */
+h2 {
+  text-align: center;
+  margin-bottom: 18px;
+  font-weight: 600;
+  color: #8f4e00; /* màu nâu cam đậm */
+  letter-spacing: 0.5px;
+}
+
+/* GIÃN CÁC Ô INPUT ĐỀU HƠN */
+.input-group {
+  margin-bottom: 16px;
+}
+
+input {
+  width: 100%;
+  padding: 15px 16px;
+  border-radius: 16px;
+  border: 1.8px solid #f1c78d;
+  background: #fffaf2;
+  font-size: 16px;
+  transition: 0.25s;
+}
+
+input::placeholder {
+  color: #c59352;
+}
+
+input:focus {
+  border-color: #d99227;
+  box-shadow: 0 0 0 4px rgba(217, 146, 39, 0.25);
+  background: #ffffff;
+}
+
+/* NÚT ĐĂNG KÝ RỘNG & THẢI MÀU MỀM */
+button {
+  width: 100%;
+  padding: 15px;
+  margin-top: 6px;
+  background: linear-gradient(135deg, #d99227, #cd7a13);
+  color: white;
+  font-size: 17px;
+  border-radius: 18px;
+  border: none;
+  cursor: pointer;
+  font-weight: 600;
+  letter-spacing: 0.3px;
+  transition: 0.25s;
+}
+
+button:hover {
+  background: linear-gradient(135deg, #c78120, #b4680f);
+  transform: translateY(-2px);
+  box-shadow: 0 8px 20px rgba(155, 85, 0, 0.25);
+}
+
+/* ===== LINKS ===== */
+.link {
+  margin-top: 20px;
+  text-align: center !important; 
+  display: block !important;
+  color: #a86b1f !important;
+  font-size: 15px;
+  text-decoration: none;
+}
+
+.link:hover {
+  color: #cc7e22 !important;
+}
+
+/* ===== PASSWORD TOGGLE ===== */
+.password-wrapper {
+  position: relative;
+}
+
+.toggle-password {
+  position: absolute;
+  right: 14px;
+  top: 50%;
+  transform: translateY(-50%);
+  cursor: pointer;
+}
+
+.toggle-password img {
+  width: 22px;
+  opacity: 0.85;
+  transition: 0.25s;
+}
+
+.toggle-password img:hover {
+  opacity: 1;
+}
+
+/* ===== TOAST NOTIFICATION ===== */
+#toast {
+  position: fixed;
+  top: 25px;
+  right: 25px;
+  z-index: 9999;
+  display: flex;
+  flex-direction: column;
+  gap: 10px;
+}
+
+.toast {
+  display: flex;
+  align-items: center;
+  gap: 12px;
+  padding: 14px 18px;
+  border-radius: 12px;
+  font-size: 15px;
+  min-width: 260px;
+  max-width: 350px;
+  box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+  animation: slideIn 0.4s ease, fadeOut 0.6s ease 3.2s forwards;
+}
+
+/* SUCCESS */
+.toast.success {
+  background: #e9f8ec;
+  color: #2c7a3f;
+  border-left: 5px solid #2c7a3f;
+}
+
+/* ERROR */
+.toast.error {
+  background: #ffeaea;
+  color: #c0353c;
+  border-left: 5px solid #c0353c;
+}
+
+/* WARNING */
+.toast.warning {
+  background: #fff6e5;
+  color: #b86d00;
+  border-left: 5px solid #b86d00;
+}
+
+.toast i {
+  font-size: 18px;
+}
+
+@keyframes slideIn {
+  from { opacity: 0; transform: translateX(40px); }
+  to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+  to { opacity: 0; transform: translateX(40px); }
+}
+

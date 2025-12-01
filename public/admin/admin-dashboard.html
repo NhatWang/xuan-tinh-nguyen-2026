@@ -1,0 +1,97 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Admin Dashboard – XTN 2026</title>
+<link rel="stylesheet" href="admin-dashboard.css">
+</head>
+
+<body>
+
+<div class="sidebar">
+    <h2>ADMIN DASHBOARD</h2>
+    <button class="menu-btn active" onclick="loadUsers()">Danh sách đăng ký</button>
+</div>
+
+<div class="main">
+    <h1>Danh sách tình nguyện viên đăng ký</h1>
+
+    <!-- Thanh lọc -->
+    <div class="filter-box">
+        <select id="filterNV" onchange="filterUsers()">
+            <option value="">Lọc theo nguyện vọng 1</option>
+            <option>Sức Xuân</option>
+            <option>Tết Bản Sắc</option>
+            <option>Xuân Chiến Sĩ</option>
+            <option>Xuân Cho Em</option>
+            <option>Tết Vùng Cao</option>
+        </select>
+
+        <select id="filterStatus" onchange="filterUsers()">
+            <option value="">Lọc theo trạng thái</option>
+            <option value="Đạt">Đạt</option>
+            <option value="Không đạt">Không đạt</option>
+            <option value="Chờ duyệt">Chờ duyệt</option>
+            <option value="Chưa phỏng vấn">Chưa phỏng vấn</option>
+        </select>
+    </div>
+
+    <table id="userTable">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>MSSV</th>
+                <th>Email</th>
+                <th>Nguyện vọng</th>
+                <th>Facebook</th>
+                <th>Trạng thái</th>
+                <th>Hồ sơ</th>
+                <th>Phỏng vấn</th>
+            </tr>
+        </thead>
+        <tbody id="tableBody"></tbody>
+    </table>
+</div>
+
+<!-- Modal xem hồ sơ -->
+<div id="profileModal" class="modal">
+    <div class="modal-content large">
+        <h2>HỒ SƠ TÌNH NGUYỆN VIÊN</h2>
+
+        <div id="profileDetail"></div>
+
+        <div class="btn-group">
+            <button class="close-btn" onclick="closeProfileModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<!-- Modal phỏng vấn -->
+<div id="interviewModal" class="modal">
+    <div class="modal-content">
+        <h2>PHỎNG VẤN</h2>
+
+        <label>Ghi chú</label>
+        <textarea id="interviewNote"></textarea>
+
+        <label>Kết quả</label>
+        <select id="interviewResult">
+            <option value="Đạt">Đạt</option>
+            <option value="Không đạt">Không đạt</option>
+            <option value="Chờ duyệt">Chờ duyệt</option>
+        </select>
+
+        <label>Người phỏng vấn</label>
+        <input id="interviewer" type="text" placeholder="Nhập tên người phỏng vấn" required>
+
+        <div class="btn-group">
+            <button class="save-btn" onclick="saveInterview()">Lưu</button>
+            <button class="close-btn" onclick="closeInterviewModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
+<script src="admin-dashboard.js"></script>
+
+</body>
+</html>
