@@ -65,7 +65,4 @@ const RegistrationSchema = new mongoose.Schema(
     timestamps: true                 // thêm updatedAt tự động
 });
 
-// Tạo index để chống duplicate userId
-RegistrationSchema.index({ userId: 1 }, { unique: true });
-
 module.exports = mongoose.model("Registration", RegistrationSchema);
