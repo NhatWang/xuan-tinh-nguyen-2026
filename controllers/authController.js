@@ -109,8 +109,8 @@ exports.login = async (req, res) => {
 
     res.cookie("token", token, {
       httpOnly: true,
-      sameSite: "lax",
-      secure: false,
+      secure: true,             // 🔥 bắt buộc khi deploy HTTPS (Railway)
+      sameSite: "none",         // 🔥 cho phép cookie cross-domain
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 

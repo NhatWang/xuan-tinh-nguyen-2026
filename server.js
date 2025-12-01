@@ -16,8 +16,11 @@ connectDB();
 // 2. CORS CHUẨN CHO COOKIE + FRONTEND
 // ===============================
 app.use(cors({
-  origin: "http://localhost:3000",   // nơi chạy frontend
-  credentials: true                  // CHO PHÉP COOKIE
+  origin: [
+    "https://xuan-tinh-nguyen-2026-production.up.railway.app",
+    "https://xtnhoahoc2026.id.vn"
+  ],
+  credentials: true
 }));
 
 // ===============================
