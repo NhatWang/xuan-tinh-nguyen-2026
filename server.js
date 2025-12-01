@@ -41,7 +41,7 @@ app.use(express.static("public/frontend-dang-ky"));
 // ===============================
 // 6. CUSTOM ROUTES
 // ===============================
-app.get("/dang-nhap", (req, res) => {
+app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/frontend-dang-ky/login.html");
 });
 
