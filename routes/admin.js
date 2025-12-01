@@ -9,7 +9,6 @@ const admin = require("../middleware/admin");
 
 const fs = require("fs");
 const path = require("path");
-const puppeteer = require("puppeteer");
 
 /* ============================================================
    1. API: LẤY DANH SÁCH NGƯỜI ĐĂNG KÝ CHO ADMIN DASHBOARD
