@@ -1,4 +1,4 @@
-const API_APP = "http://localhost:5000/api/auth";
+const API_APP = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api/auth";
 
 /* =====================================================
    LOGIN

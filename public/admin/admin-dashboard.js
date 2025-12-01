@@ -1,4 +1,4 @@
-const API = "http://localhost:5000/api";
+const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
 /* =============================
    CHECK ADMIN
