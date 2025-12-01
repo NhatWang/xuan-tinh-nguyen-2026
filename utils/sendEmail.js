@@ -1,29 +1,35 @@
-const nodemailer = require("nodemailer");
+const axios = require("axios");
 
-const sendEmail = async (to, subject, html) => {
+async function sendEmail(to, subject, html) {
   try {
-    const transporter = nodemailer.createTransport({
-      host: process.env.EMAIL_HOST,
-      port: process.env.EMAIL_PORT,
-      auth: {
-        user: process.env.EMAIL_USER,
-        pass: process.env.EMAIL_PASS,
+    const response = await axios.post(
+      "https://send.api.mailtrap.io/api/send",
+      {
+        from: {
+          email: process.env.FROM_EMAIL,
+          name: "XTN 2026"
+        },
+        to: [
+          {
+            email: to
+          }
+        ],
+        subject,
+        html
       },
-    });
+      {
+        headers: {
+          "Api-Token": process.env.MAILTRAP_TOKEN,
+          "Content-Type": "application/json"
+        }
+      }
+    );
 
-    await transporter.sendMail({
-      from: `"XTN 2026" <no-reply@xtn.com>`,
-      to,
-      subject,
-      html,
-    });
-
-    console.log("EMAIL SENT TO:", to);
-
+    console.log("EMAIL SENT:", response.data);
   } catch (err) {
-    console.error("EMAIL SEND ERROR:", err);
+    console.error("MAILTRAP API ERROR:", err.response?.data || err.message);
     throw err;
   }
-};
+}
 
 module.exports = sendEmail;
