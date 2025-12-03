@@ -44,7 +44,7 @@ app.use("/api/admin", require("./routes/admin"));
 // ===============================
 // 5. STATIC FRONTEND (nếu cần)
 // ===============================
-app.use(express.static("public/frontend-dang-ky"));
+app.use(express.static("public"));
 
 // ===============================
 // 6. CUSTOM ROUTES
