@@ -17,11 +17,16 @@ connectDB();
 // ===============================
 app.use(cors({
   origin: [
-    "https://xuan-tinh-nguyen-2026-production.up.railway.app",
+    "https://www.xtnhoahoc2026.id.vn",
     "https://xtnhoahoc2026.id.vn"
   ],
-  credentials: true
+  credentials: true,
+  methods: ["GET", "POST", "PUT", "DELETE"],
+  allowedHeaders: ["Content-Type", "Authorization"]
 }));
+
+// 🔥 CỰC QUAN TRỌNG: XỬ LÝ PRE-FLIGHT
+app.options("*", cors());
 
 // ===============================
 // 3. MIDDLEWARE
