@@ -1,5 +1,18 @@
 const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
+/* ===== TOAST UI ===== */
+function showToast(message, type = "success") {
+    const toastContainer = document.getElementById("toast");
+    const toast = document.createElement("div");
+
+    toast.classList.add("toast", type);
+    toast.innerHTML = `<i>${type === "success" ? "✔" : "✖"}</i> ${message}`;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3200);
+}
+
 /* ============ TABS ============ */
 function showTab(tab) {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
@@ -144,10 +157,11 @@ async function submitRegistration() {
 
     // ========== VALIDATION ==========
     if (!dob || !gender || !facebook || !address || !nv1) {
-        btn.disabled = false;
-        btn.innerText = "Gửi đăng ký";
-        return showToast("Vui lòng nhập đầy đủ thông tin bắt buộc!", "error");
-    }
+    showToast("Vui lòng nhập đầy đủ thông tin bắt buộc!", "error");
+    btn.disabled = false;
+    btn.innerText = "Gửi đăng ký";
+    return;
+}
 
     // FACEBOOK LINK CHECK (bản fix mạnh nhất)
     const fbRegex = /^https?:\/\/(www\.)?(facebook|fb)\.com\/[A-Za-z0-9\.\/_\-]+$/;
