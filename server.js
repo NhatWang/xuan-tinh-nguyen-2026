@@ -17,16 +17,16 @@ connectDB();
 // ===============================
 app.use(cors({
   origin: [
-    "https://www.xtnhoahoc2026.id.vn",
-    "https://xtnhoahoc2026.id.vn"
+    "https://xtnhoahoc2026.id.vn",
+    "https://www.xtnhoahoc2026.id.vn"
   ],
   credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE"],
+  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
   allowedHeaders: ["Content-Type", "Authorization"]
 }));
 
-// 🔥 CỰC QUAN TRỌNG: XỬ LÝ PRE-FLIGHT
-app.options("*", cors());
+// 🔥 Fix cho preflight OPTIONS
+app.options(/.*/, cors());
 
 // ===============================
 // 3. MIDDLEWARE
