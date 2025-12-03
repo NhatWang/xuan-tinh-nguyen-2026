@@ -7,15 +7,15 @@ async function sendEmail(to, subject, html) {
       {
         from: {
           email: process.env.FROM_EMAIL,
-          name: "XTN 2026"
+          name: "Chiến dịch Xuân tình nguyện 2026 khoa Hóa học"
         },
         to: [
           {
             email: to
           }
         ],
-        subject,
-        html
+        subject: subject,
+        html: html
       },
       {
         headers: {
@@ -25,10 +25,10 @@ async function sendEmail(to, subject, html) {
       }
     );
 
-    console.log("EMAIL SENT:", response.data);
-  } catch (err) {
-    console.error("MAILTRAP API ERROR:", err.response?.data || err.message);
-    throw err;
+    console.log("MAILTRAP SUCCESS:", response.data);
+  } catch (error) {
+    console.error("MAILTRAP ERROR:", error.response?.data || error.message);
+    throw error;
   }
 }
 

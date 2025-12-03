@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+  <meta charset="UTF-8">
+  <title>Xác minh email | XTN 2026</title>
+  <link rel="stylesheet" href="style.css">
+</head>
+
+<body class="verify-body">
+
+  <div class="verify-card">
+    <div class="verify-loading"></div>
+    <div id="verify-status" class="verify-status">Đang xác minh tài khoản...</div>
+    <p id="verify-message">Vui lòng chờ trong giây lát.</p>
+  </div>
+
+<script>
+  async function verifyEmail() {
+    const params = new URLSearchParams(window.location.search);
+    const token = params.get("token");
+
+    if (!token) {
+      document.getElementById("verify-status").innerText = "Lỗi xác minh";
+      document.getElementById("verify-message").innerText = "Token không hợp lệ.";
+      return;
+    }
+
+    try {
+      const res = await fetch(`${window.location.origin}/api/auth/verify-email/${token}`);
+      const data = await res.json();
+
+      if (res.ok) {
+        document.querySelector(".verify-loading").style.borderTopColor = "#1a8f42";
+        document.getElementById("verify-status").innerText = "Xác minh thành công!";
+        document.getElementById("verify-status").classList.add("verify-success");
+        document.getElementById("verify-message").innerText = "Bạn sẽ được chuyển hướng đến trang đăng nhập.";
+
+        setTimeout(() => {
+          window.location.href = "/login.html";
+        }, 2000);
+
+      } else {
+        document.querySelector(".verify-loading").style.borderTopColor = "#d93025";
+        document.getElementById("verify-status").innerText = "Xác minh thất bại";
+        document.getElementById("verify-status").classList.add("verify-error");
+        document.getElementById("verify-message").innerText = data.msg || "Token không hợp lệ hoặc đã hết hạn.";
+      }
+
+    } catch (err) {
+      document.getElementById("verify-status").innerText = "Lỗi hệ thống";
+      document.getElementById("verify-message").innerText = "Không thể kết nối đến máy chủ.";
+    }
+  }
+
+  verifyEmail();
+</script>
+
+</body>
+</html>
