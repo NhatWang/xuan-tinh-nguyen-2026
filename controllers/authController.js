@@ -46,7 +46,7 @@ exports.register = async (req, res) => {
     });
 
     // Gửi email verify
-    const verifyUrl = `${process.env.CLIENT_URL}/verify-email.html?token=${verifyToken}`;
+    const verifyUrl = `${process.env.CLIENT_URL}/verified-email.html?token=${verifyToken}`;
 
     await sendEmail(email, "Xác minh tài khoản", 
       `<p>Nhấn để xác minh tài khoản:</p><a href="${verifyUrl}">${verifyUrl}</a>`
