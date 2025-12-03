@@ -50,7 +50,7 @@ app.use(express.static("public"));
 // 6. CUSTOM ROUTES
 // ===============================
 app.get("/", (req, res) => {
-  res.sendFile(__dirname + "/public/frontend-dang-ky/login.html");
+  res.sendFile(__dirname + "/public/login.html");
 });
 
 // ===============================
