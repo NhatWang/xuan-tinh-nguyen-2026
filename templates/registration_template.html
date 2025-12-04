@@ -164,7 +164,6 @@
     </style>
 </head>
 <body>
-
     <div class="page">
         <div class="header">
             <div class="header-left">
@@ -174,7 +173,7 @@
                 <hr style="width: 30%; border: 0.5px solid #000;">
             </div>
             <div class="header-right">
-                <p class="bold" style="border: 2px solid #000; padding: 2px 10px; display: flex; width: 45%; font-size: 18px; margin-left: 30%;"><span style="text-decoration: underline;">{{STT}}</span></p> <br>
+                <p class="bold" style="border: 2px solid #000; padding: 2px 10px; display: flex; width: 45%; font-size: 18px; margin-left: 30%;"><span style="text-decoration: underline;">STT:</span><span>{{STT}}</span></p> <br>
                 <p class="italic">Tp. Hồ Chí Minh, ngày {{day}} tháng {{month}} năm {{year}}</p>
             </div>
         </div>
@@ -194,8 +193,8 @@
 			</div>
 			<div class="col">
 				<label>Giới tính:</label> &nbsp;&nbsp; 
-				<span class="checkbox" {{gender_male}}></span> Nam &nbsp;&nbsp; 
-				<span class="checkbox" {{gender_female}}></span> Nữ
+				<span class="checkbox">{{gender_male}}</span> Nam &nbsp;&nbsp; 
+				<span class="checkbox">{{gender_female}}</span> Nữ
 			</div>
 		</div>
 
@@ -237,23 +236,23 @@
 		<!-- Phương tiện di chuyển -->
 		<p>
 			Phương tiện di chuyển cá nhân:&nbsp; 
-			<span class="checkbox" {{vehicle_50}}></span> Xe máy 50cc &nbsp;
-			<span class="checkbox" {{vehicle_100}}></span> Xe máy trên 50cc &nbsp;
-			<span class="checkbox" {{vehicle_none}}></span> Không
+			<span class="checkbox">{{vehicle_50}}</span> Xe máy 50cc &nbsp;
+			<span class="checkbox">{{vehicle_100}}</span> Xe máy trên 50cc &nbsp;
+			<span class="checkbox">{{vehicle_none}}</span> Không
 		</p>
 
 		<!-- Bằng lái -->
 		<p>
 			Bằng lái xe: &nbsp;&nbsp; 
-			<span class="checkbox" {{license_yes}}></span> Có &nbsp;&nbsp;
-			<span class="checkbox" {{license_no}}></span> Không
+			<span class="checkbox">{{license_yes}}</span> Có &nbsp;&nbsp;
+			<span class="checkbox">{{license_no}}</span> Không
 		</p>
 
 		<!-- Thực tập hóa -->
 		<p>
 			Đã học học phần Thực tập Hóa đại cương: &nbsp;&nbsp; 
-			<span class="checkbox" {{lab_yes}}></span> Đã học &nbsp;&nbsp;
-			<span class="checkbox" {{lab_no}}></span> Chưa học
+			<span class="checkbox">{{lab_yes}}</span> Đã học &nbsp;&nbsp;
+			<span class="checkbox">{{lab_no}}</span> Chưa học
 		</p>
 
 		<!-- Facebook -->
@@ -304,46 +303,43 @@
             <div class="field"><label>NV5:</label> <span>{{nv5}}</span></div> 
             <div class="field"><label>NV6:</label> <span>{{nv6}}</span></div>
         </div>
-    </div>
 
-    <div class="page">
         <p>2. Bạn đã từng tham gia CDTN Xuân tình nguyện năm nào chưa?</p>
         <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-            <span class="checkbox" {{cdtn_yes}}></span> Đã từng tham gia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
-            <span class="checkbox" {{cdtn_no}}></span> Chưa từng tham gia
+            <span class="checkbox">{{cdtn_yes}}</span> Đã từng tham gia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <span class="checkbox">{{cdtn_no}}</span> Chưa từng tham gia
         </p>
 
         <p>3. Bạn có khả năng thực hiện tốt các công việc nào sau đây (có thể chọn nhiều):</p>
         <div class="skills">
         <div class="skill-item">
-            <span class="checkbox" {{skill_mc}}></span> Dẫn chương trình
+            <span class="checkbox">{{skill_mc}}</span> Dẫn chương trình
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_hoatnao}}></span> Hoạt náo
+            <span class="checkbox">{{skill_hoatnao}}</span> Hoạt náo
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_thinghiem}}></span> Thực hiện các thí nghiệm
+            <span class="checkbox">{{skill_thinghiem}}</span> Thực hiện các thí nghiệm
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_goibanh}}></span> Gói bánh chưng, bánh tét
+            <span class="checkbox">{{skill_goibanh}}</span> Gói bánh chưng, bánh tét
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_vetuong}}></span> Vẽ tường
+            <span class="checkbox">{{skill_vetuong}}</span> Vẽ tường
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_handmade}}></span> Trang trí, làm đồ handmade
+            <span class="checkbox">{{skill_handmade}}</span> Trang trí, làm đồ handmade
         </div>
         <div class="skill-item">
-            <span class="checkbox" {{skill_vannghe}}></span> 
+            <span class="checkbox">{{skill_vannghe}}</span> 
             Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)
         </div>
-    </div>
 
         <div class="part-title">4. Đăng ký áo Xuân tình nguyện:</div>
         <p>Nếu <strong> chưa có </strong> hoặc muốn <strong> mua thêm </strong> áo Xuân tình nguyện, bạn vui lòng chọn size áo:</p>
         <p>
-            <span class="checkbox" {{size_S}}></span> S &nbsp;&nbsp; <span class="checkbox" {{size_M}}></span> M &nbsp;&nbsp; <span class="checkbox" {{size_L}}></span> L &nbsp;&nbsp;
-            <span class="checkbox" {{size_XL}}></span> XL &nbsp;&nbsp; <span class="checkbox" {{size_XXL}}></span> XXL &nbsp;&nbsp; <span class="checkbox" {{size_XXXL}}></span> XXXL
+            <span class="checkbox">{{size_S}}</span> S &nbsp;&nbsp; <span class="checkbox">{{size_M}}</span> M &nbsp;&nbsp; <span class="checkbox">{{size_L}}</span> L &nbsp;&nbsp;
+            <span class="checkbox">{{size_XL}}</span> XL &nbsp;&nbsp; <span class="checkbox">{{size_XXL}}</span> XXL &nbsp;&nbsp; <span class="checkbox">{{size_XXXL}}</span> XXXL
         </p>
 
         <table style="font-size: 10pt; width: 80%; margin: 10px auto;">
@@ -375,6 +371,6 @@
             <li>3. Ngày tình nguyện được quy đổi dựa trên số ngày hoạt động của đội hình (bao gồm cả thời gian di chuyển).</li>
         </ul>
     </div>
-
+</div>
 </body>
 </html>
