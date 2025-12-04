@@ -69,7 +69,7 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         replace("className", user.className);
         replace("faculty", user.faculty);
         replace("university", user.university);
-        replace("major", user.major || "");
+        replace("major", reg.major || "");
         replace("email", user.email);
         replace("phone", user.phone);
         if (reg.dob) {
