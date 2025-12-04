@@ -21,7 +21,7 @@ async function checkAdmin() {
         const res = await fetch(API + "/auth/me", { credentials: "include" });
 
         if (!res.ok) {
-            alert("Bạn chưa đăng nhập!");
+            showToast("Bạn chưa đăng nhập!", "warning");
             window.location.href = "../frontend-dang-ky/login.html";
             return false;
         }
@@ -29,7 +29,7 @@ async function checkAdmin() {
         const user = await res.json();
 
         if (user.role !== "admin") {
-            alert("Bạn không có quyền truy cập trang admin!");
+            showToast("Bạn không có quyền truy cập trang admin!", "error");
             window.location.href = "../dashboard/dashboard.html";
             return false;
         }
@@ -37,7 +37,7 @@ async function checkAdmin() {
         return true;
 
     } catch (err) {
-        alert("Không thể kết nối server!");
+        showToast("Không thể kết nối server!", "error");
         return false;
     }
 }
@@ -143,13 +143,13 @@ function filterUsers() {
 ============================= */
 async function downloadPDF(regId, fullName) {
     try {
-        const res = await fetch(API + `/export/${regId}`, {
+        const res = await fetch(API + `/admin/export/${regId}`, {
             method: "GET",
             credentials: "include"
         });
 
         if (!res.ok) {
-            return alert("Không thể tải PDF!");
+            return showToast("Không thể tải PDF!", "error");
         }
 
         const blob = await res.blob();
@@ -161,11 +161,11 @@ async function downloadPDF(regId, fullName) {
         a.click();
 
         window.URL.revokeObjectURL(url);
-
     } catch (err) {
-        alert("Lỗi khi tải PDF!");
+        showToast("Lỗi khi tải PDF!", "error");
     }
 }
+
 
 /* =============================
    PHỎNG VẤN
@@ -184,30 +184,6 @@ function openInterviewModal(id, note, result, interviewer) {
 
 function closeInterviewModal() {
     document.getElementById("interviewModal").style.display = "none";
-}
-
-/* SAVE INTERVIEW */
-async function saveInterview() {
-    const note = document.getElementById("interviewNote").value;
-    const result = document.getElementById("interviewResult").value;
-
-    try {
-        const res = await fetch(API + `/admin/interview/${currentRegId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ interviewNote: note, interviewResult: result })
-        });
-
-        if (!res.ok) return alert("Lưu thất bại!");
-
-        alert("Đã lưu!");
-        closeInterviewModal();
-        loadUsers();
-
-    } catch {
-        alert("Không thể kết nối server!");
-    }
 }
 
 /* =============================
@@ -231,7 +207,7 @@ async function saveInterview() {
     const interviewer = document.getElementById("interviewer").value.trim();
 
     if (!interviewer) {
-        alert("Vui lòng nhập tên người phỏng vấn!");
+        showToast("Vui lòng nhập tên người phỏng vấn!", "warning");
         return;
     }
 
@@ -246,9 +222,9 @@ async function saveInterview() {
         })
     });
 
-    if (!res.ok) return alert("Lưu thất bại!");
+    if (!res.ok) return showToast("Lưu thất bại!", "error");
 
-    alert("Đã lưu!");
+    showToast("Đã lưu!", "success");
     closeInterviewModal();
     loadUsers();
 }
