@@ -9,7 +9,7 @@
 
 /* ===== BACKGROUND ===== */
 body {
-  background-image: url("images/bg.png");  /* nền bạn gửi */
+  background-image: url("/public/images/bg.png");  /* nền bạn gửi */
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;

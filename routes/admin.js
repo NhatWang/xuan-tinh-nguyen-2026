@@ -72,19 +72,25 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         replace("major", user.major || "");
         replace("email", user.email);
         replace("phone", user.phone);
-        replace("dob", reg.dob ? reg.dob.toISOString().substring(0, 10) : "");
+        if (reg.dob) {
+            const d = new Date(reg.dob);
+            const dobFormatted = `${d.getDate().toString().padStart(2, "0")}/${(d.getMonth()+1)
+            .toString().padStart(2, "0")}/${d.getFullYear()}`;
+            replace("dob", dobFormatted);
+        } else replace("dob", "");
 
         replace("facebook", reg.facebook);
         replace("address", reg.address);
         replace("bio", reg.bio);
         replace("health", reg.health);
 
-        replace("nv1", reg.nv1);
-        replace("nv2", reg.nv2);
-        replace("nv3", reg.nv3);
-        replace("nv4", reg.nv4);
-        replace("nv5", reg.nv5);
-        replace("nv6", reg.nv6);
+        const oneLine = (txt) => txt ? txt.replace(/\n/g, " ") : "";
+        replace("nv1", oneLine(reg.nv1));
+        replace("nv2", oneLine(reg.nv2));
+        replace("nv3", oneLine(reg.nv3));
+        replace("nv4", oneLine(reg.nv4));
+        replace("nv5", oneLine(reg.nv5));
+        replace("nv6", oneLine(reg.nv6));
 
         // ==========================
         // Tick GIỚI TÍNH
@@ -129,21 +135,20 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         // ==========================
         // Tick KỸ NĂNG
         // ==========================
-        const skillList = [
-            "Dẫn chương trình",
-            "Hoạt náo",
-            "Thực hiện các thí nghiệm",
-            "Gói bánh chưng, bánh tét",
-            "Vẽ tường",
-            "Trang trí, làm đồ handmade",
-            "Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)"
-        ];
+        const skillMap = {
+            "Dẫn chương trình": "skill_mc",
+            "Hoạt náo": "skill_hoatnao",
+            "Thực hiện các thí nghiệm": "skill_thinghiem",
+            "Gói bánh chưng, bánh tét": "skill_goibanh",
+            "Vẽ tường": "skill_vetuong",
+            "Trang trí, làm đồ handmade": "skill_handmade",
+            "Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)": "skill_vannghe"
+        };
 
-        skillList.forEach(skill => {
-            const key = "skill_" + skill.replace(/[^a-zA-Z0-9]/g, "");
-            const checked = reg.skills?.includes(skill) ? "checked" : "";
-            replace(key, checked);
+        Object.entries(skillMap).forEach(([label, key]) => {
+            replace(key, reg.skills?.includes(label) ? "checked" : "");
         });
+
 
         // ====== TÍNH STT ======
         const countBefore = await Registration.countDocuments({
@@ -172,7 +177,9 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         });
 
         const page = await browser.newPage();
-        await page.setContent(html, { waitUntil: "networkidle0" });
+        await page.setContent(html, { waitUntil: ["load", "domcontentloaded", "networkidle0"] });
+        await page.evaluateHandle("document.fonts.ready");
+
 
         const pdf = await page.pdf({ format: "A4", printBackground: true });
         await browser.close();

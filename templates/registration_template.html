@@ -59,12 +59,7 @@
             white-space: nowrap;
             margin-right: 5px;
         }
-        .field span {
-            flex-grow: 1;
-            border-bottom: 1px dotted #000;
-            min-height: 18px; 
-        }
-
+    
         /* Bảng */
         table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
         th, td { border: 1px solid #000; padding: 5px; vertical-align: middle; }
@@ -102,7 +97,7 @@
 		}
 
 		/* ===== Ô VUÔNG ===== */
-		.box {
+		.checkbox {
 			display: inline-block;
 			width: 14px;
 			height: 14px;
@@ -114,9 +109,25 @@
 			font-weight: bold;
 			font-size: 12px;
 		}
-		.box.checked::after {
+		.checkbox.checked::after {
 			content: "✓";
 		}
+
+        @font-face {
+            font-family: 'TimesNewRoman';
+            src: url('/public/fonts/SVN-Times\ New\ Roman.ttf') format('truetype');
+            font-weight: normal;
+        }
+
+        @font-face {
+            font-family: 'TimesNewRoman';
+            src: url('/public/fonts/SVN-Times\ New\ Roman\ Bold.ttf') format('truetype');
+            font-weight: bold;
+        }
+
+        body {
+            font-family: 'TimesNewRoman', serif;
+        }
 </style>
 
     </style>
@@ -152,15 +163,15 @@
 			</div>
 			<div class="col">
 				<label>Giới tính:</label> &nbsp;&nbsp; 
-				<span class="box {{gender_male}}"></span> Nam &nbsp;&nbsp; 
-				<span class="box {{gender_female}}"></span> Nữ
+				<input class="checkbox" {{gender_male}}></span> Nam &nbsp;&nbsp; 
+				<input class="checkbox" {{gender_female}}></span> Nữ
 			</div>
 		</div>
 
 		<!-- MSSV + NTNS -->
 		<div class="row-2col">
 			<div class="col">
-				<label>MSSV:</label> <span>{{studentID}}</span>
+				<label>MSSV:</label> <span>{{studentId}}</span>
 			</div>
 			<div class="col">
 				<label>NTNS:</label> <span>{{dob}}</span>
@@ -195,23 +206,23 @@
 		<!-- Phương tiện di chuyển -->
 		<p>
 			Phương tiện di chuyển cá nhân:&nbsp; 
-			<span class="box {{vehicle_50cc}}"></span> Xe máy 50cc &nbsp;
-			<span class="box {{vehicle_above_50cc}}"></span> Xe máy trên 50cc &nbsp;
-			<span class="box {{vehicle_none}}"></span> Không
+			<input class="checkbox" {{vehicle_50}}> Xe máy 50cc &nbsp;
+			<input class="checkbox" {{vehicle_100}}> Xe máy trên 50cc &nbsp;
+			<input class="checkbox" {{vehicle_none}}> Không
 		</p>
 
 		<!-- Bằng lái -->
 		<p>
 			Bằng lái xe: &nbsp;&nbsp; 
-			<span class="box {{license_yes}}"></span> Có &nbsp;&nbsp;
-			<span class="box {{license_no}}"></span> Không
+			<input class="checkbox" {{license_yes}}> Có &nbsp;&nbsp;
+			<input class="checkbox" {{license_no}}> Không
 		</p>
 
 		<!-- Thực tập hóa -->
 		<p>
 			Đã học học phần Thực tập Hóa đại cương: &nbsp;&nbsp; 
-			<span class="box {{lab_yes}}"></span> Đã học &nbsp;&nbsp;
-			<span class="box {{lab_no}}"></span> Chưa học
+			<input class="checkbox" {{lab_yes}}> Đã học &nbsp;&nbsp;
+			<input class="checkbox" {{lab_no}}> Chưa học
 		</p>
 
 		<!-- Facebook -->
@@ -254,7 +265,7 @@
         </table>
         
         <p>1. Các nguyện vọng của bạn trong CDTN Xuân tình nguyện khoa Hóa học năm 2026 là:</p>
-        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 10px;">
+        <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
             <div class="field"><label>NV1:</label> <span>{{nv1}}</span></div> <br>
             <div class="field"><label>NV2:</label> <span>{{nv2}}</span></div> <br>
             <div class="field"><label>NV3:</label> <span>{{nv3}}</span></div> <br>
@@ -270,20 +281,20 @@
 
         <p>3. Bạn có khả năng thực hiện tốt các công việc nào sau đây (có thể chọn nhiều):</p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-            <div><span class="box {{skill_mc}}"></span> Dẫn chương trình</div> <br>
-            <div><span class="box {{skill_cheer}}"></span> Hoạt náo</div> <br>
-            <div><span class="box {{skill_experiment}}"></span> Thực hiện các thí nghiệm</div> <br>
-            <div><span class="box {{skill_wrap}}"></span> Gói bánh chưng, bánh tét</div> <br>
-            <div><span class="box {{skill_paint}}"></span> Vẽ tường</div> <br>
-            <div><span class="box {{skill_handmade}}"></span> Trang trí, làm đồ handmade</div> <br>
-            <div><span class="box {{skill_art}}"></span> Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)</div>
+            <div><input class="checkbox" {{skill_mc}}> Dẫn chương trình</div> <br>
+            <div><input class="checkbox" {{skill_hoatnao}}> Hoạt náo</div> <br>
+            <div><input class="checkbox" {{skill_thinghiem}}> Thực hiện các thí nghiệm</div> <br>
+            <div><input class="checkbox" {{skill_goibanh}}> Gói bánh chưng, bánh tét</div> <br>
+            <div><input class="checkbox" {{skill_vetuong}}> Vẽ tường</div> <br>
+            <div><input class="checkbox" {{skill_handmade}}> Trang trí, làm đồ handmade</div> <br>
+            <div><input class="checkbox" {{skill_vannghe}}> Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)</div>
         </div>
 
         <div class="part-title">4. Đăng ký áo Xuân tình nguyện:</div>
         <p>Nếu <strong> chưa có </strong> hoặc muốn <strong> mua thêm </strong> áo Xuân tình nguyện, bạn vui lòng chọn size áo:</p>
         <p>
-            <span class="box {{size_s}}"></span> S &nbsp;&nbsp; <span class="box {{size_m}}"></span> M &nbsp;&nbsp; <span class="box {{size_l}}"></span> L &nbsp;&nbsp;
-            <span class="box {{size_xl}}"></span> XL &nbsp;&nbsp; <span class="box {{size_xxl}}"></span> XXL &nbsp;&nbsp; <span class="box {{size_xxxl}}"></span> XXXL
+            <input class="checkbox" {{size_S}}> S &nbsp;&nbsp; <input class="checkbox" {{size_M}}> M &nbsp;&nbsp; <input class="checkbox" {{size_L}}> L &nbsp;&nbsp;
+            <input class="checkbox" {{size_XL}}> XL &nbsp;&nbsp; <input class="checkbox" {{size_XXL}}> XXL &nbsp;&nbsp; <input class="checkbox" {{size_XXXL}}> XXXL
         </p>
 
         <table style="font-size: 10pt; width: 80%; margin: 10px auto;">
