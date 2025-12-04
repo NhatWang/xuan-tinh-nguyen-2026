@@ -108,41 +108,40 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         // ==========================
         // Tick GIỚI TÍNH
         // ==========================
-        replace("gender_male", checkBox(reg.gender, "Nam"));
-        replace("gender_female", checkBox(reg.gender, "Nữ"));
-        replace("gender_other", checkBox(reg.gender, "Khác"));
+        replace("gender_male", mark(reg.gender === "Nam"));
+        replace("gender_female", mark(reg.gender === "Nữ"));
 
         // ==========================
         // Tick PHƯƠNG TIỆN
         // ==========================
-        replace("vehicle_50", checkBox(reg.vehicle, "Xe máy 50cc"));
-        replace("vehicle_100", checkBox(reg.vehicle, "Xe máy trên 50cc"));
-        replace("vehicle_none", checkBox(reg.vehicle, "Không"));
+        replace("vehicle_50", mark(reg.vehicle === "Xe máy 50cc"));
+        replace("vehicle_100", mark(reg.vehicle === "Xe máy trên 50cc"));
+        replace("vehicle_none", mark(reg.vehicle === "Không"));
 
         // ==========================
         // Tick BẰNG LÁI
         // ==========================
-        replace("license_yes", checkBox(reg.license, "Có"));
-        replace("license_no", checkBox(reg.license, "Không"));
+        replace("license_yes", mark(reg.license === "Có"));
+        replace("license_no", mark(reg.license === "Không"));
 
         // ==========================
         // Tick THỰC TẬP HÓA ĐẠI CƯƠNG
         // ==========================
-        replace("lab_yes", checkBox(reg.lab, "Đã học"));
-        replace("lab_no", checkBox(reg.lab, "Chưa học"));
+        replace("lab_yes", mark(reg.lab === "Đã học"));
+        replace("lab_no", mark(reg.lab === "Chưa học"));
 
         // ==========================
         // Tick CDTN
         // ==========================
-        replace("cdtn_yes", checkBox(reg.cdtn, "Đã từng"));
-        replace("cdtn_no", checkBox(reg.cdtn, "Chưa từng"));
+        replace("cdtn_yes", mark(reg.cdtn === "Đã từng"));
+        replace("cdtn_no", mark(reg.cdtn === "Chưa từng"));
 
         // ==========================
         // Tick SIZE ÁO
         // ==========================
         const sizes = ["S", "M", "L", "XL", "XXL", "XXXL"];
         sizes.forEach(size => {
-            replace("size_" + size, checkBox(reg.size, size));
+            replace(`size_${size}`, mark(reg.size === size));
         });
 
         // ==========================
@@ -159,7 +158,7 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         };
 
         Object.entries(skillMap).forEach(([label, key]) => {
-            replace(key, reg.skills?.includes(label) ? "checked" : "");
+            replace(key, mark(reg.skills?.includes(label)));
         });
 
 
