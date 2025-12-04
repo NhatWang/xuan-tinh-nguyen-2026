@@ -12,25 +12,44 @@
         body {
             margin: 0;
             padding: 0;
-            background-color: #CCCCCC; /* Màu nền xám để dễ nhìn trang giấy khi xem trên web */
+            background-color: #ccc; /* Màu nền trắng để dễ nhìn trang giấy khi xem trên web */
             font-size: 14pt; /* Cỡ chữ chuẩn văn bản */
             line-height: 1.5;
         }
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 20mm 20mm; /* Lề trái phải trên dưới 2cm */
+            padding: 20mm 20mm !important; /* Lề trái phải trên dưới 2cm */
             margin: 10mm auto;
             background: white;
             box-sizing: border-box;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             position: relative;
+            page-break-before: always;
+        }
+
+        .page:first-child {
+            page-break-before: auto;  /* Trang đầu không cần ép nhảy */
         }
         
+        /* Ngăn các bảng bị tách nửa trang */
+        table, tr, td, th {
+            page-break-inside: avoid !important;
+        }
+
         /* Ẩn các yếu tố thừa khi in */
         @media print {
             body { background: white; }
             .page { margin: 0; box-shadow: none; width: 100%; height: auto; }
+            .page::before {
+                content: "";
+                display: block;
+                height: 20mm; /* Lề trên cho mọi trang */
+                position: running(header-space);
+            }
+            @page {
+                margin-top: 20mm; /* ép khoảng trắng đầu trang */
+            }
         }
 
         /* Định dạng chung */
