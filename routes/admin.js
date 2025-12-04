@@ -62,6 +62,14 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         const checkBox = (value, target) => (value === target ? "checked" : "");
 
         // ==========================
+        // Load Fonts
+        // ==========================
+        const fontNormal = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman.ttf");
+        const fontBold = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman Bold.ttf");
+        replace("font_normal", fontNormal.replace(/\\/g, "/"));
+        replace("font_bold", fontBold.replace(/\\/g, "/"));
+
+        // ==========================
         // Fill TEXT fields
         // ==========================
         replace("fullName", user.fullName);

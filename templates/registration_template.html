@@ -13,7 +13,7 @@
             margin: 0;
             padding: 0;
             background-color: #CCCCCC; /* Màu nền xám để dễ nhìn trang giấy khi xem trên web */
-            font-family: "Times New Roman", Times, serif;
+            font-family: 'TimesNewRoman', serif !important;
             font-size: 14pt; /* Cỡ chữ chuẩn văn bản */
             line-height: 1.5;
         }
@@ -53,12 +53,19 @@
         .field {
             display: flex;
             margin-bottom: 5px;
-			gap: 50%;
+			align-items: center;
         }
         .field label {
             white-space: nowrap;
             margin-right: 5px;
+            width: 50px;
+
         }
+        .field span {
+            flex: 1;
+            white-space: nowrap;
+        }
+
     
         /* Bảng */
         table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
@@ -115,13 +122,12 @@
 
         @font-face {
             font-family: 'TimesNewRoman';
-            src: url('/public/fonts/SVN-Times\ New\ Roman.ttf') format('truetype');
+            src: url('{{font_normal}}') format('truetype');
             font-weight: normal;
         }
-
         @font-face {
             font-family: 'TimesNewRoman';
-            src: url('/public/fonts/SVN-Times\ New\ Roman\ Bold.ttf') format('truetype');
+            src: url('{{font_bold}}') format('truetype');
             font-weight: bold;
         }
 
@@ -163,8 +169,8 @@
 			</div>
 			<div class="col">
 				<label>Giới tính:</label> &nbsp;&nbsp; 
-				<input class="checkbox" {{gender_male}}></span> Nam &nbsp;&nbsp; 
-				<input class="checkbox" {{gender_female}}></span> Nữ
+				<span class="checkbox {{gender_male}}"></span> Nam &nbsp;&nbsp; 
+				<span class="checkbox {{gender_female}}"></span> Nữ
 			</div>
 		</div>
 
@@ -206,23 +212,23 @@
 		<!-- Phương tiện di chuyển -->
 		<p>
 			Phương tiện di chuyển cá nhân:&nbsp; 
-			<input class="checkbox" {{vehicle_50}}> Xe máy 50cc &nbsp;
-			<input class="checkbox" {{vehicle_100}}> Xe máy trên 50cc &nbsp;
-			<input class="checkbox" {{vehicle_none}}> Không
+			<span class="checkbox {{vehicle_50}}"></span> Xe máy 50cc &nbsp;
+			<span class="checkbox {{vehicle_100}}"></span> Xe máy trên 50cc &nbsp;
+			<span class="checkbox {{vehicle_none}}"></span> Không
 		</p>
 
 		<!-- Bằng lái -->
 		<p>
 			Bằng lái xe: &nbsp;&nbsp; 
-			<input class="checkbox" {{license_yes}}> Có &nbsp;&nbsp;
-			<input class="checkbox" {{license_no}}> Không
+			<span class="checkbox {{license_yes}}"></span> Có &nbsp;&nbsp;
+			<span class="checkbox {{license_no}}"></span> Không
 		</p>
 
 		<!-- Thực tập hóa -->
 		<p>
 			Đã học học phần Thực tập Hóa đại cương: &nbsp;&nbsp; 
-			<input class="checkbox" {{lab_yes}}> Đã học &nbsp;&nbsp;
-			<input class="checkbox" {{lab_no}}> Chưa học
+			<span class="checkbox {{lab_yes}}"></span> Đã học &nbsp;&nbsp;
+			<span class="checkbox {{lab_no}}"></span> Chưa học
 		</p>
 
 		<!-- Facebook -->
@@ -281,20 +287,20 @@
 
         <p>3. Bạn có khả năng thực hiện tốt các công việc nào sau đây (có thể chọn nhiều):</p>
         <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 5px;">
-            <div><input class="checkbox" {{skill_mc}}> Dẫn chương trình</div> <br>
-            <div><input class="checkbox" {{skill_hoatnao}}> Hoạt náo</div> <br>
-            <div><input class="checkbox" {{skill_thinghiem}}> Thực hiện các thí nghiệm</div> <br>
-            <div><input class="checkbox" {{skill_goibanh}}> Gói bánh chưng, bánh tét</div> <br>
-            <div><input class="checkbox" {{skill_vetuong}}> Vẽ tường</div> <br>
-            <div><input class="checkbox" {{skill_handmade}}> Trang trí, làm đồ handmade</div> <br>
-            <div><input class="checkbox" {{skill_vannghe}}> Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)</div>
+            <div><span class="checkbox {{skill_mc}}"></span> Dẫn chương trình</div> <br>
+            <div><span class="checkbox {{skill_hoatnao}}"></span> Hoạt náo</div> <br>
+            <div><span class="checkbox {{skill_thinghiem}}"></span> Thực hiện các thí nghiệm</div> <br>
+            <div><span class="checkbox {{skill_goibanh}}"></span> Gói bánh chưng, bánh tét</div> <br>
+            <div><span class="checkbox {{skill_vetuong}}"></span> Vẽ tường</div> <br>
+            <div><span class="checkbox {{skill_handmade}}"></span> Trang trí, làm đồ handmade</div> <br>
+            <div><span class="checkbox {{skill_vannghe}}"></span> Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)</div>
         </div>
 
         <div class="part-title">4. Đăng ký áo Xuân tình nguyện:</div>
         <p>Nếu <strong> chưa có </strong> hoặc muốn <strong> mua thêm </strong> áo Xuân tình nguyện, bạn vui lòng chọn size áo:</p>
         <p>
-            <input class="checkbox" {{size_S}}> S &nbsp;&nbsp; <input class="checkbox" {{size_M}}> M &nbsp;&nbsp; <input class="checkbox" {{size_L}}> L &nbsp;&nbsp;
-            <input class="checkbox" {{size_XL}}> XL &nbsp;&nbsp; <input class="checkbox" {{size_XXL}}> XXL &nbsp;&nbsp; <input class="checkbox" {{size_XXXL}}> XXXL
+            <span class="checkbox {{size_S}}"></span> S &nbsp;&nbsp; <span class="checkbox {{size_M}}"></span> M &nbsp;&nbsp; <span class="checkbox {{size_L}}"></span> L &nbsp;&nbsp;
+            <span class="checkbox {{size_XL}}"></span> XL &nbsp;&nbsp; <span class="checkbox {{size_XXL}}"></span> XXL &nbsp;&nbsp; <span class="checkbox {{size_XXXL}}"></span> XXXL
         </p>
 
         <table style="font-size: 10pt; width: 80%; margin: 10px auto;">
