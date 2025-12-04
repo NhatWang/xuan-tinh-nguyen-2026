@@ -59,7 +59,7 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
             html = html.replace(new RegExp(`{{${key}}}`, "g"), value || "");
         };
 
-        const mark = (condition) => (condition ? "✓" : "");
+        const mark = (condition) => (condition ? "X" : "");
 
         // ===========================
         // LOAD FONT → BASE64
