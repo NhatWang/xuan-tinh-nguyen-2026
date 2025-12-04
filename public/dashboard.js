@@ -86,6 +86,8 @@ async function loadRegistrationForm() {
     document.getElementById("nv3").value = safe(r.nv3);
     document.getElementById("nv4").value = safe(r.nv4);
     document.getElementById("nv5").value = safe(r.nv5);
+    document.getElementById("nv6").value = safe(r.nv6);
+    document.getElementById("major").value = safe(r.major);
 
     if (Array.isArray(r.skills)) {
         r.skills.forEach(skill => {
@@ -142,6 +144,8 @@ async function submitRegistration() {
     const nv3 = document.getElementById("nv3").value;
     const nv4 = document.getElementById("nv4").value;
     const nv5 = document.getElementById("nv5").value;
+    const nv6 = document.getElementById("nv6").value;
+    const major = document.getElementById("major").value;
 
     const skills = Array.from(document.querySelectorAll('.checkboxes input[type="checkbox"]:checked'))
         .map(cb => cb.value);
@@ -156,7 +160,7 @@ async function submitRegistration() {
     const lab = document.querySelector('input[name="lab"]:checked')?.value;
 
     // ========== VALIDATION ==========
-    if (!dob || !gender || !facebook || !address || !nv1) {
+    if (!dob || !gender || !facebook || !address || !nv1 || !major) {
     showToast("Vui lòng nhập đầy đủ thông tin bắt buộc!", "error");
     btn.disabled = false;
     btn.innerText = "Gửi đăng ký";
@@ -172,7 +176,7 @@ async function submitRegistration() {
     }
 
     // Check NV trùng nhau
-    const nvList = [nv1, nv2, nv3, nv4, nv5].filter(v => v && v !== "Không");
+    const nvList = [nv1, nv2, nv3, nv4, nv5, nv6].filter(v => v && v !== "Không");
     if (new Set(nvList).size !== nvList.length) {
         btn.disabled = false;
         btn.innerText = "Gửi đăng ký";
@@ -181,7 +185,8 @@ async function submitRegistration() {
 
     const body = {
         dob, gender, facebook, address,
-        nv1, nv2, nv3, nv4, nv5,
+        nv1, nv2, nv3, nv4, nv5, nv6,
+        major,
         skills, size, bio, health,
         cdtn, vehicle, license, lab
     };

@@ -31,6 +31,9 @@ const RegistrationSchema = new mongoose.Schema(
     nv3: { type: String },
     nv4: { type: String },
     nv5: { type: String },
+    nv6: { type: String },
+
+    major: { type: String },           // Ngành học
 
     // --- Kỹ năng ---
     skills: { 

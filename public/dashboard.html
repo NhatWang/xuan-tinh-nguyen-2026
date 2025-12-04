@@ -37,7 +37,7 @@
 
                 <div class="profile-field"><label>Trạng thái phỏng vấn:</label><span id="pf_interviewResult"></span></div>
 
-                <div class="profile-field"><label>Ghi chú phỏng vấn:</label></div>
+                <div class="profile-field"><label>Ghi chú phỏng vấn:</label><span id="pf_interviewNote"></span></div>
                 <p id="pf_interviewNote" style="
                     background:#fff3dc;
                     padding:12px;
@@ -55,9 +55,8 @@
                 <label>Giới tính</label>
                 <select id="gender" class="input" required>
                     <option value="">Chọn giới tính</option>
-                    <option>Nam</option>
-                    <option>Nữ</option>
-                    <option>Khác</option>
+                    <option value="Nam">Nam</option>
+                    <option value="Nữ">Nữ</option>
                 </select>
 
                 <label>Ngày tháng năm sinh</label>
@@ -70,76 +69,100 @@
                 <label>Nơi ở hiện tại</label>
                 <input type="text" id="address" placeholder="Ghi rõ địa chỉ hiện tại" class="input" required>
 
+                <!-- NGÀNH HỌC -->
+                <label>Ngành học</label>
+                <input type="text" id="major" placeholder="Nhập ngành học của bạn" class="input" required>
                 <!-- NGUYỆN VỌNG -->
                 <label>Nguyện vọng 1</label>
                 <select id="nv1" class="input" required>
                     <option value="">-- chọn đội hình --</option>
-                    <option>Sức Xuân</option>
-                    <option>Tết Bản Sắc</option>
-                    <option>Xuân Chiến Sĩ</option>
-                    <option>Xuân Cho Em</option>
-                    <option>Tết Vùng Cao</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
                 </select>
 
                 <label>Nguyện vọng 2</label>
                 <select id="nv2" class="input" required>
                     <option value="">-- chọn đội hình --</option>
-                    <option>Sức Xuân</option>
-                    <option>Tết Bản Sắc</option>
-                    <option>Xuân Chiến Sĩ</option>
-                    <option>Xuân Cho Em</option>
-                    <option>Tết Vùng Cao</option>
-                    <option>Không</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+                    <option value="Không">Không</option>
                 </select>
 
                 <label>Nguyện vọng 3</label>
                 <select id="nv3" class="input" required>
                     <option value="">-- chọn đội hình --</option>
-                    <option>Sức Xuân</option>
-                    <option>Tết Bản Sắc</option>
-                    <option>Xuân Chiến Sĩ</option>
-                    <option>Xuân Cho Em</option>
-                    <option>Tết Vùng Cao</option>
-                    <option>Không</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+                    <option value="Không">Không</option>
                 </select>
 
                 <label>Nguyện vọng 4</label>
                 <select id="nv4" class="input" required>
                     <option value="">-- chọn đội hình --</option>
-                    <option>Sức Xuân</option>
-                    <option>Tết Bản Sắc</option>
-                    <option>Xuân Chiến Sĩ</option>
-                    <option>Xuân Cho Em</option>
-                    <option>Tết Vùng Cao</option>
-                    <option>Không</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+                    <option value="Không">Không</option>
                 </select>
 
                 <label>Nguyện vọng 5</label>
                 <select id="nv5" class="input" required>
                     <option value="">-- chọn đội hình --</option>
-                    <option>Sức Xuân</option>
-                    <option>Tết Bản Sắc</option>
-                    <option>Xuân Chiến Sĩ</option>
-                    <option>Xuân Cho Em</option>
-                    <option>Tết Vùng Cao</option>
-                    <option>Không</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+                    <option value="Không">Không</option>
+                </select>
+
+                <label>Nguyện vọng 6</label>
+                <select id="nv6" class="input" required>
+                    <option value="">-- chọn đội hình --</option>
+                    <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
+                    <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
+                    <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
+                    <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
+                    <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
+                    <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+                    <option value="Không">Không</option>
                 </select>
 
                 <label>Kỹ năng</label>
                 <div class="checkboxes">
-                    <label><input type="checkbox" value="MC"> Dẫn chương trình</label>
+                    <label><input type="checkbox" value="Dẫn chương trình"> Dẫn chương trình</label>
                     <label><input type="checkbox" value="Hoạt náo"> Hoạt náo</label>
-                    <label><input type="checkbox" value="Thí nghiệm"> Thực hiện thí nghiệm</label>
-                    <label><input type="checkbox" value="Gói bánh"> Gói bánh</label>
+                    <label><input type="checkbox" value="Thực hiện các thí nghiệm"> Thực hiện các thí nghiệm</label>
+                    <label><input type="checkbox" value="Gói bánh chưng, bánh tét"> Gói bánh chưng, bánh tét</label>
                     <label><input type="checkbox" value="Vẽ tường"> Vẽ tường</label>
-                    <label><input type="checkbox" value="Handmade"> Handmade</label>
+                    <label><input type="checkbox" value="Trang trí, làm đồ handmade"> Trang trí, làm đồ handmade</label>
+                    <label><input type="checkbox" value="Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)">Văn nghệ (VD: hát, nhảy, đạo diễn tiết mục, sử dụng nhạc cụ)</label>
                 </div>
 
                 <label>Size áo</label>
                 <select id="size" class="input" required>
                     <option value="">Chọn size</option>
-                    <option>S</option><option>M</option><option>L</option>
-                    <option>XL</option><option>XXL</option>
+                    <option value="S">S</option>
+                    <option value="M">M</option>
+                    <option value="L">L</option>
+                    <option value="XL">XL</option>
+                    <option value="XXL">XXL</option>
                 </select>
 
                 <label>Giới thiệu bản thân</label>

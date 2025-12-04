@@ -1,5 +1,18 @@
 const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
+/* ===== TOAST UI ===== */
+function showToast(message, type = "success") {
+    const toastContainer = document.getElementById("toast");
+    const toast = document.createElement("div");
+
+    toast.classList.add("toast", type);
+    toast.innerHTML = `<i>${type === "success" ? "✔" : "✖"}</i> ${message}`;
+
+    toastContainer.appendChild(toast);
+
+    setTimeout(() => toast.remove(), 3200);
+}
+
 /* =============================
    CHECK ADMIN
 ============================= */
@@ -66,7 +79,7 @@ function renderTable(list) {
         const u = item.user;
         const r = item.reg;
 
-        const nvList = [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5]
+        const nvList = [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5, r.nv6]
             .filter(v => v && v !== "Không")
             .join(", ");
 
@@ -81,7 +94,7 @@ function renderTable(list) {
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
-                <button class="action-btn" onclick="openProfile('${r._id}')">
+                <button class="action-btn" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
                     Xem hồ sơ
                 </button>
             </td>
@@ -110,7 +123,7 @@ function filterUsers() {
     if (nvFilter) {
         filtered = filtered.filter(u => {
             const r = u.reg;
-            return [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5].includes(nvFilter);
+            return [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5, r.nv6].includes(nvFilter);
         });
     }
 
@@ -126,49 +139,32 @@ function filterUsers() {
 }
 
 /* =============================
-   XEM HỒ SƠ
+   DOWNLOAD PDF
 ============================= */
-function openProfile(regId) {
-    const item = allUsers.find(u => u.reg._id === regId);
+async function downloadPDF(regId, fullName) {
+    try {
+        const res = await fetch(API + `/export/${regId}`, {
+            method: "GET",
+            credentials: "include"
+        });
 
-    if (!item) return alert("Không tìm thấy hồ sơ.");
+        if (!res.ok) {
+            return alert("Không thể tải PDF!");
+        }
 
-    const p = item.reg;
-    const u = item.user;
+        const blob = await res.blob();
+        const url = window.URL.createObjectURL(blob);
 
-    const html = `
-        <p><b>Họ tên:</b> ${safe(u.fullName)}</p>
-        <p><b>MSSV:</b> ${safe(u.studentId)}</p>
-        <p><b>Email:</b> ${safe(u.email)}</p>
+        const a = document.createElement("a");
+        a.href = url;
+        a.download = `${fullName}.pdf`;
+        a.click();
 
-        <p><b>Giới tính:</b> ${safe(p.gender)}</p>
-        <p><b>Ngày sinh:</b> ${p.dob ? safe(p.dob.substring(0, 10)) : ""}</p>
-        <p><b>Nơi ở:</b> ${safe(p.address)}</p>
-        <p><b>Facebook:</b> <a href="${p.facebook || "#"}" target="_blank">${safe(p.facebook || "Không có")}</a></p>
+        window.URL.revokeObjectURL(url);
 
-        <hr>
-
-        <p><b>Nguyện vọng:</b> ${safe([p.nv1, p.nv2, p.nv3, p.nv4, p.nv5].join(", "))}</p>
-        <p><b>Kỹ năng:</b> ${safe(p.skills?.join(", ") || "")}</p>
-        <p><b>Size áo:</b> ${safe(p.size)}</p>
-        <p><b>Sức khỏe:</b> ${safe(p.health)}</p>
-        <p><b>Giới thiệu:</b> ${safe(p.bio)}</p>
-
-        <hr>
-
-        <p><b>CDTN:</b> ${safe(p.cdtn)}</p>
-        <p><b>Phương tiện:</b> ${safe(p.vehicle)}</p>
-        <p><b>Bằng lái:</b> ${safe(p.license)}</p>
-        <p><b>Thực tập hóa:</b> ${safe(p.lab)}</p>
-    `;
-
-    document.getElementById("profileDetail").innerHTML = html;
-    document.getElementById("profileModal").style.display = "flex";
-}
-
-function closeProfileModal() {
-    document.getElementById("profileDetail").innerHTML = "";
-    document.getElementById("profileModal").style.display = "none";
+    } catch (err) {
+        alert("Lỗi khi tải PDF!");
+    }
 }
 
 /* =============================

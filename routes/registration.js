@@ -10,7 +10,8 @@ router.post("/", authMiddleware, async (req, res) => {
       gender,
       facebook,
       address,
-      nv1, nv2, nv3, nv4, nv5,
+      nv1, nv2, nv3, nv4, nv5, nv6,
+      major,
       skills,
       size,
       bio,
@@ -36,9 +37,10 @@ router.post("/", authMiddleware, async (req, res) => {
       gender,
       facebook,
       address,
+      major,
 
       // preferences
-      nv1, nv2, nv3, nv4, nv5,
+      nv1, nv2, nv3, nv4, nv5, nv6,
 
       // skills
       skills: skills || [],
