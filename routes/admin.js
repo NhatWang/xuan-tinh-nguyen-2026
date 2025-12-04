@@ -59,7 +59,7 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
             html = html.replace(new RegExp(`{{${key}}}`, "g"), value || "");
         };
 
-        const checkBox = (value, target) => (value === target ? "checked" : "");
+        const mark = (condition) => (condition ? "✓" : "");
 
         // ===========================
         // LOAD FONT → BASE64
