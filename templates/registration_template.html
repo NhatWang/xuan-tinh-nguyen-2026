@@ -13,7 +13,6 @@
             margin: 0;
             padding: 0;
             background-color: #CCCCCC; /* Màu nền xám để dễ nhìn trang giấy khi xem trên web */
-            font-family: 'TimesNewRoman', serif !important;
             font-size: 14pt; /* Cỡ chữ chuẩn văn bản */
             line-height: 1.5;
         }
@@ -122,17 +121,18 @@
 
         @font-face {
             font-family: 'TimesNewRoman';
-            src: url('{{font_normal}}') format('truetype');
             font-weight: normal;
-        }
-        @font-face {
-            font-family: 'TimesNewRoman';
-            src: url('{{font_bold}}') format('truetype');
-            font-weight: bold;
+            src: url(data:font/truetype;base64,{{font_normal_base64}}) format('truetype');
         }
 
-        body {
-            font-family: 'TimesNewRoman', serif;
+        @font-face {
+            font-family: 'TimesNewRoman';
+            font-weight: bold;
+            src: url(data:font/truetype;base64,{{font_bold_base64}}) format('truetype');
+        }
+
+        body, html {
+            font-family: 'TimesNewRoman', serif !important;
         }
 </style>
 

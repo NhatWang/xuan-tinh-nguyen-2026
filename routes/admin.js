@@ -61,13 +61,18 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
 
         const checkBox = (value, target) => (value === target ? "checked" : "");
 
-        // ==========================
-        // Load Fonts
-        // ==========================
-        const fontNormal = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman.ttf");
-        const fontBold = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman Bold.ttf");
-        replace("font_normal", fontNormal.replace(/\\/g, "/"));
-        replace("font_bold", fontBold.replace(/\\/g, "/"));
+        // ===========================
+        // LOAD FONT → BASE64
+        // ===========================
+        const fontNormalPath = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman.ttf");
+        const fontBoldPath   = path.join(process.cwd(), "public", "fonts", "SVN-Times New Roman Bold.ttf");
+
+        const fontNormalBase64 = fs.readFileSync(fontNormalPath).toString("base64");
+        const fontBoldBase64   = fs.readFileSync(fontBoldPath).toString("base64");
+
+        // Inject vào template
+        replace("font_normal_base64", fontNormalBase64);
+        replace("font_bold_base64", fontBoldBase64);
 
         // ==========================
         // Fill TEXT fields
@@ -210,53 +215,30 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
    PUT /api/admin/interview/:regId
 ============================================================ */
 router.put("/interview/:regId", auth, admin, async (req, res) => {
-    try {
-        const { interviewNote, interviewResult } = req.body;
-
-        if (!interviewResult) {
-            return res.status(400).json({ msg: "Thiếu kết quả phỏng vấn" });
-        }
-
-        const updated = await Registration.findByIdAndUpdate(
-            req.params.regId,
-            { interviewNote, interviewResult },
-            { new: true }
-        );
-
-        if (!updated) {
-            return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
-        }
-
-        res.json({ msg: "Đã cập nhật phỏng vấn", updated });
-
-    } catch (err) {
-        console.error(err);
-        res.status(500).json({ msg: "Lỗi cập nhật phỏng vấn" });
-    }
-});
-
-router.put("/interview/:regId", auth, admin, async (req, res) => {
   try {
     const { interviewNote, interviewResult, interviewer } = req.body;
 
-    if (!interviewer)
-      return res.status(400).json({ msg: "Vui lòng chọn người phỏng vấn!" });
+    if (!interviewResult)
+      return res.status(400).json({ msg: "Thiếu kết quả phỏng vấn" });
 
-    const reg = await Registration.findByIdAndUpdate(
+    if (!interviewer)
+      return res.status(400).json({ msg: "Vui lòng điền tên người phỏng vấn!" });
+
+    const updated = await Registration.findByIdAndUpdate(
       req.params.regId,
       { interviewNote, interviewResult, interviewer },
       { new: true }
     );
 
-    if (!reg) return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
+    if (!updated)
+      return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
 
-    res.json({ msg: "Đã cập nhật phỏng vấn" });
+    res.json({ msg: "Đã cập nhật phỏng vấn", updated });
 
   } catch (err) {
+    console.error(err);
     res.status(500).json({ msg: "Lỗi cập nhật phỏng vấn" });
   }
 });
-
-
 
 module.exports = router;
