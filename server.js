@@ -40,6 +40,8 @@ app.use(cookieParser());
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/registration", require("./routes/registration"));
 app.use("/api/admin", require("./routes/admin"));
+app.use("/api/admin/media", require("./routes/adminMedia"));
+app.use("/api/media", require("./routes/media"));
 
 // ===============================
 // 5. STATIC FRONTEND (nếu cần)

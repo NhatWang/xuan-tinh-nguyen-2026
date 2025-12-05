@@ -24,7 +24,10 @@
     </div>
 
     <button class="menu-btn active" onclick="loadUsers()">
-        Danh sách đăng ký
+        Đội hình Chuyên môn & Địa phương
+    </button>
+        <button class="menu-btn" onclick="loadMediaList()">
+        Đội hình Truyền thông
     </button>
 
     <!-- LOGOUT -->
@@ -36,7 +39,7 @@
 
 <!-- MAIN -->
 <div class="main">
-    <h1>Danh sách tình nguyện viên đăng ký</h1>
+    <h1 id="pageTitle">Đội hình Chuyên môn & Địa phương</h1>
 
     <!-- FILTER AREA -->
     <div class="filter-box">
@@ -95,6 +98,28 @@
         </thead>
 
         <tbody id="tableBody"></tbody>
+    </table>
+
+    <table id="mediaTable" style="display:none; margin-top:35px;">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>MSSV</th>
+                <th>Email</th>
+
+                <th>Vai trò</th>
+                <th>Địa điểm</th>
+
+                <th>Facebook</th>
+                <th>Trạng thái</th>
+
+                <th>Hồ sơ</th>
+                <th>Phỏng vấn</th>
+                <th>Người phỏng vấn</th>
+            </tr>
+        </thead>
+
+        <tbody id="mediaTableBody"></tbody>
     </table>
 </div>
 

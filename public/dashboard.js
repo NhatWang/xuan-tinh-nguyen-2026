@@ -124,6 +124,7 @@ async function loadRegistrationForm() {
 async function initDashboard() {
     await loadProfile();
     await loadRegistrationForm();
+    await loadMediaForm();
 }
 initDashboard();
 
@@ -147,8 +148,8 @@ async function submitRegistration() {
     const nv6 = document.getElementById("nv6").value;
     const major = document.getElementById("major").value;
 
-    const skills = Array.from(document.querySelectorAll('.checkboxes input[type="checkbox"]:checked'))
-        .map(cb => cb.value);
+    const skills = Array.from(document.querySelectorAll('#registration .checkboxes input[type="checkbox"]:checked'))
+    .map(cb => cb.value);
 
     const size = document.getElementById("size").value;
     const bio = document.getElementById("bio").value;
@@ -272,5 +273,147 @@ document.addEventListener("DOMContentLoaded", () => {
     setupTextarea(document.getElementById("health"), "health_count", 60);
 });
 
+async function submitMediaTeam() {
+
+    const btn = document.querySelector('#mediaTeam button');
+    btn.disabled = true;
+    btn.innerText = "Đang gửi...";
+
+    const gender = document.getElementById("media_gender").value;
+    const dob = document.getElementById("media_dob").value;
+    const facebook = document.getElementById("media_facebook").value.trim();
+    const address = document.getElementById("media_address").value.trim();
+    const major = document.getElementById("media_major").value.trim();
+    const bio = document.getElementById("media_bio").value.trim();
+    const health = document.getElementById("media_health").value.trim();
+
+    const cdtn = document.querySelector("input[name='media_cdtn']:checked")?.value;
+    const vehicle = document.querySelector("input[name='media_vehicle']:checked")?.value;
+    const license = document.querySelector("input[name='media_license']:checked")?.value;
+
+    const mediaRoles = [...document.querySelectorAll("#mediaTeam input[name='media_role']:checked")]
+        .map(i => i.value);
+
+    const mediaLocations = [...document.querySelectorAll("#mediaTeam input[name='media_locations']:checked")]
+        .map(i => i.value);
+
+    const size = document.getElementById("media_size").value;
+
+    if (!gender || !dob || !facebook || !address || !major || !bio || !health ||
+        !cdtn || !vehicle || !license || mediaRoles.length === 0 || mediaLocations.length === 0 || !size) {
+
+        showToast("Vui lòng điền đầy đủ thông tin!", "warning");
+        btn.disabled = false;
+        btn.innerText = "GỬI ĐĂNG KÝ ĐỘI HÌNH TRUYỀN THÔNG";
+        return;
+    }
+
+    // CHECK FACEBOOK
+    const fbRegex = /^https?:\/\/(www\.)?(facebook|fb)\.com\/[A-Za-z0-9\.\/_\-]+$/;
+    if (!fbRegex.test(facebook)) {
+        showToast("Link Facebook không hợp lệ!", "error");
+        btn.disabled = false;
+        btn.innerText = "GỬI ĐĂNG KÝ ĐỘI HÌNH TRUYỀN THÔNG";
+        return;
+    }
+
+    try {
+        const res = await fetch(API + "/media", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+                gender, dob, facebook, address, major,
+                bio, health, cdtn, vehicle, license,
+                mediaRoles, mediaLocations, size
+            })
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            showToast(data.msg || "Lỗi đăng ký!", "error");
+        } else {
+            showToast("Đăng ký đội hình truyền thông thành công!", "success");
+            disableMediaForm();
+        }
+
+    } catch (err) {
+    showToast("Không thể kết nối server!", "error");
+    } finally {
+        btn.disabled = false;
+        btn.innerText = "GỬI ĐĂNG KÝ ĐỘI HÌNH TRUYỀN THÔNG";
+    }
+    }
+
+
+function disableMediaForm() {
+    document.querySelectorAll('#mediaTeam input, #mediaTeam select, #mediaTeam textarea')
+        .forEach(el => el.disabled = true);
+
+    const btn = document.querySelector('#mediaTeam button');
+    if (btn) {
+        btn.disabled = true;
+        btn.innerText = "Bạn đã gửi đăng ký";
+        btn.style.opacity = "0.6";
+    }
+}
+
+async function loadMediaForm() {
+    const res = await fetch(API + "/media/me", { credentials: "include" });
+
+    if (res.status !== 200) return;
+
+    const r = await res.json();
+
+    const safe = (v) => v || "";
+
+    document.getElementById("media_dob").value = safe(r.dob?.substring?.(0, 10));
+    document.getElementById("media_gender").value = safe(r.gender);
+    document.getElementById("media_facebook").value = safe(r.facebook);
+    document.getElementById("media_address").value = safe(r.address);
+    document.getElementById("media_major").value = safe(r.major);
+    document.getElementById("media_bio").value = safe(r.bio);
+    document.getElementById("media_health").value = safe(r.health);
+
+    if (r.cdtn) document.querySelector(`input[name='media_cdtn'][value="${r.cdtn}"]`).checked = true;
+    if (r.vehicle) document.querySelector(`input[name='media_vehicle'][value="${r.vehicle}"]`).checked = true;
+    if (r.license) document.querySelector(`input[name='media_license'][value="${r.license}"]`).checked = true;
+
+    if (Array.isArray(r.mediaRoles)) {
+        r.mediaRoles.forEach(role => {
+            const cb = document.querySelector(`input[name='media_role'][value="${role}"]`);
+            if (cb) cb.checked = true;
+        });
+    }
+
+    if (Array.isArray(r.mediaLocations)) {
+        r.mediaLocations.forEach(loc => {
+            const cb = document.querySelector(`input[name='media_locations'][value="${loc}"]`);
+            if (cb) cb.checked = true;
+        });
+    }
+
+    document.getElementById("media_size").value = safe(r.size);
+     disableMediaForm();
+}
+
+/* =============================
+   AUTO RESIZE + WORD COUNT MEDIA
+============================= */
+
+document.addEventListener("DOMContentLoaded", () => {
+    // BIO MEDIA — giới hạn 60 chữ
+    const mediaBio = document.getElementById("media_bio");
+    if (mediaBio) {
+        setupTextarea(mediaBio, "media_bio_count", 60);
+    }
+
+    // HEALTH MEDIA — giới hạn 60 chữ
+    const mediaHealth = document.getElementById("media_health");
+    if (mediaHealth) {
+        setupTextarea(mediaHealth, "media_health_count", 60);
+    }
+});
 
 

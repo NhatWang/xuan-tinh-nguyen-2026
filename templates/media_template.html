@@ -1,0 +1,377 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>PHIEU DANG KY - IN A4</title>
+    <style>
+        /* Cấu hình trang A4 */
+        /* ===== FIX BLANK PAGE TRIỆT ĐỂ ===== */
+        @page {
+            size: A4;
+            margin: 5mm 10mm 10mm 10mm;
+        }
+
+        html, body {
+            margin: 0;
+            padding: 0;
+            height: auto !important;
+            background: none !important;
+            overflow: visible !important;
+            font-size: 14pt;
+            line-height: 1.5;
+            font-family: 'TimesNewRoman', serif !important;
+        }
+
+        /* KHÔNG dùng min-height = đúng 297mm (gây sinh trang ảo) */
+        .page {
+            width: 210mm;
+            min-height: 0 !important;   /* <-- FIX CHÍNH */
+            padding: 5mm 15mm !important;
+            margin: 0 auto;
+            background: white;
+            box-sizing: border-box;
+            position: relative;
+            page-break-after: always !important;
+        }
+
+        /* Trang cuối cùng KHÔNG nhảy */
+        .page:last-child {
+            page-break-after: auto !important;
+        }
+
+        * {
+            page-break-inside: avoid !important;
+        }
+
+        /* Khi print thì xoá shadow */
+        @media print {
+            .page { box-shadow: none; width: 100%; }
+            html, body {
+                background: none !important;
+            }
+        }
+
+        /* Định dạng chung */
+        h1, h2, h3, h4 { margin: 0; padding: 0; font-weight: bold; text-align: center; }
+        p { margin: 5px 0; }
+        .text-center { text-align: center; }
+        .text-right { text-align: right; }
+        .text-left { text-align: left; }
+        .bold { font-weight: bold; }
+        .italic { font-style: italic; }
+        .uppercase { text-transform: uppercase; }
+        
+        /* Flexbox cho header */
+        .header { display: flex; justify-content: space-between; align-items: flex-start; margin-bottom: 20px; }
+        .header-left { text-align: center; width: 50%; font-size: 11.5pt; }
+        .header-right { text-align: left; width: 50%; font-size: 11.5pt; }
+
+        .header-right p {
+            white-space: nowrap !important;
+        }
+
+        /* Dòng chấm để điền */
+        .field {
+            display: flex;
+            margin-bottom: 5px;
+			align-items: center;
+        }
+        .field label {
+            white-space: nowrap;
+            margin-right: 5px;
+            width: 50px;
+
+        }
+        .field span {
+            flex: 1;
+            white-space: nowrap;
+        }
+
+    
+        /* Bảng */
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        th, td { border: 1px solid #000; padding: 5px; vertical-align: middle; }
+        th { text-align: center; font-weight: bold; background-color: #f0f0f0; }
+        .col-stt { width: 40px; text-align: center; }
+        
+        /* Tiêu đề phần */
+        .part-title {
+            margin-top: 15px;
+            margin-bottom: 5px;
+        }
+
+		.part-title-2 {
+			margin-top: 20px;
+			font-weight: bold;
+            margin-top: 15px;
+            margin-bottom: 5px;
+			text-align: center;
+        }
+
+		/* ===== BỐ CỤC 2 CỘT ===== */
+		.row-2col {
+			display: flex;
+			justify-content: space-between;
+			margin-bottom: 8px;
+		}
+
+		.row-2col .col {
+			width: 40%;
+		}
+
+		/* ===== 1 CỘT ===== */
+		.row-1col {
+			margin: 8px 0;
+		}
+
+		/* ===== Ô VUÔNG ===== */
+		.checkbox {
+			display: inline-block;
+			width: 14px;
+			height: 14px;
+			border: 1px solid #000;
+			margin-right: 5px;
+			vertical-align: middle;
+			text-align: center;
+			line-height: 14px;
+			font-weight: bold;
+			font-size: 12px;
+		}
+
+        @font-face {
+            font-family: 'TimesNewRoman';
+            font-weight: normal;
+            src: url(data:font/truetype;base64,{{font_normal_base64}}) format('truetype');
+        }
+
+        @font-face {
+            font-family: 'TimesNewRoman';
+            font-weight: bold;
+            src: url(data:font/truetype;base64,{{font_bold_base64}}) format('truetype');
+        }
+
+        body, html {
+            font-family: 'TimesNewRoman', serif !important;
+        }
+
+        .nv-row {
+            display: flex;
+            flex-direction: column;
+            gap: 4px; /* khoảng cách giữa các dòng NV */
+        }
+
+        .skills {
+            margin-top: 5px;
+        }
+
+        .skill-item {
+            display: flex;
+            align-items: center;      /* Căn checkbox và chữ thẳng hàng */
+            gap: 6px;                 /* Khoảng cách đều */
+            margin-bottom: 6px;
+            font-size: 14pt;
+        }
+
+        .skill-item span {
+            white-space: normal; /* Cho phép xuống dòng văn nghệ */
+        }
+
+</style>
+</head>
+<body>
+    <div class="page">
+        <div class="header">
+            <div class="header-left">
+                <p class="uppercase">Hội Sinh Viên Việt Nam TP. Hồ Chí Minh</p>
+                <p class="uppercase">Trường Đại Học Khoa Học Tự Nhiên</p>
+                <p class="uppercase bold">Liên Chi Hội Khoa Hóa Học</p>
+                <hr style="width: 30%; border: 0.5px solid #000;">
+            </div>
+            <div class="header-right">
+                <p class="bold" style="border: 2px solid #000; padding: 2px 10px; display: flex; width: 45%; font-size: 18px; margin-left: 30%;"><span style="text-decoration: underline;">STT</span>:<span>{{STT}}</span></p> <br>
+                <p class="italic">Tp. Hồ Chí Minh, ngày {{day}} tháng {{month}} năm {{year}}</p>
+            </div>
+        </div>
+
+        <div class="text-center mb-4">
+            <h1 class="uppercase" style="font-size: 16pt;">PHIẾU ĐĂNG KÝ THAM GIA PHỎNG VẤN</h1>
+            <h2 class="uppercase" style="font-size: 14pt; margin-top: 5px;">CHIẾN DỊCH TÌNH NGUYỆN XUÂN TÌNH NGUYỆN KHOA HÓA HỌC</h2>
+            <h3 class="uppercase" style="font-size: 14pt;">LẦN THỨ 18 - NĂM 2026</h3>
+            <p class="italic">(Dành cho đội hình chuyên môn và địa phương)</p>
+        </div>
+
+        <div class="part-title-2">PHẦN 1: THÔNG TIN CÁ NHÂN</div>
+		<!-- Họ tên + Giới tính -->
+		<div class="row-2col">
+			<div class="col">
+				<label>Họ và Tên:</label> <span>{{fullName}}</span>
+			</div>
+			<div class="col">
+				<label>Giới tính:</label> &nbsp;&nbsp; 
+				<span class="checkbox">{{gender_male}}</span> Nam &nbsp;&nbsp; 
+				<span class="checkbox">{{gender_female}}</span> Nữ
+			</div>
+		</div>
+
+		<!-- MSSV + NTNS -->
+		<div class="row-2col">
+			<div class="col">
+				<label>MSSV:</label> <span>{{studentId}}</span>
+			</div>
+			<div class="col">
+				<label>NTNS:</label> <span>{{dob}}</span>
+			</div>
+		</div>
+
+		<!-- Khoa + Lớp -->
+		<div class="row-2col">
+			<div class="col">
+				<label>Khoa:</label> <span>{{faculty}}</span>
+			</div>
+			<div class="col">
+				<label>Lớp:</label> <span>{{className}}</span>
+			</div>
+		</div>
+
+		<!-- Trường + Ngành -->
+		<div class="row-2col">
+			<div class="col">
+				<label>Trường:</label> <span>{{university}}</span>
+			</div>
+			<div class="col">
+				<label>Ngành:</label> <span>{{major}}</span>
+			</div>
+		</div>
+
+		<!-- Số điện thoại -->
+		<div class="row-1col">
+			<label>Số điện thoại:</label> <span>{{phone}}</span>
+		</div>
+
+		<!-- Phương tiện di chuyển -->
+		<p>
+			Phương tiện di chuyển cá nhân:&nbsp; 
+			<span class="checkbox">{{vehicle_50}}</span> Xe máy 50cc &nbsp;
+			<span class="checkbox">{{vehicle_100}}</span> Xe máy trên 50cc &nbsp;
+			<span class="checkbox">{{vehicle_none}}</span> Không
+		</p>
+
+		<!-- Bằng lái -->
+		<p>
+			Bằng lái xe: &nbsp;&nbsp; 
+			<span class="checkbox">{{license_yes}}</span> Có &nbsp;&nbsp;
+			<span class="checkbox">{{license_no}}</span> Không
+		</p>
+
+		<!-- Facebook -->
+		<div class="row-1col">
+			<label>Link Facebook:</label> <span>{{facebook}}</span>
+		</div>
+
+		<!-- Nơi ở -->
+		<div class="row-1col">
+			<label>Nơi ở hiện nay:</label> <span>{{address}}</span>
+		</div>
+
+		<!-- Sức khỏe -->
+		<div class="row-1col">
+			<label>Tình trạng sức khỏe:</label> <span>{{health}}</span>
+		</div>
+
+        <div class="row-1col">
+			<label>Giới thiệu bản thân:</label> <span>{{bio}}</span>
+		</div>
+    </div>
+
+    <div class="page">
+        <div class="part-title-2">PHẦN 2: THÔNG TIN ĐĂNG KÝ ĐỘI HÌNH</div>
+        <table>
+            <thead>
+                <tr>
+                    <th class="col-stt">STT</th>
+                    <th>ĐỘI HÌNH ĐI ĐỊA PHƯƠNG</th>
+                    <th>THỜI GIAN</th>
+                    <th>ĐỘI TRƯỞNG</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td class="col-stt">1</td><td>Đội hình Chồi xuân</td><td class="text-center">03 - 04/01/2026</td><td>Đ/c Nguyễn Ngọc Lan Anh</td></tr>
+                <tr><td class="col-stt">2</td><td>Đội hình Khởi xuân an</td><td class="text-center">09 - 10/01/2026</td><td>Đ/c Nguyễn Ngọc Kiều Chinh</td></tr>
+                <tr><td class="col-stt">3</td><td>Đội hình Xuân chiến sĩ</td><td class="text-center">10 - 11/01/2026</td><td>Đ/c Huỳnh Minh Dũng</td></tr>
+                <tr><td class="col-stt">4</td><td>Đội hình Xuân gắn kết</td><td class="text-center">17 - 18/01/2026</td><td>Đ/c Huỳnh Thiên Kim</td></tr>
+                <tr><td class="col-stt">5</td><td>Đội hình Xuân đất thép</td><td class="text-center">23 - 25/01/2026</td><td>Đ/c Nguyễn Hoàng Quân</td></tr>
+                <tr><td class="col-stt">6</td><td>Đội hình Xuân Bác Ái</td><td class="text-center">06 - 09/02/2026</td><td>Đ/c Nguyễn Minh Nhật</td></tr>
+            </tbody>
+        </table>
+        
+        <p>1. Bạn muốn đăng ký làm ở mảng:</p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+            <span class="checkbox">{{role_tulieu}}</span> Tư liệu &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="checkbox">{{role_thietke}}</span> Thiết kế &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;
+			<span class="checkbox">{{role_content}}</span> Content
+
+        <p>2. Bạn có thể tham gia truyền thông ở đội hình đi địa phương nào? (có thể nhiều lựa chọn)</p>
+        <div class="locations">
+        <div class="location-item">
+            <span class="checkbox">{{loc_cx}}</span>Đội hình Chồi xuân
+        </div>
+        <div class="location-item">
+            <span class="checkbox">{{loc_kxa}}</span>Đội hình Khởi xuân an
+        </div>
+        <div class="location-item">
+            <span class="checkbox">{{loc_xcs}}</span>Đội hình Xuân chiến sĩ
+        </div>
+        <div class="location-item">
+            <span class="checkbox">{{loc_xgk}}</span>Đội hình Xuân gắn kết
+        </div>
+        <div class="location-item">
+            <span class="checkbox">{{loc_xdt}}</span> Đội hình Xuân đất thép
+        </div>
+        <div class="location-item">
+            <span class="checkbox">{{loc_xba}}</span>Đội hình Xuân Bác Ái
+        </div> 
+
+        <p>3. Bạn đã từng tham gia CDTN Xuân tình nguyện năm nào chưa?</p>
+        <p>&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <span class="checkbox">{{cdtn_yes}}</span> Đã từng tham gia &nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp;&nbsp; 
+            <span class="checkbox">{{cdtn_no}}</span> Chưa từng tham gia
+        </p>
+
+        <div class="part-title">4. Đăng ký áo Xuân tình nguyện:</div>
+        <p>Nếu <strong> chưa có </strong> hoặc muốn <strong> mua thêm </strong> áo Xuân tình nguyện, bạn vui lòng chọn size áo:</p>
+        <p>
+            <span class="checkbox">{{size_S}}</span> S &nbsp;&nbsp; <span class="checkbox">{{size_M}}</span> M &nbsp;&nbsp; <span class="checkbox">{{size_L}}</span> L &nbsp;&nbsp;
+            <span class="checkbox">{{size_XL}}</span> XL &nbsp;&nbsp; <span class="checkbox">{{size_XXL}}</span> XXL &nbsp;&nbsp; <span class="checkbox">{{size_XXXL}}</span> XXXL
+        </p>
+
+        <table style="font-size: 10pt; width: 80%; margin: 10px auto;">
+            <thead>
+                <tr>
+                    <th colspan="7" style="background: none; border-bottom: none;">Bảng quy đổi kích cỡ</th>
+                </tr>
+                <tr>
+                    <th>Size</th><th>S</th><th>M</th><th>L</th><th>XL</th><th>XXL</th><th>XXXL</th>
+                </tr>
+            </thead>
+            <tbody class="text-center">
+                <tr><td>Dài áo</td><td>66</td><td>68.5</td><td>71</td><td>73.5</td><td>76</td><td>78.5</td></tr>
+                <tr><td>Rộng ngực (1/2 vòng)</td><td>48</td><td>50</td><td>52</td><td>52</td><td>56</td><td>58</td></tr>
+				<tr><td>Rộng lai (1/2 vòng)</td><td>48</td><td>50</td><td>52</td><td>52</td><td>56</td><td>58</td></tr>
+				<tr><td>Ngang vai</td><td>40</td><td>42</td><td>44</td><td>46</td><td>48</td><td>50</td></tr>
+				<tr><td>Dài tay</td><td>19</td><td>20</td><td>21</td><td>22</td><td>23</td><td>24</td></tr>
+				<tr><td>Cửa tay</td><td>15</td><td>16</td><td>17</td><td>18</td><td>19</td><td>20</td></tr>
+                <tr><td>Chiều cao</td><td>155-160</td><td>161-165</td><td>166-170</td><td>170-175</td><td>175-180</td><td>>180</td></tr>
+                <tr><td>Cân nặng</td><td>46-50</td><td>51-57</td><td>58-65</td><td>65-70</td><td>70-75</td><td>>75</td></tr>
+            </tbody>
+        </table>
+        <p class="italic" style="font-size: 13pt; text-align: left;">Thông số trong Bảng quy đổi kích cỡ này được Người bán cung cấp và có thể sẽ chênh lệch so với thực tế, để hoạt động thoải mái, các bạn nên <strong>tăng 01 size.</strong></p>
+
+        <div class="part-title-2">PHẦN 3: TIÊU CHÍ XÉT CÔNG NHẬN CHIẾN SĨ</div>
+        <ul style="list-style: none; padding-left: 0;">
+            <li>1. Tham gia đủ 70% các ngày sinh hoạt chung và 100% ngày hoạt động chính của đội hình.</li>
+            <li>2. Không trễ hạn và hoàn thành 100% công việc được giao.</li>
+            <li>3. Ngày tình nguyện được quy đổi dựa trên số ngày hoạt động của đội hình (bao gồm cả thời gian di chuyển).</li>
+        </ul>
+    </div>
+</div>
+</body>
+</html>
