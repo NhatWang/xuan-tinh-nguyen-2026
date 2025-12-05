@@ -232,3 +232,31 @@ if (typeof showToast !== "function") {
         alert(msg);
     };
 }
+
+/* =============================
+    GIỚI HẠN SỐ CHỮ TRONG TEXTAREA
+============================= */
+function setupWordLimit(textarea, counterId, limit) {
+    const counter = document.getElementById(counterId);
+
+    textarea.addEventListener("input", () => {
+        let words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0);
+
+        // Nếu vượt quá giới hạn → cắt lại
+        if (words.length > limit) {
+            textarea.value = words.slice(0, limit).join(" ");
+            words = words.slice(0, limit);
+            showToast(`Chỉ được nhập tối đa ${limit} chữ!`, "warning");
+        }
+
+        // Cập nhật bộ đếm
+        counter.textContent = `${words.length} / ${limit} chữ`;
+    });
+}
+
+document.addEventListener("DOMContentLoaded", () => {
+    setupWordLimit(document.getElementById("bio"), "bio_count", 60);
+    setupWordLimit(document.getElementById("health"), "health_count", 60);
+});
+
+

@@ -66,6 +66,44 @@
                 <!-- NGÀNH HỌC -->
                 <label>Ngành học</label>
                 <input type="text" id="major" placeholder="Nhập ngành học của bạn" class="input" required>
+
+                <label>Giới thiệu bản thân</label>
+                <textarea id="bio" required></textarea>
+                <div id="bio_count" class="word-count">0 / 60 chữ</div>
+
+                <label>Tình trạng sức khỏe</label>
+                <textarea id="health" required></textarea>
+                <div id="health_count" class="word-count">0 / 60 chữ</div>
+
+                <!-- CÂU HỎI: ĐÃ TỪNG THAM GIA CHƯA -->
+                <label>Đã từng tham gia CDTN Xuân tình nguyện?</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="cdtn" value="Đã từng" required> Đã từng tham gia</label>
+                    <label><input type="radio" name="cdtn" value="Chưa từng" required> Chưa từng tham gia</label>
+                </div>
+
+                <!-- PHƯƠNG TIỆN DI CHUYỂN -->
+                <label>Phương tiện di chuyển cá nhân</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="vehicle" value="Xe máy 50cc" required> Xe máy 50cc</label>
+                    <label><input type="radio" name="vehicle" value="Xe máy trên 50cc" required> Xe máy trên 50cc</label>
+                    <label><input type="radio" name="vehicle" value="Không" required> Không</label>
+                </div>
+
+                <!-- BẰNG LÁI -->
+                <label>Bằng lái xe</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="license" value="Có" required> Có</label>
+                    <label><input type="radio" name="license" value="Không" required> Không</label>
+                </div>
+
+                <!-- THỰC TẬP HÓA ĐẠI CƯƠNG -->
+                <label>Đã học học phần Thực tập Hóa đại cương?</label>
+                <div class="checkboxes">
+                    <label><input type="radio" name="lab" value="Đã học" required> Đã học</label>
+                    <label><input type="radio" name="lab" value="Chưa học" required> Chưa học</label>
+                </div>
+
                 <!-- NGUYỆN VỌNG -->
                 <label>Nguyện vọng 1</label>
                 <select id="nv1" class="input" required>
@@ -158,40 +196,6 @@
                     <option value="XL">XL</option>
                     <option value="XXL">XXL</option>
                 </select>
-
-                <label>Giới thiệu bản thân</label>
-                <textarea id="bio" required></textarea>
-
-                <label>Tình trạng sức khỏe</label>
-                <textarea id="health" required></textarea>
-                <!-- CÂU HỎI: ĐÃ TỪNG THAM GIA CHƯA -->
-                <label>Đã từng tham gia CDTN Xuân tình nguyện?</label>
-                <div class="checkboxes">
-                    <label><input type="radio" name="cdtn" value="Đã từng" required> Đã từng tham gia</label>
-                    <label><input type="radio" name="cdtn" value="Chưa từng" required> Chưa từng tham gia</label>
-                </div>
-
-                <!-- PHƯƠNG TIỆN DI CHUYỂN -->
-                <label>Phương tiện di chuyển cá nhân</label>
-                <div class="checkboxes">
-                    <label><input type="radio" name="vehicle" value="Xe máy 50cc" required> Xe máy 50cc</label>
-                    <label><input type="radio" name="vehicle" value="Xe máy trên 50cc" required> Xe máy trên 50cc</label>
-                    <label><input type="radio" name="vehicle" value="Không" required> Không</label>
-                </div>
-
-                <!-- BẰNG LÁI -->
-                <label>Bằng lái xe</label>
-                <div class="checkboxes">
-                    <label><input type="radio" name="license" value="Có" required> Có</label>
-                    <label><input type="radio" name="license" value="Không" required> Không</label>
-                </div>
-
-                <!-- THỰC TẬP HÓA ĐẠI CƯƠNG -->
-                <label>Đã học học phần Thực tập Hóa đại cương?</label>
-                <div class="checkboxes">
-                    <label><input type="radio" name="lab" value="Đã học" required> Đã học</label>
-                    <label><input type="radio" name="lab" value="Chưa học" required> Chưa học</label>
-                </div>
 
                 <button class="submit-btn" onclick="submitRegistration()">Gửi đăng ký</button>
 
