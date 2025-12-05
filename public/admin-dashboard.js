@@ -94,8 +94,12 @@ function renderTable(list) {
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
+                <button class="action-btn" onclick="previewPDF('${r._id}', '${safe(u.fullName)}')">
+                    Xem trước
+                </button>
+
                 <button class="action-btn" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
-                    Tải hồ sơ
+                    Tải xuống
                 </button>
             </td>
 
@@ -228,3 +232,34 @@ async function saveInterview() {
     closeInterviewModal();
     loadUsers();
 }
+
+/* =============================
+   XEM TRƯỚC PDF
+============================= */
+async function previewPDF(regId) {
+    try {
+        const res = await fetch(API + `/admin/export/${regId}`, {
+            method: "GET",
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            return showToast("Không thể tạo PDF!", "error");
+        }
+
+        const blob = await res.blob();
+        const url = URL.createObjectURL(blob);
+
+        document.getElementById("pdfFrame").src = url;
+        document.getElementById("pdfModal").style.display = "flex";
+
+    } catch (err) {
+        showToast("Lỗi khi xem PDF!", "error");
+    }
+}
+
+function closePDFModal() {
+    document.getElementById("pdfModal").style.display = "none";
+    document.getElementById("pdfFrame").src = ""; // Reset PDF để giải phóng bộ nhớ
+}
+

@@ -56,15 +56,15 @@
     </table>
 </div>
 
-<!-- Modal xem hồ sơ -->
-<div id="profileModal" class="modal">
+<!-- Modal Preview PDF -->
+<div id="pdfModal" class="modal">
     <div class="modal-content large">
-        <h2>HỒ SƠ TÌNH NGUYỆN VIÊN</h2>
+        <h2>XEM TRƯỚC HỒ SƠ</h2>
 
-        <div id="profileDetail"></div>
+        <iframe id="pdfFrame" style="width:100%; height:80vh; border:none;"></iframe>
 
         <div class="btn-group">
-            <button class="close-btn" onclick="closeProfileModal()">Đóng</button>
+            <button class="close-btn" onclick="closePDFModal()">Đóng</button>
         </div>
     </div>
 </div>
