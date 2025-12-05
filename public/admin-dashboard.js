@@ -1,5 +1,21 @@
 const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
+const shortName = (full) => {
+    const map = {
+        "Đội hình Chồi xuân": "CX",
+        "Đội hình Khởi xuân an": "KXA",
+        "Đội hình Xuân chiến sĩ": "XCS",
+        "Đội hình Xuân gắn kết": "XGK",
+        "Đội hình Xuân đất thép": "XĐT",
+        "Đội hình Xuân Bác Ái": "XBA",
+        "Không": "—",
+        "": "—",
+        null: "—",
+        undefined: "—"
+    };
+    return map[full] || "—";
+};
+
 /* ===== TOAST UI ===== */
 function showToast(message, type = "success") {
     const toastContainer = document.getElementById("toast");
@@ -79,18 +95,21 @@ function renderTable(list) {
         const u = item.user;
         const r = item.reg;
 
-        const nvList = [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5, r.nv6]
-            .filter(v => v && v !== "Không")
-            .join(", ");
-
         const tr = document.createElement("tr");
 
         tr.innerHTML = `
             <td>${safe(u.fullName)}</td>
             <td>${safe(u.studentId)}</td>
             <td>${safe(u.email)}</td>
-            <td>${safe(nvList)}</td>
-            <td><a href="${r.facebook || "#"}" target="_blank">Facebook</a></td>
+
+            <td>${shortName(r.nv1)}</td>
+            <td>${shortName(r.nv2)}</td>
+            <td>${shortName(r.nv3)}</td>
+            <td>${shortName(r.nv4)}</td>
+            <td>${shortName(r.nv5)}</td>
+            <td>${shortName(r.nv6)}</td>
+
+            <td><a href="${r.facebook || "#"}" target="_blank">FB</a></td>
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
@@ -104,10 +123,11 @@ function renderTable(list) {
             </td>
 
             <td>
-                <button class="action-btn" onclick="openInterviewModal('${r._id}', '${safe(r.interviewNote || "")}', '${safe(r.interviewResult || "")}')">
+                <button class="action-btn" onclick="openInterviewModal('${r._id}', '${safe(r.interviewNote || "")}', '${safe(r.interviewResult || "")}', '${safe(r.interviewer || "")}')">
                     Phỏng vấn
                 </button>
             </td>
+
             <td>${safe(r.interviewer || "—")}</td>
         `;
 
@@ -119,18 +139,28 @@ function renderTable(list) {
     LỌC DANH SÁCH
 ============================= */
 function filterUsers() {
+    const text = document.getElementById("searchText").value.trim().toLowerCase();
     const nvFilter = document.getElementById("filterNV").value;
     const statusFilter = document.getElementById("filterStatus").value;
 
     let filtered = [...allUsers];
 
-    if (nvFilter) {
-        filtered = filtered.filter(u => {
-            const r = u.reg;
-            return [r.nv1, r.nv2, r.nv3, r.nv4, r.nv5, r.nv6].includes(nvFilter);
-        });
+    // Lọc theo Tên hoặc MSSV
+    if (text) {
+        filtered = filtered.filter(u =>
+            u.user.fullName.toLowerCase().includes(text) ||
+            u.user.studentId.toLowerCase().includes(text)
+        );
     }
 
+    // Lọc theo nguyện vọng 1 (rút gọn)
+    if (nvFilter) {
+        filtered = filtered.filter(u =>
+            shortName(u.reg.nv1) === shortName(nvFilter)
+        );
+    }
+
+    // Lọc theo trạng thái
     if (statusFilter) {
         if (statusFilter === "Chưa phỏng vấn") {
             filtered = filtered.filter(u => !u.reg.interviewResult);
@@ -141,6 +171,7 @@ function filterUsers() {
 
     renderTable(filtered);
 }
+
 
 /* =============================
    DOWNLOAD PDF

@@ -25,11 +25,14 @@
             box-sizing: border-box;
             box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
             position: relative;
-            page-break-after: always;
         }
 
-        .page:last-child {
-             page-break-after: auto;  /* Trang cuối không cần ép nhảy */
+        .page {
+            page-break-after: auto;
+        }
+
+        .page + .page {
+            page-break-before: always !important;
         }
         
         /* Ngăn các bảng bị tách nửa trang */

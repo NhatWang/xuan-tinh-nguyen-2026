@@ -19,14 +19,16 @@
 
     <!-- Thanh lọc -->
     <div class="filter-box">
+        <input id="searchText" type="text" placeholder="Tìm theo tên hoặc MSSV..." onkeyup="filterUsers()" />
+
         <select id="filterNV" onchange="filterUsers()">
             <option value="">Lọc theo nguyện vọng 1</option>
-            <option value="Đội hình Chồi xuân">Đội hình Chồi xuân</option>
-            <option value="Đội hình Khởi xuân an">Đội hình Khởi xuân an</option>
-            <option value="Đội hình Xuân chiến sĩ">Đội hình Xuân chiến sĩ</option>
-            <option value="Đội hình Xuân gắn kết">Đội hình Xuân gắn kết</option>
-            <option value="Đội hình Xuân đất thép">Đội hình Xuân đất thép</option>
-            <option value="Đội hình Xuân Bác Ái">Đội hình Xuân Bác Ái</option>
+            <option value="Đội hình Chồi xuân">CX</option>
+            <option value="Đội hình Khởi xuân an">KXA</option>
+            <option value="Đội hình Xuân chiến sĩ">XCS</option>
+            <option value="Đội hình Xuân gắn kết">XGK</option>
+            <option value="Đội hình Xuân đất thép">XĐT</option>
+            <option value="Đội hình Xuân Bác Ái">XBA</option>
         </select>
 
         <select id="filterStatus" onchange="filterUsers()">
@@ -44,7 +46,14 @@
                 <th>Họ tên</th>
                 <th>MSSV</th>
                 <th>Email</th>
-                <th>Nguyện vọng</th>
+
+                <th>NV1</th>
+                <th>NV2</th>
+                <th>NV3</th>
+                <th>NV4</th>
+                <th>NV5</th>
+                <th>NV6</th>
+
                 <th>Facebook</th>
                 <th>Trạng thái</th>
                 <th>Hồ sơ</th>
@@ -54,7 +63,7 @@
         </thead>
         <tbody id="tableBody"></tbody>
     </table>
-</div>
+
 
 <!-- Modal Preview PDF -->
 <div id="pdfModal" class="modal">
