@@ -1,4 +1,4 @@
-const API = "https://www.xtnhoahoc2026.id.vn/api";
+const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
 /* ===== TOAST UI ===== */
 function showToast(message, type = "success") {
