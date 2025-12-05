@@ -7,7 +7,7 @@
         /* Cấu hình trang A4 */
         @page {
             size: A4;
-            margin: 0;
+            margin: 5mm 10mm 10mm 10mm; /* Lề trái, phải: 1cm; Lề trên: 0.5cm; Lề dưới: 1cm */
         }
         body {
             margin: 0;
@@ -19,7 +19,7 @@
         .page {
             width: 210mm;
             min-height: 297mm;
-            padding: 20mm 20mm !important; /* Lề trái phải trên dưới 2cm */
+            padding: 5mm 15mm !important; /* Lề trái phải trên dưới 2cm */
             margin: 0 auto;
             background: white;
             box-sizing: border-box;
@@ -29,7 +29,6 @@
         }
 
         .page:first-child {
-            margin-top: 5mm;
             page-break-before: auto;  /* Trang đầu không cần ép nhảy */
         }
         
@@ -42,15 +41,6 @@
         @media print {
             body { background: white; }
             .page { margin: 0; box-shadow: none; width: 100%; height: auto; }
-            .page::before {
-                content: "";
-                display: block;
-                height: 20mm; /* Lề trên cho mọi trang */
-                position: running(header-space);
-            }
-            @page {
-                margin-top: 20mm; /* ép khoảng trắng đầu trang */
-            }
         }
 
         /* Định dạng chung */
@@ -305,7 +295,7 @@
                 </tr>
             </thead>
             <tbody>
-                <tr><td class="col-stt">1</td><td>Đội hình Chồi xuân</td><td class="text-center">03, 04/01/2026</td><td>Đ/c Nguyễn Ngọc Lan Anh</td></tr>
+                <tr><td class="col-stt">1</td><td>Đội hình Chồi xuân</td><td class="text-center">03 - 04/01/2026</td><td>Đ/c Nguyễn Ngọc Lan Anh</td></tr>
                 <tr><td class="col-stt">2</td><td>Đội hình Khởi xuân an</td><td class="text-center">09 - 10/01/2026</td><td>Đ/c Nguyễn Ngọc Kiều Chinh</td></tr>
                 <tr><td class="col-stt">3</td><td>Đội hình Xuân chiến sĩ</td><td class="text-center">10 - 11/01/2026</td><td>Đ/c Huỳnh Minh Dũng</td></tr>
                 <tr><td class="col-stt">4</td><td>Đội hình Xuân gắn kết</td><td class="text-center">17 - 18/01/2026</td><td>Đ/c Huỳnh Thiên Kim</td></tr>
