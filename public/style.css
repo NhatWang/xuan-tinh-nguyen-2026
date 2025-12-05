@@ -9,16 +9,11 @@
 
 /* ===== BACKGROUND ===== */
 body {
-  background-image: url("/images/bg.png");  /* nền bạn gửi */
+  background-image: url("/images/bg.png");
   background-size: cover;
   background-position: center;
   background-repeat: no-repeat;
   min-height: 100vh;
-
-  /* lớp làm mờ nhẹ tạo độ sâu */
-  display: flex;
-  justify-content: center;
-  align-items: center;
   padding: 40px;
   position: relative;
 }
@@ -287,11 +282,14 @@ button:hover {
 }
 
 .footer {
-    position: relative;
-    z-index: 10;
-    text-align: center;
-    font-size: 14px;
-    color: #5A3A26;       /* Nâu đậm — cùng tone chữ tiêu đề */
-    padding: 20px 10px;
-    margin-top: 15px;
+  text-align: center;
+  width: 100%;
+  z-index: 10;
+  margin-top: 20px;
+  font-size: 14px;
+  color: #5A3A26;
+  position: absolute;
+  bottom: 10px;
+  left: 0;
+  width: 100%;
 }
