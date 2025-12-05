@@ -47,6 +47,7 @@ app.use("/api/media", require("./routes/media"));
 // 5. STATIC FRONTEND (nếu cần)
 // ===============================
 app.use(express.static("public"));
+app.use("/avatars", express.static("public/avatars"));
 
 // ===============================
 // 6. CUSTOM ROUTES

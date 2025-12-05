@@ -29,6 +29,20 @@ function safe(text) {
     })[c]) || "";
 }
 
+const ADMIN_AVATARS = {
+    "lchhh.hcmus@gmail.com": "/avatars/lch.png",
+    "hoahoc.kttt@gmail.com": "/avatars/chemme.jpg",
+    "dsvtn.hh.khtn@gmail.com": "/avatars/svtn.jpg"
+};
+
+function loadAdminAvatar(email) {
+    const img = document.getElementById("adminAvatar");
+
+    if (!img) return;
+
+    img.src = ADMIN_AVATARS[email] || "/avatars/default.jpg";
+}
+
 /* =====================================================
    TOAST UI
 ===================================================== */
@@ -66,6 +80,8 @@ async function checkAdmin() {
 
         document.getElementById("adminName").textContent = user.fullName;
         document.getElementById("adminEmail").textContent = user.email;
+        // Gọi load avatar
+        loadAdminAvatar(user.email);
         return true;
 
     } catch (err) {
