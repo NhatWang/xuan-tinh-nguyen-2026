@@ -337,3 +337,118 @@ input[type="text"]:focus {
 
     --modal-bg: #ffffff;   /* ⭐ Quan trọng! */
 }
+
+/* ===============================
+   FIX TEXTAREA BỊ TRÀN KHỎI MODAL
+   =============================== */
+.modal-content textarea {
+    width: 100% !important;
+    max-width: 100% !important;
+
+    min-height: 90px;
+    max-height: 180px;
+
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d3c1ac;
+    background: var(--input-bg);
+
+    font-size: 15px;
+    line-height: 1.45;
+
+    overflow-y: auto;      /* ⭐ Nội dung dài => scroll */
+    resize: vertical;      /* Chỉ cho kéo dọc */
+    box-sizing: border-box;
+    word-break: break-word;
+    white-space: pre-wrap;
+}
+
+/* ==========================================
+   FIX TEXTAREA BỊ TRÀN + FORM MODAL CHUẨN
+========================================== */
+#interviewModal .modal-content {
+    width: 480px !important;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 28px;
+    border-radius: 14px;
+    box-sizing: border-box;
+}
+
+/* Tiêu đề modal */
+#interviewModal h2 {
+    font-size: 20px;
+    margin-bottom: 12px;
+    color: #5a3a1d;
+}
+
+/* Label căn đều hàng */
+#interviewModal label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #5a3a1d;
+}
+
+/* Input + Select + Textarea chuẩn form */
+#interviewModal textarea,
+#interviewModal select,
+#interviewModal input[type="text"] {
+    width: 100%;
+    padding: 12px 14px;
+    font-size: 15px;
+
+    border: 1px solid #d3c1ac;
+    border-radius: 10px;
+    background: var(--input-bg);
+
+    box-sizing: border-box;
+    margin-bottom: 16px;
+
+    outline: none;
+    transition: 0.25s;
+}
+
+/* TEXTAREA FIX TRÀN */
+#interviewModal textarea {
+    min-height: 110px;
+    max-height: 220px;
+    resize: vertical;
+    overflow-y: auto;
+
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Focus đẹp */
+#interviewModal textarea:focus,
+#interviewModal select:focus,
+#interviewModal input:focus {
+    border-color: #c59b6d;
+    box-shadow: 0 0 0 3px rgba(197,155,109,0.25);
+}
+
+/* Button group */
+#interviewModal .btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 10px;
+}
+
+.save-btn {
+    background: #8b5a2b !important;
+    color: white !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+}
+
+.close-btn {
+    background: #ccc !important;
+    color: #333 !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+}

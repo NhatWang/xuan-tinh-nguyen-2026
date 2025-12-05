@@ -15,7 +15,7 @@
             margin: 0;
             padding: 0;
             height: auto !important;
-            background: #f0f0f0 !important;
+            background: none !important;
             overflow: visible !important;
             font-size: 14pt;
             line-height: 1.5;
@@ -25,18 +25,18 @@
         /* KHÔNG dùng min-height = đúng 297mm (gây sinh trang ảo) */
         .page {
             width: 210mm;
-            min-height: auto;   /* <-- FIX CHÍNH */
+            min-height: 0 !important;   /* <-- FIX CHÍNH */
             padding: 5mm 15mm !important;
             margin: 0 auto;
             background: white;
             box-sizing: border-box;
-            box-shadow: 0 0 5px rgba(0,0,0,0.1);
             position: relative;
+            page-break-after: always !important;
         }
 
         /* Trang cuối cùng KHÔNG nhảy */
-        .page:not(:last-child) {
-            page-break-after: always !important;
+        .page:last-child {
+            page-break-after: auto !important;
         }
 
         * {
@@ -45,8 +45,10 @@
 
         /* Khi print thì xoá shadow */
         @media print {
-            body { background: white; }
             .page { box-shadow: none; width: 100%; }
+            html, body {
+                background: none !important;
+            }
         }
 
         /* Định dạng chung */
