@@ -1,93 +1,104 @@
 /* ======================================
-   THEME VARIABLES
-====================================== */
-:root {
-    --bg-main: #f8f3ea;
-    --text-main: #4A321B;
-    --glass-bg: rgba(255, 255, 255, 0.45);
-    --border-glass: rgba(255, 255, 255, 0.35);
-    --shadow: 0 8px 25px rgba(0,0,0,0.12);
-    --accent: #D8A564;
-    --accent-hover: #C18D51;
-}
-
-.dark {
-    --bg-main: #1e1c1a;
-    --text-main: #f8e9d0;
-    --glass-bg: rgba(50, 47, 44, 0.55);
-    --border-glass: rgba(255, 255, 255, 0.15);
-    --shadow: 0 8px 25px rgba(0,0,0,0.35);
-    --accent: #E4B574;
-    --accent-hover: #c69b5e;
-}
-
-/* ======================================
-   GENERAL
+   GENERAL STYLE
 ====================================== */
 body {
     margin: 0;
     font-family: "Inter", Arial, sans-serif;
     background: var(--bg-main);
     color: var(--text-main);
-    transition: 0.3s ease;
+    transition: background 0.35s ease, color 0.35s ease;
 }
 
 /* ======================================
-   SIDEBAR GLASSMORPHISM
+   SIDEBAR (TỐI ƯU + ADMIN INFO)
 ====================================== */
 .sidebar {
     width: 240px;
     height: 100vh;
+    background: var(--sidebar-bg);
+    color: white;
     position: fixed;
     padding: 24px;
-    backdrop-filter: blur(16px);
-    background: var(--glass-bg);
-    border-right: 1px solid var(--border-glass);
-    box-shadow: var(--shadow);
+    box-sizing: border-box;
     display: flex;
     flex-direction: column;
-    z-index: 10;
+    gap: 18px;
 }
 
 .sidebar h2 {
+    margin-bottom: 12px;
     font-size: 22px;
     font-weight: 700;
-    margin-bottom: 30px;
+    text-align: center;
+}
+
+/* ADMIN INFO */
+.admin-info {
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    margin-top: -10px;
+    margin-bottom: 10px;
+}
+
+.admin-avatar {
+    width: 70px;
+    height: 70px;
+    background: #fff;
+    border-radius: 50%;
+    margin-bottom: 10px;
+}
+
+.admin-name {
+    font-size: 16px;
+    font-weight: 700;
+}
+
+.admin-email {
+    font-size: 13px;
+    opacity: 0.85;
 }
 
 /* MENU BUTTON */
 .menu-btn {
-    padding: 12px;
-    margin-bottom: 12px;
-    background: var(--accent);
+    width: 100%;
+    padding: 12px 14px;
+    background: #e8c39e;
     border: none;
-    border-radius: 12px;
+    border-radius: 10px;
     cursor: pointer;
     font-size: 15px;
-    color: white;
-    transition: 0.25s;
-    box-shadow: 0 3px 10px rgba(0,0,0,0.15);
+    color: #4e2f14;
+    font-weight: 600;
+    transition: 0.25s ease;
 }
 
 .menu-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
+    background: #f1d7b8;
 }
 
 .menu-btn.active {
-    background: #fff;
-    color: var(--accent);
+    background: #fff3db;
+    color: #8b5a2b;
+    font-weight: 700;
 }
 
-.theme-switch {
+/* LOGOUT BUTTON */
+.logout-btn {
     margin-top: auto;
-    padding: 10px;
-    background: var(--accent);
+    padding: 12px;
     border-radius: 10px;
-    cursor: pointer;
+    font-size: 15px;
+    font-weight: 600;
+    background: #d46a6a;
+    border: none;
     color: white;
-    text-align: center;
-    font-size: 14px;
+    cursor: pointer;
+    transition: 0.25s ease;
+}
+
+.logout-btn:hover {
+    background: #c25454;
 }
 
 /* ======================================
@@ -95,82 +106,102 @@ body {
 ====================================== */
 .main {
     margin-left: 260px;
-    padding: 32px;
+    padding: 40px 50px;
 }
 
 h1 {
-    font-size: 26px;
-    margin-bottom: 20px;
+    font-size: 28px;
+    margin-bottom: 25px;
+    font-weight: 700;
+    color: #70471e;
 }
 
 /* ======================================
-   FILTER AREA
+   FILTER BOX
 ====================================== */
-.filter-box select {
-    padding: 10px;
-    margin-right: 12px;
-    border-radius: 10px;
-    border: 1px solid #dacbb6;
-    background: #fff;
-    transition: 0.2s;
+.filter-box {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    max-width: 900px;
 }
 
-.filter-box select:hover {
-    border-color: var(--accent);
+.filter-row {
+    display: flex;
+    gap: 12px;
+}
+
+.filter-box input,
+.filter-box select {
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid var(--border-color);
+    background: var(--input-bg);
+    font-size: 15px;
+    outline: none;
+    transition: 0.2s ease;
+}
+
+.filter-box input::placeholder {
+    color: #998675;
+}
+
+.filter-box input:focus,
+.filter-box select:focus {
+    border-color: #c59b6d;
+    box-shadow: 0 0 0 3px rgba(197, 155, 109, 0.28);
 }
 
 /* ======================================
-   TABLE GLASSMORPHISM + STICKY HEADER
+   TABLE
 ====================================== */
 table {
     width: 100%;
     border-collapse: collapse;
+    background: var(--card-bg);
+    border-radius: 14px;
     overflow: hidden;
-    background: var(--glass-bg);
-    backdrop-filter: blur(12px);
-    border-radius: 12px;
+    margin-top: 20px;
 }
 
 th {
-    position: sticky;
-    top: 0;
-    background: rgba(255,255,255,0.65);
+    background: var(--table-header);
     padding: 14px;
-    border-bottom: 1px solid var(--border-glass);
-    font-weight: 600;
-    backdrop-filter: blur(12px);
-    z-index: 2;
+    text-align: center;
+    font-weight: 700;
+    color: #5c3a1a;
 }
 
 td {
     padding: 12px;
-    border-bottom: 1px solid rgba(255,255,255,0.15);
+    text-align: center;
+    border-bottom: 1px solid #eee;
+    font-size: 14.5px;
 }
 
 tr:hover td {
-    background: rgba(255,255,255,0.2);
+    background: var(--table-hover);
 }
 
 /* ======================================
-   ACTION BUTTONS
+   BUTTONS
 ====================================== */
 .action-btn {
     padding: 8px 12px;
     border: none;
-    background: var(--accent);
+    background: var(--btn);
     color: white;
-    border-radius: 10px;
+    border-radius: 8px;
     cursor: pointer;
-    transition: 0.25s;
+    transition: 0.2s ease;
 }
 
 .action-btn:hover {
-    background: var(--accent-hover);
-    transform: translateY(-2px);
+    background: var(--btn-hover);
 }
 
 /* ======================================
-   MODAL GLASSMORPHISM
+   MODALS
 ====================================== */
 .modal {
     display: none;
@@ -179,46 +210,112 @@ tr:hover td {
     background: rgba(0,0,0,0.45);
     align-items: center;
     justify-content: center;
-    animation: fadeIn 0.25s ease;
 }
 
 .modal-content {
-    background: var(--glass-bg);
-    backdrop-filter: blur(18px);
-    border-radius: 18px;
+    background: var(--modal-bg);
     padding: 28px;
-    width: 450px;
-    border: 1px solid var(--border-glass);
-    box-shadow: var(--shadow);
-    animation: popIn 0.3s ease;
+    border-radius: 14px;
+    width: 440px;
+    box-shadow: 0 6px 25px rgba(0,0,0,0.15);
+    animation: zoomIn 0.25s ease;
 }
 
 .modal-content.large {
-    width: 720px;
+    width: 70%;
 }
 
-/* MODAL ANIMATION */
-@keyframes fadeIn {
-    from { opacity: 0; }
-    to   { opacity: 1; }
+@keyframes zoomIn {
+    from { transform: scale(0.92); opacity: 0; }
+    to { transform: scale(1); opacity: 1; }
 }
-@keyframes popIn {
-    from { transform: scale(0.8); opacity: 0; }
-    to   { transform: scale(1); opacity: 1; }
+
+textarea, select, input[type="text"] {
+    width: 100%;
+    padding: 10px 14px;
+    border-radius: 10px;
+    border: 1px solid #d3c1ac;
+    background: var(--input-bg);
+    font-size: 15px;
+    margin-bottom: 15px;
+}
+
+textarea:focus,
+input[type="text"]:focus {
+    border-color: #c59b6d;
+    box-shadow: 0 0 0 3px rgba(197, 155, 109, 0.28);
+}
+
+.close-btn {
+    background: #ccc;
+    color: #333;
+    padding: 8px 14px;
+    border-radius: 8px;
+}
+
+.save-btn {
+    background: #8b5a2b;
+    color: white;
+    padding: 8px 14px;
+    border-radius: 8px;
 }
 
 /* ======================================
-   TOAST (giữ nguyên animation đẹp)
+   TOAST
 ====================================== */
 #toast {
     position: fixed;
     top: 25px;
     right: 25px;
-    z-index: 9999;
+    z-index: 2000;
+    display: flex;
+    flex-direction: column;
+    gap: 10px;
 }
 
 .toast {
-    backdrop-filter: blur(10px);
-    background: var(--glass-bg);
-    border-left-color: var(--accent);
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 14px 18px;
+    border-radius: 12px;
+    font-size: 15px;
+    min-width: 260px;
+    max-width: 350px;
+    box-shadow: 0 4px 16px rgba(0,0,0,0.15);
+    animation: slideIn 0.4s ease, fadeOut 0.6s ease 3.2s forwards;
+}
+
+/* SUCCESS */
+.toast.success {
+    background: #e9f8ec;
+    color: #2c7a3f;
+    border-left: 5px solid #2c7a3f;
+}
+
+/* ERROR */
+.toast.error {
+    background: #ffeaea;
+    color: #c0353c;
+    border-left: 5px solid #c0353c;
+}
+
+/* WARNING */
+.toast.warning {
+    background: #fff6e5;
+    color: #b86d00;
+    border-left: 5px solid #b86d00;
+}
+
+.toast i {
+    font-size: 18px;
+}
+
+@keyframes slideIn {
+    from { opacity: 0; transform: translateX(40px); }
+    to   { opacity: 1; transform: translateX(0); }
+}
+
+@keyframes fadeOut {
+    to { opacity: 0; transform: translateX(40px); }
 }

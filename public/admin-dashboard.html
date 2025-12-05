@@ -7,39 +7,71 @@
 </head>
 
 <body>
+
+<!-- Toast -->
 <div id="toast"></div>
 
+<!-- SIDEBAR -->
 <div class="sidebar">
+
     <h2>ADMIN DASHBOARD</h2>
-    <button class="menu-btn active" onclick="loadUsers()">Danh sách đăng ký</button>
+
+    <!-- Admin Info -->
+    <div class="admin-info">
+        <div class="admin-avatar"></div>
+        <div class="admin-name" id="adminName"></div>
+        <div class="admin-email" id="adminEmail"></div>
+    </div>
+
+    <button class="menu-btn active" onclick="loadUsers()">
+        Danh sách đăng ký
+    </button>
+
+    <!-- LOGOUT -->
+    <button class="logout-btn" onclick="logoutAdmin()">
+        Đăng xuất
+    </button>
+
 </div>
 
+<!-- MAIN -->
 <div class="main">
     <h1>Danh sách tình nguyện viên đăng ký</h1>
 
-    <!-- Thanh lọc -->
+    <!-- FILTER AREA -->
     <div class="filter-box">
-        <input id="searchText" type="text" placeholder="Tìm theo tên hoặc MSSV..." onkeyup="filterUsers()" />
 
-        <select id="filterNV" onchange="filterUsers()">
-            <option value="">Lọc theo nguyện vọng 1</option>
-            <option value="Đội hình Chồi xuân">CX</option>
-            <option value="Đội hình Khởi xuân an">KXA</option>
-            <option value="Đội hình Xuân chiến sĩ">XCS</option>
-            <option value="Đội hình Xuân gắn kết">XGK</option>
-            <option value="Đội hình Xuân đất thép">XĐT</option>
-            <option value="Đội hình Xuân Bác Ái">XBA</option>
-        </select>
+        <div class="filter-row">
+            <input 
+                id="searchText" 
+                type="text" 
+                placeholder="Tìm theo tên hoặc MSSV..." 
+                onkeyup="filterUsers()"
+            />
+        </div>
 
-        <select id="filterStatus" onchange="filterUsers()">
-            <option value="">Lọc theo trạng thái</option>
-            <option value="Đạt">Đạt</option>
-            <option value="Không đạt">Không đạt</option>
-            <option value="Chờ duyệt">Chờ duyệt</option>
-            <option value="Chưa phỏng vấn">Chưa phỏng vấn</option>
-        </select>
+        <div class="filter-row">
+            <select id="filterNV" onchange="filterUsers()">
+                <option value="">Lọc theo nguyện vọng 1</option>
+                <option value="Đội hình Chồi xuân">CX</option>
+                <option value="Đội hình Khởi xuân an">KXA</option>
+                <option value="Đội hình Xuân chiến sĩ">XCS</option>
+                <option value="Đội hình Xuân gắn kết">XGK</option>
+                <option value="Đội hình Xuân đất thép">XĐT</option>
+                <option value="Đội hình Xuân Bác Ái">XBA</option>
+            </select>
+
+            <select id="filterStatus" onchange="filterUsers()">
+                <option value="">Lọc theo trạng thái</option>
+                <option value="Đạt">Đạt</option>
+                <option value="Không đạt">Không đạt</option>
+                <option value="Chờ duyệt">Chờ duyệt</option>
+                <option value="Chưa phỏng vấn">Chưa phỏng vấn</option>
+            </select>
+        </div>
     </div>
 
+    <!-- USER TABLE -->
     <table id="userTable">
         <thead>
             <tr>
@@ -61,14 +93,17 @@
                 <th>Người phỏng vấn</th>
             </tr>
         </thead>
+
         <tbody id="tableBody"></tbody>
     </table>
+</div>
 
-
-<!-- Modal Preview PDF -->
+<!-- =====================================
+     PDF PREVIEW MODAL
+===================================== -->
 <div id="pdfModal" class="modal">
     <div class="modal-content large">
-        <h2>XEM TRƯỚC HỒ SƠ</h2>
+        <h2 style="margin-bottom: 15px;">📄 Xem trước hồ sơ</h2>
 
         <iframe id="pdfFrame" style="width:100%; height:80vh; border:none;"></iframe>
 
@@ -78,13 +113,16 @@
     </div>
 </div>
 
-<!-- Modal phỏng vấn -->
+<!-- =====================================
+     INTERVIEW MODAL
+===================================== -->
 <div id="interviewModal" class="modal">
     <div class="modal-content">
+
         <h2 style="margin-bottom: 15px;">📝 Phỏng vấn</h2>
 
         <label>Ghi chú</label>
-        <textarea id="interviewNote"></textarea>
+        <textarea id="interviewNote" placeholder="Nhập ghi chú..."></textarea>
 
         <label>Kết quả</label>
         <select id="interviewResult">
@@ -94,16 +132,14 @@
         </select>
 
         <label>Người phỏng vấn</label>
-        <input id="interviewer" type="text" placeholder="Nhập tên người phỏng vấn">
+        <input id="interviewer" type="text" placeholder="Tên người phỏng vấn">
 
         <div class="btn-group" style="margin-top: 15px;">
-            <button class="action-btn" onclick="saveInterview()">Lưu</button>
-            <button class="action-btn" onclick="closeInterviewModal()" 
-                style="background:#777;">Đóng</button>
+            <button class="save-btn" onclick="saveInterview()">Lưu</button>
+            <button class="close-btn" onclick="closeInterviewModal()">Đóng</button>
         </div>
     </div>
 </div>
-
 
 <script src="admin-dashboard.js"></script>
 

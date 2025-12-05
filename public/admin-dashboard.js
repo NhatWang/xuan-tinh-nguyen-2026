@@ -38,7 +38,7 @@ async function checkAdmin() {
 
         if (!res.ok) {
             showToast("Bạn chưa đăng nhập!", "warning");
-            window.location.href = "../frontend-dang-ky/login.html";
+            window.location.href = "../public/login.html";
             return false;
         }
 
@@ -46,9 +46,13 @@ async function checkAdmin() {
 
         if (user.role !== "admin") {
             showToast("Bạn không có quyền truy cập trang admin!", "error");
-            window.location.href = "../dashboard/dashboard.html";
+            window.location.href = "../public/dashboard.html";
             return false;
         }
+
+        // 👉 Cập nhật tên & email vào sidebar
+        document.getElementById("adminName").textContent = user.fullName;
+        document.getElementById("adminEmail").textContent = user.email;
 
         return true;
 
@@ -57,6 +61,7 @@ async function checkAdmin() {
         return false;
     }
 }
+
 
 /* =============================
    LOAD DANH SÁCH ĐĂNG KÝ
@@ -294,29 +299,14 @@ function closePDFModal() {
     document.getElementById("pdfFrame").src = ""; // Reset PDF để giải phóng bộ nhớ
 }
 
-// ======================
-// THEME SWITCH
-// ======================
-const root = document.documentElement;
-const themeBtn = document.createElement("button");
-
-themeBtn.className = "theme-switch";
-themeBtn.innerText = "Đổi giao diện 🌗";
-
-document.querySelector(".sidebar").appendChild(themeBtn);
-
-// Load theme saved
-if (localStorage.getItem("theme") === "dark") {
-    document.body.classList.add("dark");
+function logoutAdmin() {
+    fetch(API + "/auth/logout", {
+        method: "POST",
+        credentials: "include"
+    }).finally(() => {
+        showToast("Đã đăng xuất!", "success");
+        setTimeout(() => {
+            window.location.href = "../public/login.html";
+        }, 800);
+    });
 }
-
-themeBtn.onclick = () => {
-    document.body.classList.toggle("dark");
-
-    if (document.body.classList.contains("dark"))
-        localStorage.setItem("theme", "dark");
-    else
-        localStorage.setItem("theme", "light");
-};
-
-
