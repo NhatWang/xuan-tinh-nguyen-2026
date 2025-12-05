@@ -95,7 +95,7 @@ function renderTable(list) {
 
             <td>
                 <button class="action-btn" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
-                    Xem hồ sơ
+                    Tải hồ sơ
                 </button>
             </td>
 
