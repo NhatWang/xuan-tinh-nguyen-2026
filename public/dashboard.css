@@ -121,7 +121,7 @@ h2 {
 }
 
 /* INPUT & TEXTAREA */
-.input, textarea {
+.input {
   width: 100%;
   padding: 14px 16px;
   border-radius: 16px;
@@ -131,6 +131,13 @@ h2 {
   margin-bottom: 16px;
   font-size: 16px;
   transition: 0.25s;
+}
+
+textarea {
+    width: 100%;
+    min-height: 60px;
+    resize: none; /* Không cho người dùng kéo thủ công */
+    overflow: hidden; /* Ẩn scrollbar */
 }
 
 .input:focus, textarea:focus {

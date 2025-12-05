@@ -234,29 +234,43 @@ if (typeof showToast !== "function") {
 }
 
 /* =============================
-    GIỚI HẠN SỐ CHỮ TRONG TEXTAREA
+    TỰ ĐỘNG RESIZE + ĐẾM CHỮ 
 ============================= */
-function setupWordLimit(textarea, counterId, limit) {
+function autoResize(textarea) {
+    textarea.style.height = "auto"; 
+    textarea.style.height = textarea.scrollHeight + "px";
+}
+
+function setupTextarea(textarea, counterId, limit) {
     const counter = document.getElementById(counterId);
 
     textarea.addEventListener("input", () => {
+        // TỰ ĐỘNG RESIZE
+        autoResize(textarea);
+
+        // ĐẾM CHỮ
         let words = textarea.value.trim().split(/\s+/).filter(w => w.length > 0);
 
-        // Nếu vượt quá giới hạn → cắt lại
+        // GIỚI HẠN 60 CHỮ
         if (words.length > limit) {
             textarea.value = words.slice(0, limit).join(" ");
             words = words.slice(0, limit);
             showToast(`Chỉ được nhập tối đa ${limit} chữ!`, "warning");
+            autoResize(textarea); // resize lại sau khi cắt chữ
         }
 
-        // Cập nhật bộ đếm
+        // CẬP NHẬT BỘ ĐẾM
         counter.textContent = `${words.length} / ${limit} chữ`;
     });
+
+    // Resize lần đầu khi load
+    autoResize(textarea);
 }
 
 document.addEventListener("DOMContentLoaded", () => {
-    setupWordLimit(document.getElementById("bio"), "bio_count", 60);
-    setupWordLimit(document.getElementById("health"), "health_count", 60);
+    setupTextarea(document.getElementById("bio"), "bio_count", 60);
+    setupTextarea(document.getElementById("health"), "health_count", 60);
 });
+
 
 
