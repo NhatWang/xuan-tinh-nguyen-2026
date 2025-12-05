@@ -452,3 +452,43 @@ input[type="text"]:focus {
     padding: 10px 20px;
     border-radius: 10px;
 }
+
+/* --- Hàng nút nằm ngang --- */
+.btn-row {
+    display: flex;
+    gap: 10px;
+    justify-content: center;
+    align-items: center;
+}
+
+/* --- Nút xem trước (màu cam nâu cũ) --- */
+.btn-preview {
+    padding: 8px 12px;
+    border: none;
+    background: #d2a679;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.25s;
+    font-size: 14px;
+}
+.btn-preview:hover {
+    background: #bb8c63;
+}
+
+/* --- Nút tải xuống (màu xanh lá) --- */
+.btn-download {
+    padding: 8px 12px;
+    border: none;
+    background: #2fa45a;
+    color: #fff;
+    border-radius: 8px;
+    cursor: pointer;
+    white-space: nowrap;
+    transition: 0.25s;
+    font-size: 14px;
+}
+.btn-download:hover {
+    background: #268749;
+}

@@ -118,13 +118,15 @@ function renderTable(list) {
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
-                <button class="action-btn" onclick="previewPDF('${r._id}', '${safe(u.fullName)}')">
-                    Xem trước
-                </button>
+                <div class="btn-row">
+                    <button class="btn-preview" onclick="previewPDF('${r._id}', '${safe(u.fullName)}')">
+                        Xem trước
+                    </button>
 
-                <button class="action-btn" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
-                    Tải xuống
-                </button>
+                    <button class="btn-download" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
+                        Tải xuống
+                    </button>
+                </div>
             </td>
 
             <td>
