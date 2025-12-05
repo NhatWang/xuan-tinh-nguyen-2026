@@ -13,20 +13,31 @@ const connectDB = require("./config/db");
 connectDB();
 
 // ===============================
-// 2. CORS CHUẨN CHO COOKIE + FRONTEND
+// 2. CORS TỰ TẠO (CHUẨN CHO COOKIE)
 // ===============================
-app.use(cors({
-  origin: [
-    "https://xtnhoahoc2026.id.vn",
-    "https://www.xtnhoahoc2026.id.vn"
-  ],
-  credentials: true,
-  methods: ["GET", "POST", "PUT", "DELETE", "OPTIONS"],
-  allowedHeaders: ["Content-Type", "Authorization"]
-}));
+const allowedOrigins = [
+  "https://xtnhoahoc2026.id.vn",
+  "https://www.xtnhoahoc2026.id.vn"
+];
 
-// 🔥 Fix cho preflight OPTIONS
-app.options(/.*/, cors());
+app.use((req, res, next) => {
+  const origin = req.headers.origin;
+
+  if (allowedOrigins.includes(origin)) {
+    res.setHeader("Access-Control-Allow-Origin", origin);
+  }
+
+  res.setHeader("Access-Control-Allow-Credentials", "true");
+  res.setHeader("Access-Control-Allow-Methods", "GET,POST,PUT,DELETE,OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization");
+
+  if (req.method === "OPTIONS") {
+    return res.sendStatus(200);
+  }
+
+  next();
+});
+
 
 // ===============================
 // 3. MIDDLEWARE
