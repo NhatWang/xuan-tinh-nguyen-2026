@@ -319,3 +319,21 @@ input[type="text"]:focus {
 @keyframes fadeOut {
     to { opacity: 0; transform: translateX(40px); }
 }
+
+:root {
+    --bg-main: #f7f4ef;
+    --text-main: #4e2f14;
+    --sidebar-bg: #8b5a2b;
+    --card-bg: #ffffff;
+
+    --input-bg: #fff;
+    --border-color: #d9c7b4;
+
+    --table-header: #f1e2cd;
+    --table-hover: #faf3e6;
+
+    --btn: #d2a679;
+    --btn-hover: #bb8c63;
+
+    --modal-bg: #ffffff;   /* ⭐ Quan trọng! */
+}
