@@ -48,6 +48,10 @@ app.use(cookieParser());
 // ===============================
 // 4. API ROUTES
 // ===============================
+app.use((req, res, next) => {
+  res.setHeader("Cache-Control", "no-store");
+  next();
+});
 app.use("/api/auth", require("./routes/auth"));
 app.use("/api/registration", require("./routes/registration"));
 app.use("/api/admin", require("./routes/admin"));
