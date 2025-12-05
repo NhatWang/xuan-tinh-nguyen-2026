@@ -5,45 +5,61 @@
     <title>PHIEU DANG KY - IN A4</title>
     <style>
         /* Cấu hình trang A4 */
+        /* ===== FIX BLANK PAGE TRIỆT ĐỂ ===== */
         @page {
             size: A4;
-            margin: 5mm 10mm 10mm 10mm; /* Lề trái, phải: 1cm; Lề trên: 0.5cm; Lề dưới: 1cm */
+            margin: 5mm 10mm 10mm 10mm;
         }
-        body {
+
+        html, body {
             margin: 0;
             padding: 0;
-            background-color: #ccc; /* Màu nền trắng để dễ nhìn trang giấy khi xem trên web */
-            font-size: 14pt; /* Cỡ chữ chuẩn văn bản */
+            height: auto !important;
+            background: #ccc;
+            overflow: visible !important;
+            font-size: 14pt;
             line-height: 1.5;
+            font-family: 'TimesNewRoman', serif !important;
         }
+
+        /* KHÔNG dùng min-height = đúng 297mm (gây sinh trang ảo) */
         .page {
             width: 210mm;
-            min-height: 297mm;
-            padding: 5mm 15mm !important; /* Lề trái phải trên dưới 2cm */
+            min-height: 265mm;   /* <-- FIX CHÍNH */
+            padding: 5mm 15mm !important;
             margin: 0 auto;
             background: white;
             box-sizing: border-box;
-            box-shadow: 0 0 5px rgba(0, 0, 0, 0.1);
+            box-shadow: 0 0 5px rgba(0,0,0,0.1);
             position: relative;
+
+            /* Cuối mỗi trang phải luôn ngắt */
+            page-break-after: always !important;
+            break-after: page !important;
         }
 
-        .page {
-            page-break-after: auto;
+        /* Trang cuối cùng KHÔNG nhảy */
+        .page:last-child {
+            page-break-after: auto !important;
+            break-after: auto !important;
         }
 
-        .page + .page {
-            page-break-before: always !important;
+        /* Không cho auto-break lung tung */
+        * {
+            page-break-inside: avoid !important;
+            page-break-before: avoid !important;
+            page-break-after: avoid !important;
         }
-        
-        /* Ngăn các bảng bị tách nửa trang */
+
+        /* Đảm bảo bảng không vỡ trang */
         table, tr, td, th {
             page-break-inside: avoid !important;
         }
 
-        /* Ẩn các yếu tố thừa khi in */
+        /* Khi print thì xoá shadow */
         @media print {
             body { background: white; }
-            .page { margin: 0; box-shadow: none; width: 100%; height: auto; }
+            .page { box-shadow: none; width: 100%; }
         }
 
         /* Định dạng chung */
@@ -171,10 +187,7 @@
             white-space: normal; /* Cho phép xuống dòng văn nghệ */
         }
 
-
 </style>
-
-    </style>
 </head>
 <body>
     <div class="page">

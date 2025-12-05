@@ -81,7 +81,7 @@
 <!-- Modal phỏng vấn -->
 <div id="interviewModal" class="modal">
     <div class="modal-content">
-        <h2>PHỎNG VẤN</h2>
+        <h2 style="margin-bottom: 15px;">📝 Phỏng vấn</h2>
 
         <label>Ghi chú</label>
         <textarea id="interviewNote"></textarea>
@@ -94,14 +94,16 @@
         </select>
 
         <label>Người phỏng vấn</label>
-        <input id="interviewer" type="text" placeholder="Nhập tên người phỏng vấn" required>
+        <input id="interviewer" type="text" placeholder="Nhập tên người phỏng vấn">
 
-        <div class="btn-group">
-            <button class="save-btn" onclick="saveInterview()">Lưu</button>
-            <button class="close-btn" onclick="closeInterviewModal()">Đóng</button>
+        <div class="btn-group" style="margin-top: 15px;">
+            <button class="action-btn" onclick="saveInterview()">Lưu</button>
+            <button class="action-btn" onclick="closeInterviewModal()" 
+                style="background:#777;">Đóng</button>
         </div>
     </div>
 </div>
+
 
 <script src="admin-dashboard.js"></script>
 

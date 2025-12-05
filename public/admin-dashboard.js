@@ -294,3 +294,29 @@ function closePDFModal() {
     document.getElementById("pdfFrame").src = ""; // Reset PDF để giải phóng bộ nhớ
 }
 
+// ======================
+// THEME SWITCH
+// ======================
+const root = document.documentElement;
+const themeBtn = document.createElement("button");
+
+themeBtn.className = "theme-switch";
+themeBtn.innerText = "Đổi giao diện 🌗";
+
+document.querySelector(".sidebar").appendChild(themeBtn);
+
+// Load theme saved
+if (localStorage.getItem("theme") === "dark") {
+    document.body.classList.add("dark");
+}
+
+themeBtn.onclick = () => {
+    document.body.classList.toggle("dark");
+
+    if (document.body.classList.contains("dark"))
+        localStorage.setItem("theme", "dark");
+    else
+        localStorage.setItem("theme", "light");
+};
+
+

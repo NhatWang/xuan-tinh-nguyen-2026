@@ -279,3 +279,12 @@ button:hover {
   to { transform: rotate(360deg); }
 }
 
+.footer {
+    position: relative;
+    z-index: 10;
+    text-align: center;
+    font-size: 14px;
+    color: #5A3A26;       /* Nâu đậm — cùng tone chữ tiêu đề */
+    padding: 20px 10px;
+    margin-top: 15px;
+}
