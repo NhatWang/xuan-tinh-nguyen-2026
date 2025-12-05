@@ -28,11 +28,11 @@ function safe(text) {
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"
     })[c]) || "";
 }
-
+const BASE = "https://xuan-tinh-nguyen-2026-production.up.railway.app";
 const ADMIN_AVATARS = {
-    "lchhh.hcmus@gmail.com": "/avatars/lch.png",
-    "hoahoc.kttt@gmail.com": "/avatars/chemme.jpg",
-    "dsvtn.hh.khtn@gmail.com": "/avatars/svtn.jpg"
+    "lchhh.hcmus@gmail.com": BASE + "/avatars/lch.png",
+    "hoahoc.kttt@gmail.com": BASE + "/avatars/chemme.jpg",
+    "dsvtn.hh.khtn@gmail.com": BASE + "/avatars/svtn.jpg"
 };
 
 function loadAdminAvatar(email) {
@@ -40,7 +40,7 @@ function loadAdminAvatar(email) {
 
     if (!img) return;
 
-    img.src = ADMIN_AVATARS[email] || "/avatars/default.jpg";
+    img.src = ADMIN_AVATARS[email] || (BASE + "/avatars/default.jpg");
 }
 
 /* =====================================================
