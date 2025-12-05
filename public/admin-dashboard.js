@@ -38,7 +38,7 @@ async function checkAdmin() {
 
         if (!res.ok) {
             showToast("Bạn chưa đăng nhập!", "warning");
-            window.location.href = "../public/login.html";
+            window.location.href = "/";
             return false;
         }
 
@@ -46,7 +46,7 @@ async function checkAdmin() {
 
         if (user.role !== "admin") {
             showToast("Bạn không có quyền truy cập trang admin!", "error");
-            window.location.href = "../public/dashboard.html";
+            window.location.href = "dashboard.html";
             return false;
         }
 
@@ -306,7 +306,7 @@ function logoutAdmin() {
     }).finally(() => {
         showToast("Đã đăng xuất!", "success");
         setTimeout(() => {
-            window.location.href = "../public/login.html";
+            window.location.href = "/";
         }, 800);
     });
 }

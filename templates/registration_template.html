@@ -32,23 +32,15 @@
             box-sizing: border-box;
             box-shadow: 0 0 5px rgba(0,0,0,0.1);
             position: relative;
-
-            /* Cuối mỗi trang phải luôn ngắt */
-            page-break-after: always !important;
-            break-after: page !important;
         }
 
         /* Trang cuối cùng KHÔNG nhảy */
-        .page:last-child {
-            page-break-after: auto !important;
-            break-after: auto !important;
+        .page:not(:last-child) {
+            page-break-after: always !important;
         }
 
-        /* Không cho auto-break lung tung */
         * {
             page-break-inside: avoid !important;
-            page-break-before: avoid !important;
-            page-break-after: avoid !important;
         }
 
         /* Khi print thì xoá shadow */
