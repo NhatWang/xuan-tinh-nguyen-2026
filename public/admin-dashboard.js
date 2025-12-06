@@ -121,7 +121,7 @@ function renderUserTable(list) {
     tbody.innerHTML = "";
 
     list.forEach(item => {
-        const u = item.user || { fullName: "Không tìm thấy", studentId: "—", email: "—" };
+        const u = item.user;
         const r = item.reg;
 
         const tr = document.createElement("tr");
@@ -321,7 +321,7 @@ function renderMediaTable(list) {
     tbody.innerHTML = "";
 
     list.forEach(item => {
-        const u = item.user || { fullName: "Không tìm thấy", studentId: "—", email: "—" };
+        const u = item.user;
         const r = item.reg;
 
         const tr = document.createElement("tr");
