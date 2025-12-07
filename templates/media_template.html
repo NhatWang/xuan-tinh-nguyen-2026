@@ -89,10 +89,14 @@
 
     
         /* Bảng */
-        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 12pt; }
+        table { width: 100%; border-collapse: collapse; margin: 10px 0; font-size: 11pt; }
         th, td { border: 1px solid #000; padding: 5px; vertical-align: middle; }
         th { text-align: center; font-weight: bold; background-color: #f0f0f0; }
-        .col-stt { width: 40px; text-align: center; }
+        .col-stt { width: 30px; text-align: center; }
+
+        table td, table th {
+            white-space: nowrap !important;
+        }
         
         /* Tiêu đề phần */
         .part-title {
