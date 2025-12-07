@@ -149,12 +149,8 @@ function renderUserTable(list) {
 
             <td>
                 <button class="action-btn"
-                    onclick="openInterviewModal(
-                        '${r._id}',
-                        '${safe(r.interviewNote || "")}',
-                        '${safe(r.interviewResult || "")}',
-                        '${safe(r.interviewer || "")}'
-                )">Phỏng vấn</button>
+                    onclick='openInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'
+                >Phỏng vấn</button>
             </td>
 
             <td>${safe(r.interviewer || "—")}</td>
@@ -342,12 +338,8 @@ function renderMediaTable(list) {
 
             <td>
                 <button class="action-btn"
-                    onclick="openMediaInterviewModal(
-                        '${r._id}',
-                        '${safe(r.interviewNote || "")}',
-                        '${safe(r.interviewResult || "")}',
-                        '${safe(r.interviewer || "")}'
-                )">Phỏng vấn</button>
+                    onclick='openMediaInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'
+                >Phỏng vấn</button>
             </td>
 
             <td>${safe(r.interviewer || "—")}</td>
