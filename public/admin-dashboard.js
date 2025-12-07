@@ -1,7 +1,3 @@
-/*************************************************
- * ADMIN DASHBOARD – FULL VERSION (NO SHORTENING)
- *************************************************/
-
 const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
 /* =====================================================
