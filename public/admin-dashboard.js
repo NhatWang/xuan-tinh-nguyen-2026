@@ -399,7 +399,7 @@ function renderMediaTable(list) {
             <td>${(r.mediaRoles || []).join(", ")}</td>
             <td>${(r.mediaLocations || []).join(", ")}</td>
 
-            <td><a href="${r.facebook}" target="_blank">FB</a></td>
+            <td><a href="${r.facebook}" target="_blank">${safe(u.fullName)}</a></td>
 
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
