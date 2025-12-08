@@ -49,15 +49,15 @@ const RegistrationSchema = new mongoose.Schema(
     vehicle: { type: String },      // Phương tiện di chuyển
     license: { type: String },      // Bằng lái
     lab: { type: String },          // Kỹ năng Lab / Hóa
-
+    interviewLocation: { type: String }, // Địa điểm phỏng vấn
+    
     // --- Phỏng vấn ---
     interviewNote: { type: String },
-    interviewResult: { 
-        type: String,
-        enum: ["pending", "pass", "fail"],
-        default: "pending"
+    interviewResult: {
+    type: String,
+    default: "Chưa phỏng vấn"
     },
-
+    
     interviewer: { type: String, default: "" },
 
     //

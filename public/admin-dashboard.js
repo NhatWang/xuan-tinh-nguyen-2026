@@ -1,5 +1,9 @@
 const API = "https://xuan-tinh-nguyen-2026-production.up.railway.app/api";
 
+let currentResultId = null;
+let currentResultNote = "";
+let currentResultInterviewer = "";
+
 /* =====================================================
    UTILITIES
 ===================================================== */
@@ -152,7 +156,13 @@ function renderUserTable(list) {
                             Phỏng vấn
                        </button>`
                     : `<button class="action-btn"
-                            onclick='openResultModal("${r._id}", ${JSON.stringify(u.fullName)}, ${JSON.stringify(r.interviewResult)})'>
+                            onclick='openResultModal(
+                            "${r._id}",
+                            ${JSON.stringify(u.fullName)},
+                            ${JSON.stringify(r.interviewResult)},
+                            ${JSON.stringify(r.interviewNote)},
+                            ${JSON.stringify(r.interviewer)}
+                        )'>
                             Kết quả
                        </button>`
                 }
@@ -244,15 +254,20 @@ function closePDFModal() {
 /* =====================================================
    RESULT MODAL
 ===================================================== */
-let currentResultId = null;
-
-function openResultModal(id, fullName, result) {
+function openResultModal(id, fullName, result, note, interviewer) {
     currentResultId = id;
 
+    // Lưu lại note + interviewer để gửi vào backend
+    currentResultNote = note || "";
+    currentResultInterviewer = interviewer || "";
+
+    // Set title modal
     document.getElementById("resultModalTitle").textContent =
         "Kết quả của " + fullName;
 
+    // Hiển thị đúng kết quả hiện tại
     document.getElementById("finalResult").value = result || "Không đạt";
+
     document.getElementById("resultModal").style.display = "flex";
 }
 
@@ -264,7 +279,11 @@ async function saveFinalResult() {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ interviewResult: result })
+            body: JSON.stringify({
+                interviewNote: currentResultNote,        // giữ nguyên ghi chú
+                interviewResult: result,                // ⭐ GỬI NGUYÊN "Đậu nguyện vọng 1"
+                interviewer: currentResultInterviewer   // giữ nguyên người PV
+            })
         });
 
         if (!res.ok) return showToast("Lưu thất bại!", "error");
@@ -277,6 +296,7 @@ async function saveFinalResult() {
         showToast("Lỗi kết nối server!", "error");
     }
 }
+
 
 function closeResultModal() {
     document.getElementById("resultModal").style.display = "none";
