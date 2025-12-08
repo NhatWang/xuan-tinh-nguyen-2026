@@ -97,6 +97,10 @@ async function loadUsers() {
     document.getElementById("pageTitle").textContent = "Danh sách đăng ký";
     document.getElementById("userTable").style.display = "table";
     document.getElementById("mediaTable").style.display = "none";
+    document.getElementById("mediaFilterRow").style.display = "none";
+    document.getElementById("filterNV").parentElement.style.display = "flex";
+    document.getElementById("filterStatus").parentElement.style.display = "flex";
+
 
     try {
         const res = await fetch(API + "/admin/list", { credentials: "include" });
@@ -204,12 +208,28 @@ function filterUsers() {
     }
 
     if (statusFilter) {
-        if (statusFilter === "Chưa phỏng vấn") {
-            filtered = filtered.filter(u => !u.reg.interviewResult);
-        } else {
-            filtered = filtered.filter(u => u.reg.interviewResult === statusFilter);
-        }
+
+    // 1) Chưa phỏng vấn = interviewResult null hoặc ""
+    if (statusFilter === "Chưa phỏng vấn") {
+        filtered = filtered.filter(u => !u.reg.interviewResult);
     }
+
+    // 2) Chờ duyệt
+    else if (statusFilter === "Chờ duyệt") {
+        filtered = filtered.filter(u => u.reg.interviewResult === "Chờ duyệt");
+    }
+
+    // 3) Không đạt / Rớt
+    else if (statusFilter === "Không đạt") {
+        filtered = filtered.filter(u => u.reg.interviewResult === "Không đạt");
+    }
+
+    // 4) Các trường hợp Đậu NV1 → NV6
+    else if (statusFilter.startsWith("Đậu NV")) {
+        filtered = filtered.filter(u => u.reg.interviewResult === statusFilter);
+    }
+}
+
 
     renderUserTable(filtered);
 }
@@ -369,6 +389,10 @@ async function loadMediaList() {
 
     document.getElementById("userTable").style.display = "none";
     document.getElementById("mediaTable").style.display = "table";
+    document.getElementById("mediaFilterRow").style.display = "flex";
+    document.getElementById("filterNV").parentElement.style.display = "none";
+    document.getElementById("filterStatus").parentElement.style.display = "none";
+
 
     try {
         const res = await fetch(API + "/admin/media/list", { credentials: "include" });
@@ -516,6 +540,23 @@ async function saveMediaInterview() {
 function closeMediaInterviewModal() {
     document.getElementById("mediaInterviewModal").style.display = "none";
 }
+
+function filterMedia() {
+    const status = document.getElementById("mediaFilterStatus").value;
+
+    let filtered = [...allMedia];
+
+    // chưa phỏng vấn = r.interviewResult null hoặc ""
+    if (status === "Chưa phỏng vấn") {
+        filtered = filtered.filter(i => !i.reg.interviewResult);
+    }
+    else if (status) {
+        filtered = filtered.filter(i => i.reg.interviewResult === status);
+    }
+
+    renderMediaTable(filtered);
+}
+
 
 /* =====================================================
    INIT
