@@ -152,7 +152,12 @@ function renderUserTable(list) {
                 ${
                     isNotInterviewed
                     ? `<button class="action-btn"
-                            onclick='openInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote)}, "", ${JSON.stringify(r.interviewer)})'>
+                            onclick='openInterviewModal(
+                            "${r._id}",
+                            ${JSON.stringify(r.interviewNote || "")},
+                            "",
+                            ${JSON.stringify(r.interviewer || "")}
+                        )'>
                             Phỏng vấn
                        </button>`
                     : `<button class="action-btn"
@@ -311,15 +316,10 @@ function openInterviewModal(id, note, result, interviewer) {
     currentRegId = id;
 
     document.getElementById("interviewNote").value = note || "";
-
-    // Nếu chưa phỏng vấn → hiển thị đúng "Chưa phỏng vấn"
-    if (!result) {
-        document.getElementById("interviewResult").value = "Chưa phỏng vấn";
-    } else {
-        document.getElementById("interviewResult").value = result;
-    }
-
     document.getElementById("interviewer").value = interviewer || "";
+
+    // checkbox chờ duyệt
+    document.getElementById("interviewPending").checked = (result === "Chờ duyệt");
 
     document.querySelector("#interviewModal .save-btn").onclick = saveInterview;
 
@@ -336,7 +336,9 @@ async function saveInterview() {
 
     if (!interviewer) return showToast("Vui lòng nhập tên người phỏng vấn!", "warning");
 
-    const result = "Chờ duyệt";
+    const result = document.getElementById("interviewPending").checked
+    ? "Chờ duyệt"
+    : "";
 
     try {
         const res = await fetch(API + `/admin/interview/${currentRegId}`, {
@@ -410,7 +412,12 @@ function renderMediaTable(list) {
 
             <td>
                 <button class="action-btn"
-                    onclick='openMediaInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'>
+                    onclick='openMediaInterviewModal(
+                        "${r._id}",
+                        ${JSON.stringify(r.interviewNote || "")},
+                        ${JSON.stringify(r.interviewResult || "")},
+                        ${JSON.stringify(r.interviewer || "")}
+                    )'>
                     Phỏng vấn
                 </button>
             </td>
@@ -462,48 +469,52 @@ async function downloadMediaPDF(id, fullName) {
 /* =====================================================
    MEDIA INTERVIEW
 ===================================================== */
+let currentMediaRegId = null;
+
 function openMediaInterviewModal(id, note, result, interviewer) {
-    currentRegId = id;
+    currentMediaRegId = id;
 
-    document.getElementById("interviewNote").value = note || "";
+    document.getElementById("mediaInterviewNote").value = note || "";
+    document.getElementById("mediaInterviewResult").value = result || "";
+    document.getElementById("mediaInterviewer").value = interviewer || "";
 
-    if (!result) {
-        document.getElementById("interviewResult").value = "Chưa phỏng vấn";
-    } else {
-        document.getElementById("interviewResult").value = result;
-    }
-
-    document.getElementById("interviewer").value = interviewer || "";
-
-    document.querySelector("#interviewModal .save-btn").onclick = saveMediaInterview;
-    document.getElementById("interviewModal").style.display = "flex";
+    document.getElementById("mediaInterviewModal").style.display = "flex";
 }
 
 async function saveMediaInterview() {
-    const note = document.getElementById("interviewNote").value;
-    const interviewer = document.getElementById("interviewer").value.trim();
+    const note = document.getElementById("mediaInterviewNote").value;
+    const result = document.getElementById("mediaInterviewResult").value;
+    const interviewer = document.getElementById("mediaInterviewer").value.trim();
 
-    if (!interviewer) return showToast("Vui lòng nhập người phỏng vấn!", "warning");
-
-    const result = "Chờ duyệt";
+    if (!interviewer)
+        return showToast("Vui lòng nhập người phỏng vấn!", "warning");
 
     try {
-        const res = await fetch(API + `/admin/media/interview/${currentRegId}`, {
+        const res = await fetch(API + `/admin/media/interview/${currentMediaRegId}`, {
             method: "PUT",
             headers: { "Content-Type": "application/json" },
             credentials: "include",
-            body: JSON.stringify({ interviewNote: note, interviewResult: result, interviewer })
+            body: JSON.stringify({
+                interviewNote: note,
+                interviewResult: result,
+                interviewer
+            })
         });
 
         if (!res.ok) return showToast("Lưu thất bại!", "error");
 
-        showToast("Đã lưu!", "success");
-        closeInterviewModal();
+        showToast("Đã lưu phỏng vấn!", "success");
+        closeMediaInterviewModal();
         loadMediaList();
 
     } catch {
-        showToast("Lỗi kết nối server!", "error");
+        showToast("Không thể kết nối server!", "error");
     }
+}
+
+
+function closeMediaInterviewModal() {
+    document.getElementById("mediaInterviewModal").style.display = "none";
 }
 
 /* =====================================================

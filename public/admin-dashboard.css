@@ -585,3 +585,132 @@ input[type="text"]:focus {
 #resultModal .close-btn:hover {
     background: #b5b5b5 !important;
 }
+
+/* ======================================
+   FIX: TABLE QUÁ DÀI → THÊM SCROLL NGANG
+====================================== */
+
+.table-wrapper {
+    width: 100%;
+    overflow-x: auto;        /* ⭐ Cho phép kéo ngang */
+    overflow-y: visible;
+    margin-top: 20px;
+}
+
+/* Cuộn ngang đẹp hơn */
+.table-wrapper::-webkit-scrollbar {
+    height: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-thumb {
+    background: #c9b08a;
+    border-radius: 10px;
+}
+
+.table-wrapper::-webkit-scrollbar-track {
+    background: #f3e9dc;
+}
+
+/* ============================================
+   MEDIA INTERVIEW MODAL – STYLE RIÊNG
+============================================ */
+
+#mediaInterviewModal .modal-content {
+    width: 480px !important;
+    max-width: 95vw;
+    max-height: 90vh;
+    overflow-y: auto;
+    overflow-x: hidden;
+
+    padding: 28px;
+    border-radius: 14px;
+    background: var(--modal-bg);
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    animation: zoomIn 0.25s ease;
+    box-sizing: border-box;
+}
+
+/* Title */
+#mediaInterviewModal h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5a3a1d;
+    margin-bottom: 18px;
+}
+
+/* Labels */
+#mediaInterviewModal label {
+    display: block;
+    font-size: 15px;
+    font-weight: 600;
+    margin-bottom: 6px;
+    color: #5a3a1d;
+}
+
+/* Inputs + Textarea + Select */
+#mediaInterviewModal textarea,
+#mediaInterviewModal input[type="text"],
+#mediaInterviewModal select {
+    width: 100%;
+    padding: 12px 14px;
+    border-radius: 10px;
+    border: 1px solid #d3c1ac;
+    background: var(--input-bg);
+    font-size: 15px;
+    margin-bottom: 16px;
+    box-sizing: border-box;
+    outline: none;
+    transition: 0.25s;
+}
+
+/* Textarea scroll fix */
+#mediaInterviewModal textarea {
+    min-height: 110px;
+    max-height: 220px;
+    resize: vertical;
+    overflow-y: auto;
+    white-space: pre-wrap;
+    word-break: break-word;
+}
+
+/* Focus highlight */
+#mediaInterviewModal textarea:focus,
+#mediaInterviewModal input:focus,
+#mediaInterviewModal select:focus {
+    border-color: #c59b6d;
+    box-shadow: 0 0 0 3px rgba(197,155,109,0.28);
+}
+
+/* Button group */
+#mediaInterviewModal .btn-group {
+    display: flex;
+    justify-content: flex-end;
+    gap: 12px;
+    margin-top: 5px;
+}
+
+/* Save button */
+#mediaInterviewModal .save-btn {
+    background: #8b5a2b !important;
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+#mediaInterviewModal .save-btn:hover {
+    background: #70471e !important;
+}
+
+/* Close button */
+#mediaInterviewModal .close-btn {
+    background: #ccc !important;
+    color: #333 !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+#mediaInterviewModal .close-btn:hover {
+    background: #b5b5b5 !important;
+}

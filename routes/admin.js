@@ -11,6 +11,15 @@ const fs = require("fs");
 const path = require("path");
 const puppeteer = require("puppeteer");
 
+const nvCode = {
+    "Đội hình Chồi xuân": "CX",
+    "Đội hình Khởi xuân an": "KXA",
+    "Đội hình Xuân chiến sĩ": "XCS",
+    "Đội hình Xuân gắn kết": "XGK",
+    "Đội hình Xuân đất thép": "XĐT",
+    "Đội hình Xuân Bác Ái": "XBA"
+};
+
 /* ============================================================
    1. API: LẤY DANH SÁCH NGƯỜI ĐĂNG KÝ CHO ADMIN DASHBOARD
    GET /api/admin/list
@@ -162,11 +171,32 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         });
 
 
-        // ====== TÍNH STT ======
-        const countBefore = await Registration.countDocuments({
-            createdAt: { $lt: reg.createdAt }
+        // ======================
+        // TÍNH STT THEO ĐỘI HÌNH
+        // ======================
+
+        // 1) Lấy TẤT CẢ đơn đăng ký và sort theo thời gian tăng dần
+        const allRegs = await Registration.find().sort({ createdAt: 1 });
+
+        // 2) Tạo bộ đếm riêng cho từng đội hình
+        const counters = {};  // ví dụ: { "Đội hình Chồi xuân": 2, ... }
+
+        // 3) Lặp và gán STT cho từng đơn
+        allRegs.forEach(r => {
+            const team = r.nv1;                // đội hình dùng để tạo STT
+            const code = nvCode[team] || "NA"; // mã viết tắt đội hình
+
+            if (!counters[team]) counters[team] = 1;
+
+            const order = counters[team]++;  // tăng 1
+            const sttFormatted = `${code}-${String(order).padStart(2, "0")}`;
+
+            r.stt_code = sttFormatted;
         });
-        const STT = countBefore + 1;
+
+        // 4) Lấy đúng STT của đơn đang export
+        const currentReg = allRegs.find(r => r._id.toString() === reg._id.toString());
+        const STT = currentReg.stt_code;
 
         // ====== NGÀY THÁNG NĂM ======
         const created = new Date(reg.createdAt);

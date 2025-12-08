@@ -76,6 +76,7 @@
     </div>
 
     <!-- USER TABLE -->
+    <div class="table-wrapper">
     <table id="userTable">
         <thead>
             <tr>
@@ -101,8 +102,9 @@
 
         <tbody id="tableBody"></tbody>
     </table>
-
+    </div>
     <!-- MEDIA TABLE -->
+    <div class="table-wrapper">
     <table id="mediaTable" style="display:none; margin-top:35px;">
         <thead>
             <tr>
@@ -164,6 +166,35 @@
             <button class="save-btn">Lưu</button>
             <button class="close-btn" onclick="closeInterviewModal()">Đóng</button>
         </div>
+    </div>
+</div>
+
+<!-- =====================================
+     MEDIA INTERVIEW MODAL
+===================================== -->
+<div id="mediaInterviewModal" class="modal">
+    <div class="modal-content">
+
+        <h2>Phỏng vấn đội hình Truyền thông</h2>
+
+        <label>Ghi chú</label>
+        <textarea id="mediaInterviewNote" placeholder="Nhập ghi chú..."></textarea>
+
+        <label>Kết quả</label>
+        <select id="mediaInterviewResult">
+            <option value="">-- Chọn kết quả --</option>
+            <option value="Đậu">Đậu</option>
+            <option value="Rớt">Rớt</option>
+        </select>
+
+        <label>Người phỏng vấn</label>
+        <input id="mediaInterviewer" type="text" placeholder="Tên người phỏng vấn">
+
+        <div class="btn-group">
+            <button class="save-btn" onclick="saveMediaInterview()">Lưu</button>
+            <button class="close-btn" onclick="closeMediaInterviewModal()">Đóng</button>
+        </div>
+
     </div>
 </div>
 

@@ -154,11 +154,22 @@ router.get("/export/:mediaId", auth, admin, async (req, res) => {
         /* ==========================
            STT & DATE
         ========================== */
-        const countBefore = await MediaRegistration.countDocuments({
-            createdAt: { $lt: reg.createdAt }
+
+        // Lấy toàn bộ đơn media, sort theo thời gian tăng
+        const allMedia = await MediaRegistration.find().sort({ createdAt: 1 });
+
+        // Tạo STT
+        allMedia.forEach((m, index) => {
+            m.stt_code = `TT-${String(index + 1).padStart(2, "0")}`;
         });
 
-        replace("STT", countBefore + 1);
+        // Tìm đúng STT của đơn đang export
+        const currentMedia = allMedia.find(m => m._id.toString() === reg._id.toString());
+
+        // STT cuối cùng
+        const STT = currentMedia ? currentMedia.stt_code : "TT-00";
+
+        replace("STT", STT);
 
         const created = new Date(reg.createdAt);
         replace("day", String(created.getDate()).padStart(2,"0"));
