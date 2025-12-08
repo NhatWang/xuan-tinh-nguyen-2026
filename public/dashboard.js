@@ -168,6 +168,8 @@ async function submitRegistration() {
     const nv6 = document.getElementById("nv6").value;
     const major = document.getElementById("major").value;
 
+    const interviewLocation = document.querySelector('input[name="interviewLocation"]:checked')?.value;
+
     const skills = Array.from(document.querySelectorAll('#registration .checkboxes input[type="checkbox"]:checked'))
     .map(cb => cb.value);
 
@@ -204,12 +206,18 @@ async function submitRegistration() {
         return showToast("Các nguyện vọng không được trùng nhau!", "error");
     }
 
+    if (!interviewLocation) {
+        showToast("Vui lòng chọn địa điểm phỏng vấn!", "error");
+        return;
+    }
+
     const body = {
         dob, gender, facebook, address,
         nv1, nv2, nv3, nv4, nv5, nv6,
         major,
         skills, size, bio, health,
-        cdtn, vehicle, license, lab
+        cdtn, vehicle, license, lab,
+        interviewLocation
     };
 
     try {

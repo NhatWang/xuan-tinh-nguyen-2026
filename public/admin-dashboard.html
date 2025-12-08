@@ -26,7 +26,8 @@
     <button class="menu-btn active" onclick="loadUsers()">
         Đội hình Chuyên môn & Địa phương
     </button>
-        <button class="menu-btn" onclick="loadMediaList()">
+
+    <button class="menu-btn" onclick="loadMediaList()">
         Đội hình Truyền thông
     </button>
 
@@ -90,6 +91,7 @@
                 <th>NV6</th>
 
                 <th>Facebook</th>
+                <th>Địa điểm phỏng vấn</th>
                 <th>Trạng thái</th>
                 <th>Hồ sơ</th>
                 <th>Phỏng vấn</th>
@@ -100,6 +102,7 @@
         <tbody id="tableBody"></tbody>
     </table>
 
+    <!-- MEDIA TABLE -->
     <table id="mediaTable" style="display:none; margin-top:35px;">
         <thead>
             <tr>
@@ -149,22 +152,46 @@
         <label>Ghi chú</label>
         <textarea id="interviewNote" placeholder="Nhập ghi chú..."></textarea>
 
-        <label>Kết quả</label>
-        <select id="interviewResult">
-            <option value="Đạt">Đạt</option>
-            <option value="Không đạt">Không đạt</option>
-            <option value="Chờ duyệt">Chờ duyệt</option>
-        </select>
+        <label>Trạng thái phỏng vấn</label>
+        <label style="display:flex; align-items:center; gap:8px;">
+            <input type="checkbox" id="interviewPending"> Chờ duyệt
+        </label>
 
         <label>Người phỏng vấn</label>
         <input id="interviewer" type="text" placeholder="Tên người phỏng vấn">
 
         <div class="btn-group" style="margin-top: 15px;">
-            <button class="save-btn" onclick="saveInterview()">Lưu</button>
+            <button class="save-btn">Lưu</button>
             <button class="close-btn" onclick="closeInterviewModal()">Đóng</button>
         </div>
     </div>
 </div>
+
+<!-- =====================================
+     RESULT MODAL
+===================================== -->
+<div id="resultModal" class="modal">
+    <div class="modal-content">
+        <h2 id="resultModalTitle">Kết quả phỏng vấn</h2>
+
+        <label>Kết quả cuối cùng</label>
+        <select id="finalResult">
+            <option value="Đậu NV1">Đậu nguyện vọng 1</option>
+            <option value="Đậu NV2">Đậu nguyện vọng 2</option>
+            <option value="Đậu NV3">Đậu nguyện vọng 3</option>
+            <option value="Đậu NV4">Đậu nguyện vọng 4</option>
+            <option value="Đậu NV5">Đậu nguyện vọng 5</option>
+            <option value="Đậu NV6">Đậu nguyện vọng 6</option>
+            <option value="Không đạt">Rớt</option>
+        </select>
+
+        <div class="btn-group" style="margin-top: 15px;">
+            <button class="save-btn" onclick="saveFinalResult()">Lưu</button>
+            <button class="close-btn" onclick="closeResultModal()">Đóng</button>
+        </div>
+    </div>
+</div>
+
 
 <script src="admin-dashboard.js"></script>
 

@@ -24,6 +24,7 @@ function safe(text) {
         "&": "&amp;", "<": "&lt;", ">": "&gt;", '"': "&quot;"
     })[c]) || "";
 }
+
 const BASE = "https://xuan-tinh-nguyen-2026-production.up.railway.app";
 const ADMIN_AVATARS = {
     "lchhh.hcmus@gmail.com": BASE + "/avatars/lch.png",
@@ -33,9 +34,7 @@ const ADMIN_AVATARS = {
 
 function loadAdminAvatar(email) {
     const img = document.getElementById("adminAvatar");
-
     if (!img) return;
-
     img.src = ADMIN_AVATARS[email] || (BASE + "/avatars/default.jpg");
 }
 
@@ -76,12 +75,10 @@ async function checkAdmin() {
 
         document.getElementById("adminName").textContent = user.fullName;
         document.getElementById("adminEmail").textContent = user.email;
-        // Gọi load avatar
         loadAdminAvatar(user.email);
         return true;
 
     } catch (err) {
-        console.log(err);
         showToast("Không thể kết nối server!", "error");
         return false;
     }
@@ -99,6 +96,7 @@ async function loadUsers() {
 
     try {
         const res = await fetch(API + "/admin/list", { credentials: "include" });
+
         if (!res.ok) {
             showToast("Không thể tải danh sách!", "error");
             return;
@@ -120,6 +118,8 @@ function renderUserTable(list) {
         const u = item.user;
         const r = item.reg;
 
+        const isNotInterviewed = !r.interviewResult || r.interviewResult === "Chưa phỏng vấn";
+
         const tr = document.createElement("tr");
         tr.innerHTML = `
             <td>${safe(u.fullName)}</td>
@@ -133,24 +133,29 @@ function renderUserTable(list) {
             <td>${shortName(r.nv5)}</td>
             <td>${shortName(r.nv6)}</td>
 
-            <td><a href="${r.facebook}" target="_blank">FB</a></td>
+            <td><a href="${r.facebook}" target="_blank">${safe(u.fullName)}</a></td>
+            <td>${safe(r.interviewLocation || "—")}</td>
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
                 <div class="btn-row">
-                    <button class="btn-preview" onclick="previewPDF('${r._id}')">
-                        Xem trước
-                    </button>
-                    <button class="btn-download" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">
-                        Tải xuống
-                    </button>
+                    <button class="btn-preview" onclick="previewPDF('${r._id}')">Xem trước</button>
+                    <button class="btn-download" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">Tải xuống</button>
                 </div>
             </td>
 
             <td>
-                <button class="action-btn"
-                    onclick='openInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'
-                >Phỏng vấn</button>
+                ${
+                    isNotInterviewed
+                    ? `<button class="action-btn"
+                            onclick='openInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote)}, "", ${JSON.stringify(r.interviewer)})'>
+                            Phỏng vấn
+                       </button>`
+                    : `<button class="action-btn"
+                            onclick='openResultModal("${r._id}", ${JSON.stringify(u.fullName)}, ${JSON.stringify(r.interviewResult)})'>
+                            Kết quả
+                       </button>`
+                }
             </td>
 
             <td>${safe(r.interviewer || "—")}</td>
@@ -195,7 +200,7 @@ function filterUsers() {
 }
 
 /* =====================================================
-   PDF FOR REGULAR REGISTRATION
+   PDF EXPORT
 ===================================================== */
 async function previewPDF(id) {
     try {
@@ -204,10 +209,9 @@ async function previewPDF(id) {
 
         const blob = await res.blob();
         document.getElementById("pdfFrame").src = URL.createObjectURL(blob);
-
         document.getElementById("pdfModal").style.display = "flex";
 
-    } catch (err) {
+    } catch {
         showToast("Lỗi xem PDF!", "error");
     }
 }
@@ -227,7 +231,7 @@ async function downloadPDF(id, fullName) {
 
         URL.revokeObjectURL(url);
 
-    } catch (err) {
+    } catch {
         showToast("Lỗi tải PDF!", "error");
     }
 }
@@ -238,7 +242,48 @@ function closePDFModal() {
 }
 
 /* =====================================================
-   INTERVIEW FOR REGULAR REGISTRATION
+   RESULT MODAL
+===================================================== */
+let currentResultId = null;
+
+function openResultModal(id, fullName, result) {
+    currentResultId = id;
+
+    document.getElementById("resultModalTitle").textContent =
+        "Kết quả của " + fullName;
+
+    document.getElementById("finalResult").value = result || "Không đạt";
+    document.getElementById("resultModal").style.display = "flex";
+}
+
+async function saveFinalResult() {
+    const result = document.getElementById("finalResult").value;
+
+    try {
+        const res = await fetch(API + `/admin/interview/${currentResultId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ interviewResult: result })
+        });
+
+        if (!res.ok) return showToast("Lưu thất bại!", "error");
+
+        showToast("Đã lưu kết quả!", "success");
+        closeResultModal();
+        loadUsers();
+
+    } catch {
+        showToast("Lỗi kết nối server!", "error");
+    }
+}
+
+function closeResultModal() {
+    document.getElementById("resultModal").style.display = "none";
+}
+
+/* =====================================================
+   INTERVIEW MODAL
 ===================================================== */
 let currentRegId = null;
 
@@ -246,10 +291,16 @@ function openInterviewModal(id, note, result, interviewer) {
     currentRegId = id;
 
     document.getElementById("interviewNote").value = note || "";
-    document.getElementById("interviewResult").value = result || "Chờ duyệt";
+
+    // Nếu chưa phỏng vấn → hiển thị đúng "Chưa phỏng vấn"
+    if (!result) {
+        document.getElementById("interviewResult").value = "Chưa phỏng vấn";
+    } else {
+        document.getElementById("interviewResult").value = result;
+    }
+
     document.getElementById("interviewer").value = interviewer || "";
 
-    // Gán đúng hàm lưu tương ứng
     document.querySelector("#interviewModal .save-btn").onclick = saveInterview;
 
     document.getElementById("interviewModal").style.display = "flex";
@@ -261,10 +312,11 @@ function closeInterviewModal() {
 
 async function saveInterview() {
     const note = document.getElementById("interviewNote").value;
-    const result = document.getElementById("interviewResult").value;
     const interviewer = document.getElementById("interviewer").value.trim();
 
     if (!interviewer) return showToast("Vui lòng nhập tên người phỏng vấn!", "warning");
+
+    const result = "Chờ duyệt";
 
     try {
         const res = await fetch(API + `/admin/interview/${currentRegId}`, {
@@ -276,7 +328,7 @@ async function saveInterview() {
 
         if (!res.ok) return showToast("Lưu thất bại!", "error");
 
-        showToast("Đã lưu!", "success");
+        showToast("Đã lưu phỏng vấn!", "success");
         closeInterviewModal();
         loadUsers();
 
@@ -286,7 +338,7 @@ async function saveInterview() {
 }
 
 /* =====================================================
-   LOAD MEDIA TEAM LIST
+   MEDIA TEAM
 ===================================================== */
 let allMedia = [];
 
@@ -338,8 +390,9 @@ function renderMediaTable(list) {
 
             <td>
                 <button class="action-btn"
-                    onclick='openMediaInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'
-                >Phỏng vấn</button>
+                    onclick='openMediaInterviewModal("${r._id}", ${JSON.stringify(r.interviewNote || "")}, ${JSON.stringify(r.interviewResult || "")}, ${JSON.stringify(r.interviewer || "")})'>
+                    Phỏng vấn
+                </button>
             </td>
 
             <td>${safe(r.interviewer || "—")}</td>
@@ -387,27 +440,32 @@ async function downloadMediaPDF(id, fullName) {
 }
 
 /* =====================================================
-   INTERVIEW – MEDIA TEAM
+   MEDIA INTERVIEW
 ===================================================== */
 function openMediaInterviewModal(id, note, result, interviewer) {
     currentRegId = id;
 
     document.getElementById("interviewNote").value = note || "";
-    document.getElementById("interviewResult").value = result || "Chờ duyệt";
+
+    if (!result) {
+        document.getElementById("interviewResult").value = "Chưa phỏng vấn";
+    } else {
+        document.getElementById("interviewResult").value = result;
+    }
+
     document.getElementById("interviewer").value = interviewer || "";
 
-    // Gán hàm saveMediaInterview thay vì saveInterview
     document.querySelector("#interviewModal .save-btn").onclick = saveMediaInterview;
-
     document.getElementById("interviewModal").style.display = "flex";
 }
 
 async function saveMediaInterview() {
     const note = document.getElementById("interviewNote").value;
-    const result = document.getElementById("interviewResult").value;
     const interviewer = document.getElementById("interviewer").value.trim();
 
     if (!interviewer) return showToast("Vui lòng nhập người phỏng vấn!", "warning");
+
+    const result = "Chờ duyệt";
 
     try {
         const res = await fetch(API + `/admin/media/interview/${currentRegId}`, {
