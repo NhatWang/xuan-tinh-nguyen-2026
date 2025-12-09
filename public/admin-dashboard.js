@@ -94,7 +94,7 @@ async function checkAdmin() {
 let allUsers = [];
 
 async function loadUsers() {
-    document.getElementById("pageTitle").textContent = "Danh sách đăng ký";
+    document.getElementById("pageTitle").textContent = "Danh sách đăng ký đội hình Chuyên môn và địa phương";
     document.getElementById("userTable").style.display = "table";
     document.getElementById("mediaTable").style.display = "none";
     document.getElementById("mediaFilterRow").style.display = "none";
@@ -404,7 +404,7 @@ function updateTotalMedia(list) {
 let allMedia = [];
 
 async function loadMediaList() {
-    document.getElementById("pageTitle").textContent = "Danh sách đội hình Truyền thông";
+    document.getElementById("pageTitle").textContent = "Danh sách đăng ký đội hình Truyền thông";
 
     document.getElementById("userTable").style.display = "none";
     document.getElementById("mediaTable").style.display = "table";
