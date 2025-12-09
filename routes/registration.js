@@ -19,7 +19,8 @@ router.post("/", authMiddleware, async (req, res) => {
       cdtn,
       vehicle,
       license,
-      lab
+      lab,
+      interviewLocation
     } = req.body;
 
     // 1. Check duplicate registration
@@ -51,7 +52,8 @@ router.post("/", authMiddleware, async (req, res) => {
       cdtn,
       vehicle,
       license,
-      lab
+      lab,
+      interviewLocation
     });
 
     res.json({ msg: "Đăng ký thành công!" });

@@ -136,6 +136,12 @@ async function loadRegistrationForm() {
         const lab = document.querySelector(`input[name="lab"][value="${r.lab}"]`);
         if (lab) lab.checked = true;
     }
+    if (r.interviewLocation) {
+        const selectedRadio = document.querySelector(
+            `input[name="interviewLocation"][value="${r.interviewLocation}"]`
+        );
+        if (selectedRadio) selectedRadio.checked = true;
+    }
 
     disableRegistrationForm();
 }
