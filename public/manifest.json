@@ -1,0 +1,19 @@
+{
+  "name": "XTN 2026",
+  "short_name": "XTN",
+  "icons": [
+    {
+      "src": "/images/favicon.png",
+      "sizes": "192x192",
+      "type": "image/png"
+    },
+    {
+      "src": "/images/favicon.png",
+      "sizes": "512x512",
+      "type": "image/png"
+    }
+  ],
+  "theme_color": "#8b5a2b",
+  "background_color": "#ffffff",
+  "display": "standalone"
+}
