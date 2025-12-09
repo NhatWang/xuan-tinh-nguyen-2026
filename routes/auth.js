@@ -17,7 +17,7 @@ router.get("/verify-email/:token", authCtrl.verifyEmail);
 router.post("/login", authCtrl.login);
 
 // Quên mật khẩu
-router.post("/forgot-password", authCtrl.forgotPassword);
+router.put("/reset-password/:token", authCtrl.resetPassword);
 
 // Reset mật khẩu
 router.post("/reset-password/:token", authCtrl.resetPassword);
