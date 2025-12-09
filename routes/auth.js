@@ -17,10 +17,10 @@ router.get("/verify-email/:token", authCtrl.verifyEmail);
 router.post("/login", authCtrl.login);
 
 // Quên mật khẩu
-router.put("/reset-password/:token", authCtrl.resetPassword);
+router.post("/forgot-password", authCtrl.forgotPassword);
 
 // Reset mật khẩu
-router.post("/reset-password/:token", authCtrl.resetPassword);
+router.put("/reset-password/:token", authCtrl.resetPassword);
 
 // Đăng xuất
 router.post("/logout", authCtrl.logout);
