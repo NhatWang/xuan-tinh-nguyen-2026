@@ -111,7 +111,6 @@ exports.login = async (req, res) => {
       httpOnly: true,
       secure: true,             // 🔥 bắt buộc khi deploy HTTPS (Railway)
       sameSite: "none",         // 🔥 cho phép cookie cross-domain
-      domain: ".xtnhoahoc2026.id.vn",
       maxAge: 7 * 24 * 60 * 60 * 1000
     });
 

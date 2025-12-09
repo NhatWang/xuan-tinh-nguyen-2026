@@ -3,6 +3,8 @@ const app = express();
 const dotenv = require("dotenv");
 dotenv.config();
 
+app.set("trust proxy", 1); 
+
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const connectDB = require("./config/db");
@@ -25,6 +27,8 @@ app.use((req, res, next) => {
 
   if (allowedOrigins.includes(origin)) {
     res.setHeader("Access-Control-Allow-Origin", origin);
+  } else {
+    res.setHeader("Access-Control-Allow-Origin", "https://xtnhoahoc2026.id.vn");
   }
 
   res.setHeader("Access-Control-Allow-Credentials", "true");
