@@ -70,12 +70,12 @@
         <div class="filter-row">
             <select id="filterNV" onchange="filterUsers()">
                 <option value="">Lọc theo nguyện vọng 1</option>
-                <option value="Đội hình Chồi xuân">CX</option>
-                <option value="Đội hình Khởi xuân an">KXA</option>
-                <option value="Đội hình Xuân chiến sĩ">XCS</option>
-                <option value="Đội hình Xuân gắn kết">XGK</option>
-                <option value="Đội hình Xuân đất thép">XĐT</option>
-                <option value="Đội hình Xuân Bác Ái">XBA</option>
+                <option value="CX">CX</option>
+                <option value="KXA">KXA</option>
+                <option value="XCS">XCS</option>
+                <option value="XGK">XGK</option>
+                <option value="XĐT">XĐT</option>
+                <option value="XBA">XBA</option>
             </select>
 
             <select id="filterStatus" onchange="filterUsers()">
@@ -93,6 +93,24 @@
                 <option value="Chưa phỏng vấn">Chưa phỏng vấn</option>
             </select>
         </div>
+
+                <!-- Lọc theo Ca phỏng vấn -->
+        <div class="filter-row" id="filterCaRow">
+            <select id="filterCa" onchange="filterUsers()">
+                <option value="">Lọc theo Ca</option>
+                <option value="Ca 1">Ca 1</option>
+                <option value="Ca 2">Ca 2</option>
+                <option value="Ca 3">Ca 3</option>
+                <option value="Ca 4">Ca 4</option>
+            </select>
+        </div>
+
+        <!-- Hiển thị tổng số đăng ký -->
+        <div class="filter-row">
+            <strong>Tổng đơn: <span id="totalReg">0</span></strong>
+        </div>
+
+
         <div class="filter-row" id="mediaFilterRow" style="display:none;">
             <select id="mediaFilterStatus" onchange="filterMedia()">
                 <option value="">Lọc theo trạng thái</option>
@@ -100,6 +118,10 @@
                 <option value="Rớt">Rớt</option>
                 <option value="Chưa phỏng vấn">Chưa phỏng vấn</option>
             </select>
+        </div>
+
+        <div class="filter-row" id="mediaTotalRow" style="display:none;">
+            <strong>Tổng đơn truyền thông: <span id="totalMedia">0</span></strong>
         </div>
     </div>
 

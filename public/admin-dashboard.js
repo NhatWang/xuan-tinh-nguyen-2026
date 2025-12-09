@@ -98,8 +98,10 @@ async function loadUsers() {
     document.getElementById("userTable").style.display = "table";
     document.getElementById("mediaTable").style.display = "none";
     document.getElementById("mediaFilterRow").style.display = "none";
+    document.getElementById("mediaTotalRow").style.display = "none";
     document.getElementById("filterNV").parentElement.style.display = "flex";
     document.getElementById("filterStatus").parentElement.style.display = "flex";
+    document.getElementById("filterCaRow").style.display = "flex";
 
 
     try {
@@ -111,6 +113,7 @@ async function loadUsers() {
         }
 
         allUsers = await res.json();
+        updateTotalReg(allUsers);
         renderUserTable(allUsers);
 
     } catch (err) {
@@ -191,6 +194,7 @@ function filterUsers() {
     const text = document.getElementById("searchText").value.trim().toLowerCase();
     const nvFilter = document.getElementById("filterNV").value;
     const statusFilter = document.getElementById("filterStatus").value;
+    const caFilter = document.getElementById("filterCa").value;
 
     let filtered = [...allUsers];
 
@@ -206,6 +210,9 @@ function filterUsers() {
             shortName(u.reg.nv1) === shortName(nvFilter)
         );
     }
+
+    if (caFilter)
+        filtered = filtered.filter(u => u.reg.interviewLocation === caFilter);
 
     if (statusFilter) {
 
@@ -230,7 +237,7 @@ function filterUsers() {
     }
 }
 
-
+    updateTotalReg(filtered);
     renderUserTable(filtered);
 }
 
@@ -380,6 +387,17 @@ async function saveInterview() {
 }
 
 /* =====================================================
+   GLOBAL STATE FOR COUNT DISPLAY
+===================================================== */
+function updateTotalReg(list) {
+    document.getElementById("totalReg").textContent = list.length;
+}
+
+function updateTotalMedia(list) {
+    document.getElementById("totalMedia").textContent = list.length;
+}
+
+/* =====================================================
    MEDIA TEAM
 ===================================================== */
 let allMedia = [];
@@ -392,6 +410,9 @@ async function loadMediaList() {
     document.getElementById("mediaFilterRow").style.display = "flex";
     document.getElementById("filterNV").parentElement.style.display = "none";
     document.getElementById("filterStatus").parentElement.style.display = "none";
+    document.getElementById("filterCaRow").style.display = "none";
+    document.getElementById("mediaFilterRow").style.display = "flex";
+    document.getElementById("mediaTotalRow").style.display = "flex";
 
 
     try {
@@ -399,6 +420,7 @@ async function loadMediaList() {
         if (!res.ok) return showToast("Không thể tải danh sách đội hình!", "error");
 
         allMedia = await res.json();
+        updateTotalMedia(allMedia);
         renderMediaTable(allMedia);
 
     } catch {
@@ -554,6 +576,7 @@ function filterMedia() {
         filtered = filtered.filter(i => i.reg.interviewResult === status);
     }
 
+    updateTotalMedia(filtered);
     renderMediaTable(filtered);
 }
 
