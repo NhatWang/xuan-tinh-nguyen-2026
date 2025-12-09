@@ -102,6 +102,7 @@ async function loadUsers() {
     document.getElementById("filterNV").parentElement.style.display = "flex";
     document.getElementById("filterStatus").parentElement.style.display = "flex";
     document.getElementById("filterCaRow").style.display = "flex";
+    document.getElementById("totalRegRow").style.display = "flex";
 
 
     try {
@@ -411,6 +412,7 @@ async function loadMediaList() {
     document.getElementById("filterNV").parentElement.style.display = "none";
     document.getElementById("filterStatus").parentElement.style.display = "none";
     document.getElementById("filterCaRow").style.display = "none";
+    document.getElementById("totalRegRow").style.display = "none";
     document.getElementById("mediaFilterRow").style.display = "flex";
     document.getElementById("mediaTotalRow").style.display = "flex";
 
