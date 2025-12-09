@@ -28,9 +28,11 @@ body::before {
 
 .main-wrapper {
   display: flex;
-  justify-content: center;
+  justify-content: center; /* đẩy sang trái */
   align-items: center;
-  min-height: calc(100vh - 100px); /* chừa chỗ cho footer */
+  min-height: calc(100vh - 100px);
+  padding-left: 0px; /* tuỳ chỉnh khoảng cách trái */
+  gap: 60px;
 }
 
 /* ===== FORM CONTAINER ===== */
@@ -292,4 +294,12 @@ button:hover {
   bottom: 10px;
   left: 0;
   width: 100%;
+}
+
+.login-title-img {
+    width: 40%;       /* chỉnh theo kích thước bạn muốn */
+    display: block;
+    margin: 0 0 20px 0; 
+    user-select: none;
+    z-index: 9999;
 }

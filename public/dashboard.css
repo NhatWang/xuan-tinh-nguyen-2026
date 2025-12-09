@@ -280,3 +280,11 @@ textarea {
   left: 0;
   width: 100%;
 }
+
+.title-img {
+    width: 220px;       /* chỉnh theo kích thước bạn muốn */
+    display: block;
+    margin: 0 auto 12px auto;   /* căn giữa + khoảng cách dưới */
+    user-select: none;
+    z-index: 9999;
+}
