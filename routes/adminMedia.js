@@ -191,12 +191,24 @@ router.get("/export/:mediaId", auth, admin, async (req, res) => {
         const pdf = await page.pdf({ format: "A4", printBackground: true });
         await browser.close();
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `inline; filename=${user.fullName}_MEDIA.pdf`
-        });
+        // Chuẩn hoá tên file
+        const safeName = user.fullName
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "") // bỏ dấu
+        .replace(/[^\w\- ]+/g, "")                        // ký tự đặc biệt
+        .replace(/ /g, "_");                              // space → underscore
+
+        const fileName = `${safeName}_MEDIA.pdf`;
+
+        res.setHeader("Content-Type", "application/pdf");
+
+        // Hỗ trợ chuẩn UTF-8 trên tất cả trình duyệt
+        res.setHeader(
+        "Content-Disposition",
+        `inline; filename="${fileName}"; filename*=UTF-8''${encodeURIComponent(fileName)}`
+        );
 
         res.send(pdf);
+
 
     } catch (err) {
         console.error(err);

@@ -226,10 +226,21 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
         const pdf = await page.pdf({ format: "A4", printBackground: true });
         await browser.close();
 
-        res.set({
-            "Content-Type": "application/pdf",
-            "Content-Disposition": `inline; filename=${user.fullName}.pdf`
-        });
+        // Chuẩn hóa tên file: bỏ dấu + khoảng trắng nguy hiểm
+        const safeName = user.fullName
+        .normalize("NFD").replace(/[\u0300-\u036f]/g, "")   // bỏ dấu tiếng Việt
+        .replace(/[^\w\- ]+/g, "")                          // loại ký tự đặc biệt
+        .replace(/ /g, "_");                                // đổi space thành _
+
+        const fileName = `${safeName}.pdf`;
+
+        res.setHeader("Content-Type", "application/pdf");
+
+        // ⭐ Hỗ trợ UTF8 đúng chuẩn cho iOS/Android
+        res.setHeader(
+        "Content-Disposition",
+        `inline; filename="${fileName}"; filename*=UTF-8''${encodeURIComponent(fileName)}`
+        );
 
         res.send(pdf);
 
