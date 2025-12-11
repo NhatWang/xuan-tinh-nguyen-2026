@@ -255,31 +255,72 @@ router.get("/export/:regId", auth, admin, async (req, res) => {
    PUT /api/admin/interview/:regId
 ============================================================ */
 router.put("/interview/:regId", auth, admin, async (req, res) => {
-  try {
-    const { interviewNote, interviewResult, interviewer } = req.body;
+    try {
+        const { interviewNote, interviewResult, interviewer } = req.body;
 
-    if (!interviewResult)
-      return res.status(400).json({ msg: "Thiếu kết quả phỏng vấn" });
+        if (!interviewer)
+            return res.status(400).json({ msg: "Vui lòng nhập tên người phỏng vấn!" });
 
-    if (!interviewer)
-      return res.status(400).json({ msg: "Vui lòng điền tên người phỏng vấn!" });
+        // Lấy bản ghi để biết team + ca
+        const regOld = await Registration.findById(req.params.regId);
+        if (!regOld) return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
 
-    const updated = await Registration.findByIdAndUpdate(
-      req.params.regId,
-      { interviewNote, interviewResult, interviewer },
-      { new: true }
-    );
+        const team = regOld.nv1;
+        const ca   = regOld.interviewLocation;
 
-    if (!updated)
-      return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
+        // ⭐ Data update cơ bản
+        let updateData = { interviewNote, interviewResult, interviewer };
 
-    res.json({ msg: "Đã cập nhật phỏng vấn", updated });
+        // ⭐ Nếu chuyển sang "Chờ duyệt" → gỡ khỏi hàng đợi
+        let needReset = false;
 
-  } catch (err) {
-    console.error(err);
-    res.status(500).json({ msg: "Lỗi cập nhật phỏng vấn" });
-  }
+        if (interviewResult === "Chờ duyệt") {
+            updateData.attendance = false;
+            updateData.interviewOrder = null;
+            needReset = true;
+        }
+
+        // ⭐ Update chính bản ghi
+        const updated = await Registration.findByIdAndUpdate(
+            req.params.regId,
+            updateData,
+            { new: true }
+        );
+
+        if (!updated)
+            return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
+
+        // =====================================================
+        // ⭐ RESET STT khi "Chờ duyệt"
+        // =====================================================
+        if (needReset) {
+            const groupRegs = await Registration.find({
+                nv1: team,
+                interviewLocation: ca,
+                attendance: true
+            }).sort({ interviewOrder: 1 });
+
+            // Dồn lại STT từ 1 → n
+            for (let i = 0; i < groupRegs.length; i++) {
+                groupRegs[i].interviewOrder = i + 1;
+                await groupRegs[i].save();
+            }
+        }
+
+        // =====================================================
+
+        res.json({ msg: "Đã cập nhật phỏng vấn", updated });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Lỗi cập nhật phỏng vấn" });
+    }
 });
+
+/* ============================================================
+   4. API: UPDATE ĐIỂM DANH THEO registrationId
+   PUT /api/admin/attendance/:regId
+============================================================ */
 
 router.put("/attendance/:regId", auth, admin, async (req, res) => {
     try {
