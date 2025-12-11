@@ -49,6 +49,7 @@ const RegistrationSchema = new mongoose.Schema(
     vehicle: { type: String },      // Phương tiện di chuyển
     license: { type: String },      // Bằng lái
     lab: { type: String },          // Kỹ năng Lab / Hóa
+    interviewRoom: { type: String, default: "" },
     interviewLocation: { type: String }, // Địa điểm phỏng vấn
     
     // --- Phỏng vấn ---

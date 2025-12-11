@@ -699,6 +699,9 @@ function updateSingleRow(id) {
     });
 }
 
+function goToTracker() {
+    window.open("/tracker.html", "_blank"); // mở tab mới
+}
 
 /* =====================================================
    INIT

@@ -45,6 +45,7 @@ async function loadProfile() {
 
     const user = await userRes.json();
 
+    // Hiển thị thông tin tài khoản
     document.getElementById("pf_name").innerText = user.fullName;
     document.getElementById("pf_studentId").innerText = user.studentId;
     document.getElementById("pf_class").innerText = user.className;
@@ -53,29 +54,46 @@ async function loadProfile() {
     document.getElementById("pf_email").innerText = user.email;
     document.getElementById("pf_phone").innerText = user.phone;
 
+    // ===== LOAD REGISTRATION (Đội hình chuyên môn & địa phương) =====
     const regRes = await fetch(API + "/registration/me", { credentials: "include" });
 
     if (regRes.status === 200) {
         const reg = await regRes.json();
 
-        document.getElementById("pf_interviewResult").innerText = reg.interviewResult || "Chưa phỏng vấn";
-    } else {
-    // Nếu chưa đăng ký đội hình chuyên môn & địa phương → hiển thị mặc định
-    document.getElementById("pf_interviewResult").innerText = "Chưa đăng ký";
-}
+        document.getElementById("pf_interviewCa").innerText =
+            reg.interviewLocation || "Chưa có";
 
-    // ===== LOAD MEDIA INTERVIEW RESULT =====
+        // PHÒNG PHỎNG VẤN — THÊM DÒNG NÀY
+        document.getElementById("pf_interviewRoom").innerText =
+            reg.interviewRoom || "Chưa có";
+
+        // Thời gian phỏng vấn theo Ca
+        document.getElementById("pf_interviewTime").innerText =
+            getInterviewTime(reg.interviewLocation);
+
+        // Kết quả phỏng vấn
+        document.getElementById("pf_interviewResult").innerText =
+            reg.interviewResult || "Chưa phỏng vấn";
+    } else {
+        document.getElementById("pf_interviewResult").innerText = "Chưa đăng ký";
+        document.getElementById("pf_interviewRoom").innerText = "Chưa có";
+        document.getElementById("pf_interviewCa").innerText = "Chưa có";
+        document.getElementById("pf_interviewTime").innerText = "Chưa có";
+    }
+
+    // ===== LOAD MEDIA TEAM RESULT =====
     const mediaRes = await fetch(API + "/media/me", { credentials: "include" });
 
     if (mediaRes.status === 200) {
         const media = await mediaRes.json();
-
-    document.getElementById("pf_media_interviewResult").innerText =media.interviewResult || "Chưa phỏng vấn";
+        document.getElementById("pf_media_interviewResult").innerText =
+            media.interviewResult || "Chưa phỏng vấn";
     } else {
-    // Nếu chưa đăng ký đội hình truyền thông → hiển thị mặc định
-    document.getElementById("pf_media_interviewResult").innerText = "Chưa đăng ký";
+        document.getElementById("pf_media_interviewResult").innerText = "Chưa đăng ký";
+    }
 }
-}
+
+
 
 /* ============ LOAD REGISTRATION FORM ============ */
 async function loadRegistrationForm() {
@@ -441,4 +459,15 @@ document.addEventListener("DOMContentLoaded", () => {
     }
 });
 
+function getInterviewTime(ca) {
+    const map = {
+        "Ca 1": "08:00 – 11:30 · 13/12/2025",
+        "Ca 2": "13:00 – 16:00 · 13/12/2025",
+        "Ca 3": "08:00 – 11:30 · 14/12/2025",
+        "Ca 4": "13:30 – 19:30 · 14/12/2025",
+        "Khác": "Theo sắp xếp riêng từ BTC"
+    };
+
+    return map[ca] || "Chưa cập nhật";
+}
 
