@@ -195,7 +195,7 @@ function renderUserTable(list) {
                 ${
                     (!r.interviewNote || r.interviewNote.trim() === "")
                     ? "—"
-                    : `<button class="note-btn" onclick="openNoteModal(${JSON.stringify(r.interviewNote)})">Ghi chú</button>`
+                    : `<button class="note-btn" onclick="openNoteModal(decodeURIComponent('${encodeURIComponent(r.interviewNote)}'))">Ghi chú</button>`
                 }
             </td>
         `;
@@ -459,9 +459,9 @@ function updateInterviewRow(id) {
 
     // Nút ghi chú (cột 17)
     tds[17].innerHTML =
-        (!r.interviewNote || r.interviewNote.trim() === "")
+    (!r.interviewNote || r.interviewNote.trim() === "")
         ? "—"
-        : `<button class="note-btn" onclick="openNoteModal(${JSON.stringify(r.interviewNote)})">Ghi chú</button>`;
+        : `<button class="note-btn" onclick="openNoteModal(decodeURIComponent('${encodeURIComponent(r.interviewNote)}'))">Ghi chú</button>`;
 }
 
 

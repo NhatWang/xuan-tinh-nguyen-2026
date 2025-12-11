@@ -796,3 +796,26 @@ input[type="text"]:focus {
 #noteModal .close-btn:hover {
     background: #b8a48d !important;
 }
+
+/* ================================
+   NÚT GHI CHÚ – ĐẸP HƠN
+================================ */
+.note-btn {
+    padding: 6px 12px;
+    font-size: 13px;
+    border: none;
+    border-radius: 8px;
+    background: #d2a679;       /* màu cam nâu giống nút Xem trước */
+    color: #fff;
+    cursor: pointer;
+    transition: 0.25s ease;
+    white-space: nowrap;
+}
+
+.note-btn:hover {
+    background: #bb8c63;       /* hover giống nút Xem trước */
+}
+
+.note-btn:active {
+    transform: scale(0.95);
+}
