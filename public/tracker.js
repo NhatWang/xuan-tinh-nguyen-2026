@@ -65,5 +65,5 @@ function renderSlot(item, isCurrent = false) {
 }
 
 // Auto reload
-setInterval(loadQueue, 3000);
+setInterval(loadQueue, 1000);
 loadQueue();
