@@ -155,7 +155,15 @@ function renderUserTable(list) {
                     <button class="btn-download" onclick="downloadPDF('${r._id}', '${safe(u.fullName)}')">Tải xuống</button>
                 </div>
             </td>
+            <td>
+                <input 
+                    type="checkbox" 
+                    ${r.attendance ? "checked" : ""} 
+                    onclick="toggleAttendance('${r._id}', this.checked)"
+                >
+            </td>
 
+            <td>${r.interviewOrder || "—"}</td>
             <td>
                 ${
                     isNotInterviewed
@@ -581,6 +589,28 @@ function filterMedia() {
     updateTotalMedia(filtered);
     renderMediaTable(filtered);
 }
+
+async function toggleAttendance(id, checked) {
+    try {
+        const res = await fetch(API + `/admin/attendance/${id}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ attendance: checked })
+        });
+
+        if (!res.ok) return showToast("Lỗi cập nhật điểm danh!", "error");
+
+        showToast("Đã cập nhật điểm danh", "success");
+
+        // Reload nhẹ bảng
+        loadUsers();
+
+    } catch {
+        showToast("Không thể kết nối server!", "error");
+    }
+}
+
 
 
 /* =====================================================

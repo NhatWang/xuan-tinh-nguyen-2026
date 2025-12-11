@@ -281,4 +281,70 @@ router.put("/interview/:regId", auth, admin, async (req, res) => {
   }
 });
 
+router.put("/attendance/:regId", auth, admin, async (req, res) => {
+    try {
+        const { attendance } = req.body;
+
+        const reg = await Registration.findById(req.params.regId);
+        if (!reg) return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
+
+        const team = reg.nv1;
+        const ca = reg.interviewLocation;
+
+        // =============================
+        // CASE 1: TICK → GÁN STT MỚI
+        // =============================
+        if (attendance) {
+
+            // Lấy group đã điểm danh
+            const groupRegs = await Registration.find({
+                nv1: team,
+                interviewLocation: ca,
+                attendance: true
+            }).sort({ interviewOrder: 1 });
+
+            // STT mới = số lượng hiện tại + 1
+            const nextOrder = groupRegs.length + 1;
+
+            reg.attendance = true;
+            reg.interviewOrder = nextOrder;
+
+            await reg.save();
+
+            return res.json({ msg: "Đã điểm danh", order: nextOrder });
+        }
+
+        // =============================
+        // CASE 2: BỎ TICK → XÓA STT
+        // =============================
+        else {
+
+            // 1) Lưu lại thay đổi của chính bản ghi
+            reg.attendance = false;
+            reg.interviewOrder = null;
+            await reg.save();   // ⭐ Quan trọng: phải SAVE TRƯỚC
+
+            // 2) Lấy toàn bộ các bản ghi còn điểm danh
+            const groupRegs = await Registration.find({
+                nv1: team,
+                interviewLocation: ca,
+                attendance: true
+            }).sort({ interviewOrder: 1 });
+
+            // 3) RESET lại thứ tự phỏng vấn từ 1 → n
+            for (let i = 0; i < groupRegs.length; i++) {
+                groupRegs[i].interviewOrder = i + 1;
+                await groupRegs[i].save();
+            }
+
+            return res.json({ msg: "Đã bỏ điểm danh và cập nhật lại STT" });
+        }
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Lỗi cập nhật điểm danh" });
+    }
+});
+
+
 module.exports = router;

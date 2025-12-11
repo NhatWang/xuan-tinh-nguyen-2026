@@ -59,6 +59,8 @@ const RegistrationSchema = new mongoose.Schema(
     },
     
     interviewer: { type: String, default: "" },
+    attendance: { type: Boolean, default: false },
+    interviewOrder: { type: Number, default: null },
 
     //
 
