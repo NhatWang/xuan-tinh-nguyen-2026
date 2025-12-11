@@ -131,8 +131,9 @@ function renderUserTable(list) {
         const r = item.reg;
 
         const isNotInterviewed = !r.interviewResult || r.interviewResult === "Chưa phỏng vấn";
-
         const tr = document.createElement("tr");
+        tr.setAttribute("data-id", r._id);
+
         tr.innerHTML = `
             <td>${safe(u.fullName)}</td>
             <td>${safe(u.studentId)}</td>
@@ -590,6 +591,10 @@ function filterMedia() {
     renderMediaTable(filtered);
 }
 
+/* =====================================================
+   ATTENDANCE + INTERVIEW ORDER FIXED VERSION
+===================================================== */
+
 async function toggleAttendance(id, checked) {
     try {
         const res = await fetch(API + `/admin/attendance/${id}`, {
@@ -601,16 +606,98 @@ async function toggleAttendance(id, checked) {
 
         if (!res.ok) return showToast("Lỗi cập nhật điểm danh!", "error");
 
-        showToast("Đã cập nhật điểm danh", "success");
+        const data = await res.json();
+        showToast(data.msg, "success");
 
-        // Reload nhẹ bảng
-        loadUsers();
+        // 1️⃣ Cập nhật local cho user hiện tại
+        updateLocalAttendance(id, checked, data.order);
+
+        // 2️⃣ Lấy user hiện tại để biết nhóm
+        const current = allUsers.find(u => u.reg._id === id);
+
+        // 3️⃣ Cập nhật lại toàn bộ STT nhóm
+        refreshGroupOrders(current.reg.nv1, current.reg.interviewLocation);
+
+        // 4️⃣ Nếu đang filter → cập nhật bảng theo filter
+        if (document.getElementById("searchText").value ||
+            document.getElementById("filterNV").value ||
+            document.getElementById("filterStatus").value ||
+            document.getElementById("filterCa").value) {
+
+            filterUsers();
+        }
 
     } catch {
         showToast("Không thể kết nối server!", "error");
     }
 }
 
+/* =====================================================
+   RESET STT CHO TOÀN BỘ NHÓM (FIXED)
+===================================================== */
+function refreshGroupOrders(team, ca) {
+    const group = allUsers.filter(u =>
+        u.reg.nv1 === team &&
+        u.reg.interviewLocation === ca &&
+        u.reg.attendance
+    );
+
+    // Sort theo STT backend trả về, nếu null → cho xuống cuối
+    group.sort((a, b) =>
+        (a.reg.interviewOrder || 9999) - (b.reg.interviewOrder || 9999)
+    );
+
+    // 1️⃣ Reset thứ tự lại từ 1 → n trong allUsers
+    group.forEach((item, index) => {
+        item.reg.interviewOrder = index + 1;
+        updateSingleRow(item.reg._id);   // cập nhật UI
+    });
+}
+
+/* =====================================================
+   CẬP NHẬT 1 USER SAU KHI TICK / UNTICK
+===================================================== */
+function updateLocalAttendance(id, checked, newOrder) {
+    const item = allUsers.find(u => u.reg._id === id);
+    if (!item) return;
+
+    item.reg.attendance = checked;
+
+    if (checked) {
+        item.reg.interviewOrder = newOrder; // ghi STT từ backend
+    } else {
+        item.reg.interviewOrder = null;
+    }
+
+    updateSingleRow(id);
+}
+
+/* =====================================================
+   UPDATE 1 ROW TRONG BẢNG UI
+===================================================== */
+function updateSingleRow(id) {
+    const allRows = document.querySelectorAll("#tableBody tr");
+
+    allRows.forEach(row => {
+        const rowId = row.getAttribute("data-id");
+        if (rowId !== id) return;
+
+        const item = allUsers.find(u => u.reg._id === id);
+        if (!item) return;
+
+        const tds = row.querySelectorAll("td");
+
+        // Cột checkbox attendance (index 13)
+        tds[13].innerHTML = `
+            <input type="checkbox" 
+            ${item.reg.attendance ? "checked" : ""} 
+            onclick="toggleAttendance('${id}', this.checked)">
+        `;
+
+        // Cột STT phỏng vấn (index 14)
+        tds[14].textContent = item.reg.interviewOrder || "—";
+    });
+}
 
 
 /* =====================================================

@@ -288,56 +288,58 @@ router.put("/attendance/:regId", auth, admin, async (req, res) => {
         const reg = await Registration.findById(req.params.regId);
         if (!reg) return res.status(404).json({ msg: "Không tìm thấy đăng ký" });
 
+        // ⭐ GROUP = NV1 + CA
         const team = reg.nv1;
         const ca = reg.interviewLocation;
 
-        // =============================
-        // CASE 1: TICK → GÁN STT MỚI
-        // =============================
+        // ======================================================
+        // CASE 1: TICK → Gán STT mới
+        // ======================================================
         if (attendance) {
-
-            // Lấy group đã điểm danh
             const groupRegs = await Registration.find({
                 nv1: team,
                 interviewLocation: ca,
                 attendance: true
             }).sort({ interviewOrder: 1 });
 
-            // STT mới = số lượng hiện tại + 1
             const nextOrder = groupRegs.length + 1;
 
             reg.attendance = true;
             reg.interviewOrder = nextOrder;
-
             await reg.save();
 
-            return res.json({ msg: "Đã điểm danh", order: nextOrder });
+            return res.json({
+                msg: "Đã điểm danh",
+                order: nextOrder   // ⭐ trả STT về frontend
+            });
         }
 
-        // =============================
-        // CASE 2: BỎ TICK → XÓA STT
-        // =============================
+        // ======================================================
+        // CASE 2: BỎ TICK → Xóa STT và RESET cả nhóm
+        // ======================================================
         else {
-
-            // 1) Lưu lại thay đổi của chính bản ghi
+            // 1) Bỏ tick bản ghi hiện tại
             reg.attendance = false;
             reg.interviewOrder = null;
-            await reg.save();   // ⭐ Quan trọng: phải SAVE TRƯỚC
+            await reg.save(); // ⭐ Quan trọng: save trước
 
-            // 2) Lấy toàn bộ các bản ghi còn điểm danh
+            // 2) Lấy toàn bộ nhóm còn attendance = true
             const groupRegs = await Registration.find({
                 nv1: team,
                 interviewLocation: ca,
                 attendance: true
             }).sort({ interviewOrder: 1 });
 
-            // 3) RESET lại thứ tự phỏng vấn từ 1 → n
+            // 3) Reset lại STT từ 1 → n
             for (let i = 0; i < groupRegs.length; i++) {
                 groupRegs[i].interviewOrder = i + 1;
                 await groupRegs[i].save();
             }
 
-            return res.json({ msg: "Đã bỏ điểm danh và cập nhật lại STT" });
+            return res.json({
+                msg: "Đã bỏ điểm danh và cập nhật lại STT",
+                order: null   // ⭐ luôn null khi bỏ tick
+            });
         }
 
     } catch (err) {
@@ -345,6 +347,5 @@ router.put("/attendance/:regId", auth, admin, async (req, res) => {
         res.status(500).json({ msg: "Lỗi cập nhật điểm danh" });
     }
 });
-
 
 module.exports = router;
