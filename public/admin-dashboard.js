@@ -339,7 +339,11 @@ async function saveFinalResult() {
 
         showToast("Đã lưu kết quả!", "success");
         closeResultModal();
-        loadUsers();
+        const item = allUsers.find(u => u.reg._id === currentResultId);
+        item.reg.interviewResult = result;
+        item.reg.interviewer = currentResultInterviewer;
+
+        updateInterviewRow(currentResultId);
 
     } catch {
         showToast("Lỗi kết nối server!", "error");
@@ -396,12 +400,71 @@ async function saveInterview() {
 
         showToast("Đã lưu phỏng vấn!", "success");
         closeInterviewModal();
-        loadUsers();
+        // cập nhật local object
+        const item = allUsers.find(u => u.reg._id === currentRegId);
+        item.reg.interviewNote = note;
+        item.reg.interviewResult = result;
+        item.reg.interviewer = interviewer;
+
+        // cập nhật UI cho dòng đó
+        updateInterviewRow(currentRegId);
 
     } catch {
         showToast("Lỗi kết nối server!", "error");
     }
 }
+
+function updateInterviewRow(id) {
+    const row = document.querySelector(`tr[data-id="${id}"]`);
+    const item = allUsers.find(u => u.reg._id === id);
+    if (!item) return;
+
+    const r = item.reg;
+    const u = item.user;
+    if (!row) {
+        filterUsers();
+        return;
+    }
+
+    const tds = row.querySelectorAll("td");
+
+    // Trạng thái (cột 11)
+    tds[11].textContent = r.interviewResult || "Chưa phỏng vấn";
+
+    // Nút Phỏng vấn / Kết quả (cột 15)
+    tds[15].innerHTML =
+        (!r.interviewResult || r.interviewResult === "Chưa phỏng vấn")
+        ? `<button class="action-btn"
+                onclick='openInterviewModal(
+                "${r._id}",
+                ${JSON.stringify(r.interviewNote || "")},
+                "",
+                ${JSON.stringify(r.interviewer || "")}
+            )'>
+                Phỏng vấn
+           </button>`
+        : `<button class="action-btn"
+                onclick='openResultModal(
+                "${r._id}",
+                ${JSON.stringify(u.fullName)},
+                ${JSON.stringify(r.interviewResult)},
+                ${JSON.stringify(r.interviewNote)},
+                ${JSON.stringify(r.interviewer)}
+            )'>
+                Kết quả
+           </button>`;
+
+    // Người phỏng vấn (cột 16)
+    tds[16].textContent = r.interviewer || "—";
+
+    // Nút ghi chú (cột 17)
+    tds[17].innerHTML =
+        (!r.interviewNote || r.interviewNote.trim() === "")
+        ? "—"
+        : `<button class="note-btn" onclick="openNoteModal(${JSON.stringify(r.interviewNote)})">Ghi chú</button>`;
+}
+
+
 
 function openNoteModal(note) {
     document.getElementById("noteText").textContent = note;
