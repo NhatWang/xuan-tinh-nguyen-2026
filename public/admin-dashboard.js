@@ -414,58 +414,6 @@ async function saveInterview() {
     }
 }
 
-function updateInterviewRow(id) {
-    const row = document.querySelector(`tr[data-id="${id}"]`);
-    const item = allUsers.find(u => u.reg._id === id);
-    if (!item) return;
-
-    const r = item.reg;
-    const u = item.user;
-    if (!row) {
-        filterUsers();
-        return;
-    }
-
-    const tds = row.querySelectorAll("td");
-
-    // Trạng thái (cột 11)
-    tds[11].textContent = r.interviewResult || "Chưa phỏng vấn";
-
-    // Nút Phỏng vấn / Kết quả (cột 15)
-    tds[15].innerHTML =
-        (!r.interviewResult || r.interviewResult === "Chưa phỏng vấn")
-        ? `<button class="action-btn"
-                onclick='openInterviewModal(
-                "${r._id}",
-                ${JSON.stringify(r.interviewNote || "")},
-                "",
-                ${JSON.stringify(r.interviewer || "")}
-            )'>
-                Phỏng vấn
-           </button>`
-        : `<button class="action-btn"
-                onclick='openResultModal(
-                "${r._id}",
-                ${JSON.stringify(u.fullName)},
-                ${JSON.stringify(r.interviewResult)},
-                ${JSON.stringify(r.interviewNote)},
-                ${JSON.stringify(r.interviewer)}
-            )'>
-                Kết quả
-           </button>`;
-
-    // Người phỏng vấn (cột 16)
-    tds[16].textContent = r.interviewer || "—";
-
-    // Nút ghi chú (cột 17)
-    tds[17].innerHTML =
-    (!r.interviewNote || r.interviewNote.trim() === "")
-        ? "—"
-        : `<button class="note-btn" onclick="openNoteModal(decodeURIComponent('${encodeURIComponent(r.interviewNote)}'))">Ghi chú</button>`;
-}
-
-
-
 function openNoteModal(note) {
     document.getElementById("noteText").textContent = note;
     document.getElementById("noteModal").style.display = "flex";
