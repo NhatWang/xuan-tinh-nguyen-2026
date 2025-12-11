@@ -716,3 +716,83 @@ input[type="text"]:focus {
 #mediaInterviewModal .close-btn:hover {
     background: #b5b5b5 !important;
 }
+
+/* ======================================
+   NOTE VIEW MODAL (XEM GHI CHÚ)
+====================================== */
+
+#noteModal {
+    display: none;
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    align-items: center;
+    justify-content: center;
+    z-index: 2000;
+}
+
+#noteModal .modal-content {
+    width: 420px;
+    max-width: 90vw;
+    background: var(--modal-bg);
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.2);
+    animation: zoomIn 0.25s ease;
+    box-sizing: border-box;
+}
+
+/* Tiêu đề */
+#noteModal h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5a3a1d;
+    margin-bottom: 14px;
+    text-align: center;
+}
+
+/* Nội dung ghi chú */
+#noteModal #noteText {
+    white-space: pre-wrap;       /* Giữ xuống dòng từ backend */
+    word-break: break-word;
+    font-size: 15px;
+    line-height: 1.45;
+    color: #4e2f14;
+    background: #fffdf8;
+    border: 1px solid #e2d2bd;
+    padding: 14px;
+    border-radius: 10px;
+    max-height: 260px;
+    overflow-y: auto;            /* Cuộn nếu ghi chú dài */
+}
+
+/* Thanh cuộn đẹp */
+#noteModal #noteText::-webkit-scrollbar {
+    width: 8px;
+}
+#noteModal #noteText::-webkit-scrollbar-thumb {
+    background: #c9b08a;
+    border-radius: 10px;
+}
+#noteModal #noteText::-webkit-scrollbar-track {
+    background: #f3e9dc;
+}
+
+/* Nút đóng */
+#noteModal .close-btn {
+    background: #c9b8a6 !important;
+    color: #4e2f14 !important;
+    padding: 10px 20px;
+    margin-top: 18px;
+    border-radius: 10px;
+    font-size: 15px;
+    cursor: pointer;
+    display: block;
+    width: 100%;
+    text-align: center;
+    transition: 0.25s ease;
+}
+
+#noteModal .close-btn:hover {
+    background: #b8a48d !important;
+}

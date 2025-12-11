@@ -191,6 +191,13 @@ function renderUserTable(list) {
             </td>
 
             <td>${safe(r.interviewer || "—")}</td>
+            <td>
+                ${
+                    (!r.interviewNote || r.interviewNote.trim() === "")
+                    ? "—"
+                    : `<button class="note-btn" onclick="openNoteModal(${JSON.stringify(r.interviewNote)})">Ghi chú</button>`
+                }
+            </td>
         `;
 
         tbody.appendChild(tr);
@@ -394,6 +401,15 @@ async function saveInterview() {
     } catch {
         showToast("Lỗi kết nối server!", "error");
     }
+}
+
+function openNoteModal(note) {
+    document.getElementById("noteText").textContent = note;
+    document.getElementById("noteModal").style.display = "flex";
+}
+
+function closeNoteModal() {
+    document.getElementById("noteModal").style.display = "none";
 }
 
 /* =====================================================
