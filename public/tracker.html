@@ -1,0 +1,46 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <title>THEO DÕI LƯỢT PHỎNG VẤN</title>
+    <link rel="stylesheet" href="tracker.css">
+    <!-- Favicon for all devices -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon.png">
+
+    <!-- For iPhone/iPad (Home screen icon) -->
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+
+    <!-- For Android Chrome -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#8b5a2b">
+</head>
+
+<body>
+<img src="images/typo.png" alt="Title" class="title-img">
+<div class="tracker-wrapper">
+
+    <h2 class="tracker-title">THEO DÕI LƯỢT PHỎNG VẤN</h2>
+
+    <table id="queueTable" class="tracker-table">
+        <thead>
+            <tr>
+                <th>Đội hình</th>
+                <th>Đang phỏng vấn</th>
+                <th>Sắp tới 1</th>
+                <th>Sắp tới 2</th>
+            </tr>
+        </thead>
+        <tbody id="queueBody"></tbody>
+    </table>
+
+    <p id="updateTime"></p>
+
+</div>
+
+<script src="tracker.js"></script>
+</body>
+</html>
