@@ -59,14 +59,9 @@ async function loadProfile() {
         const reg = await regRes.json();
 
         document.getElementById("pf_interviewResult").innerText = reg.interviewResult || "Chưa phỏng vấn";
-        document.getElementById("pf_interviewNote").innerText = reg.interviewNote || "—";
-        document.getElementById("pf_interviewer").innerText = reg.interviewer || "—";
-
     } else {
     // Nếu chưa đăng ký đội hình chuyên môn & địa phương → hiển thị mặc định
     document.getElementById("pf_interviewResult").innerText = "Chưa đăng ký";
-    document.getElementById("pf_interviewNote").innerText = "—";
-    document.getElementById("pf_interviewer").innerText = "—";
 }
 
     // ===== LOAD MEDIA INTERVIEW RESULT =====
@@ -75,14 +70,10 @@ async function loadProfile() {
     if (mediaRes.status === 200) {
         const media = await mediaRes.json();
 
-        document.getElementById("pf_media_interviewResult").innerText =media.interviewResult || "Chưa phỏng vấn";
-        document.getElementById("pf_media_interviewNote").innerText =media.interviewNote || "—";
-        document.getElementById("pf_media_interviewer").innerText =media.interviewer || "—";
+    document.getElementById("pf_media_interviewResult").innerText =media.interviewResult || "Chưa phỏng vấn";
     } else {
     // Nếu chưa đăng ký đội hình truyền thông → hiển thị mặc định
     document.getElementById("pf_media_interviewResult").innerText = "Chưa đăng ký";
-    document.getElementById("pf_media_interviewNote").innerText = "—";
-    document.getElementById("pf_media_interviewer").innerText = "—";
 }
 }
 
