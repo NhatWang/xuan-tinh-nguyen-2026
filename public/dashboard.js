@@ -92,11 +92,11 @@ async function loadProfile() {
         if (reg.interviewLocation !== "Khác") {
             roomRow.style.display = "flex";
             joinRow.style.display = "none";
-            statusRow.style.display = "none";
 
             document.getElementById("pf_interviewRoom").innerText =
                 reg.interviewRoom || "Thông báo sau";
 
+            statusRow.style.display = "none";
         // ===== ONLINE =====
         } else {
             roomRow.style.display = "none";
