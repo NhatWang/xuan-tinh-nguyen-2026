@@ -51,7 +51,6 @@ async function startInterview() {
   if (interviewStarted) return;
 
   try {
-    // 1️⃣ CALL API START
     const res = await fetch(`/api/admin/interview/start/${regId}`, {
       method: "PUT",
       credentials: "include"
@@ -64,11 +63,17 @@ async function startInterview() {
     }
 
     const data = await res.json();
-    roomUrl = data.room; // ✅ FULL DAILY URL
+    roomUrl = data.room;
     interviewStarted = true;
 
-    // 2️⃣ CREATE DAILY FRAME
-    callFrame = window.DailyIframe.createFrame({
+    const container = document.getElementById("daily");
+    if (!container) {
+      alert("Thiếu div#daily");
+      return;
+    }
+
+    // ✅ CHUẨN DAILY.CO
+    callFrame = window.DailyIframe.createFrame(container, {
       iframeStyle: {
         width: "100%",
         height: "100%",
@@ -76,26 +81,13 @@ async function startInterview() {
       }
     });
 
-    // 3️⃣ APPEND iframe → DOM
-    const container = document.getElementById("daily");
-    if (!container) {
-      alert("Thiếu div#daily");
-      return;
-    }
-
-    container.appendChild(callFrame.iframe);
-
-    // 4️⃣ JOIN ROOM
     await callFrame.join({ url: roomUrl });
 
-    // 5️⃣ EVENT LISTENER (KHÔNG AUTO END)
     callFrame.on("left-meeting", () => {
-      console.warn("Admin rời phòng (không auto end)");
+      console.warn("Admin rời phòng");
     });
 
-    // 6️⃣ DISABLE START BUTTON
-    const startBtn = document.querySelector(".start-btn");
-    if (startBtn) startBtn.disabled = true;
+    document.querySelector(".start-btn")?.setAttribute("disabled", true);
 
   } catch (err) {
     console.error("startInterview error:", err);
