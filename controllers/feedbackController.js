@@ -29,3 +29,12 @@ exports.submitFeedback = async (req, res) => {
         return res.status(500).json({ msg: "Lỗi server!" });
     }
 };
+
+exports.getAllFeedback = async (req, res) => {
+    try {
+        const list = await Feedback.find().sort({ createdAt: -1 });
+        res.json(list);
+    } catch (err) {
+        res.status(500).json({ msg: "Lỗi server!" });
+    }
+};

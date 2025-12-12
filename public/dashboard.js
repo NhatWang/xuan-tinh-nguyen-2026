@@ -529,7 +529,16 @@ function updateRatingText(val) {
     document.getElementById("ratingValue").innerText = `${val} / 5`;
 }
 
+function openFeedback() {
+    document.getElementById("feedbackModal").style.display = "flex";
+    initStars(); // tạo lại hệ thống sao
+}
 
+function closeFeedback() {
+    document.getElementById("feedbackModal").style.display = "none";
+}
+
+document.getElementById("feedbackButton").addEventListener("click", openFeedback);
 
 // Gửi đánh giá
 async function submitFeedback() {

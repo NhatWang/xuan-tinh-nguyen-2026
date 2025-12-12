@@ -6,6 +6,7 @@ const Registration = require("../models/Registration");
 
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
+const feedbackCtrl = require("../controllers/feedbackController");
 
 const fs = require("fs");
 const path = require("path");
@@ -388,5 +389,8 @@ router.put("/attendance/:regId", auth, admin, async (req, res) => {
         res.status(500).json({ msg: "Lỗi cập nhật điểm danh" });
     }
 });
+
+router.get("/feedback/all", auth, adminOnly, feedbackCtrl.getAllFeedback);
+
 
 module.exports = router;
