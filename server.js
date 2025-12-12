@@ -94,6 +94,19 @@ app.set("io", io);
 io.on("connection", socket => {
   console.log("🟢 Socket connected:", socket.id);
 
+  // ⭐ USER JOIN ROOM RIÊNG
+  socket.on("join:user", userId => {
+    if (!userId) return;
+    socket.join(userId);
+    console.log("👤 User joined room:", userId);
+  });
+
+  // ⭐ ADMIN JOIN ROOM (OPTIONAL – DEBUG)
+  socket.on("join:admin", () => {
+    socket.join("admins");
+    console.log("👑 Admin joined room");
+  });
+
   socket.on("disconnect", () => {
     console.log("🔴 Socket disconnected:", socket.id);
   });

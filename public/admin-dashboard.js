@@ -7,6 +7,46 @@ let currentResultInterviewer = "";
 const socket = io({
     withCredentials: true
 });
+
+/* =====================================================
+   REALTIME – INTERVIEW STATUS (ADMIN)
+===================================================== */
+
+socket.on("interview:calling", data => {
+    const item = allUsers.find(u => u.reg._id === data.regId);
+    if (!item) return;
+
+    item.reg.interviewStatus = "calling";
+    item.reg.interviewRoomId = data.roomUrl || item.reg.interviewRoomId;
+
+    refreshOnlineTableIfOpen();
+});
+
+socket.on("interview:ended", data => {
+    const item = allUsers.find(u => u.reg._id === data?.regId);
+    if (!item) return;
+
+    item.reg.interviewStatus = "ended";
+    item.reg.interviewRoomId = null;
+
+    refreshOnlineTableIfOpen();
+});
+
+/* =====================================================
+   HELPER
+===================================================== */
+function refreshOnlineTableIfOpen() {
+    const onlineTable = document.getElementById("onlineInterviewTable");
+    if (!onlineTable || onlineTable.style.display !== "table") return;
+
+    const onlineUsers = allUsers.filter(
+        u => u.reg.interviewLocation === "Khác"
+    );
+
+    renderOnlineInterviewTable(onlineUsers);
+}
+
+
 /* =====================================================
    UTILITIES
 ===================================================== */
@@ -832,6 +872,7 @@ async function loadOnlineInterviewList() {
     document.getElementById("filterStatus").parentElement.style.display = "none";
     document.getElementById("filterCaRow").style.display = "none";
     document.getElementById("totalRegRow").style.display = "none";
+    document.getElementById("searchText").parentElement.style.display = "none";
 
     // Nếu chưa load users thì load
     if (allUsers.length === 0) {
@@ -906,40 +947,6 @@ function openOnlineInterviewRoom(regId, roomId) {
    REALTIME – ONLINE INTERVIEW STATUS
 ===================================================== */
 
-socket.on("interview:update", data => {
-    /*
-        data = {
-            regId,
-            status: "waiting" | "calling" | "ended",
-            roomId
-        }
-    */
-
-    console.log("🔔 Realtime interview update:", data);
-
-    // Update local allUsers
-    const item = allUsers.find(u => u.reg._id === data.regId);
-    if (!item) return;
-
-    item.reg.interviewStatus = data.status;
-    if (data.roomId) item.reg.interviewRoomId = data.roomId;
-
-    // Nếu đang ở màn Online Interview → render lại bảng
-    const onlineTable = document.getElementById("onlineInterviewTable");
-    if (onlineTable && onlineTable.style.display === "table") {
-        const onlineUsers = allUsers.filter(
-            u => u.reg.interviewLocation === "Khác"
-        );
-        renderOnlineInterviewTable(onlineUsers);
-    }
-
-    // Optional: toast realtime
-    showToast(
-        `Ứng viên ${item.user.fullName}: ${data.status}`,
-        "success"
-    );
-});
-
 function renderStatus(status) {
     const map = {
         idle: "⚪ Chưa gán",
@@ -947,7 +954,7 @@ function renderStatus(status) {
         calling: "🟢 Đang phỏng vấn",
         ended: "🔴 Đã kết thúc"
     };
-    return map[status] || status;
+    return map[status] || "⚪ Chưa gán";
 }
 
 /* =====================================================
