@@ -819,3 +819,126 @@ input[type="text"]:focus {
 .note-btn:active {
     transform: scale(0.95);
 }
+
+/* ======================================
+   FEEDBACK MODAL — SCROLLABLE VERSION
+====================================== */
+
+/* Khung modal */
+#feedbackModal .modal-content {
+    width: 420px;
+    max-width: 95vw;
+
+    max-height: 85vh;        /* ⭐ Không cao quá màn hình */
+    overflow-y: auto;        /* ⭐ Scroll bên trong */
+    overflow-x: hidden;
+
+    background: var(--modal-bg);
+    padding: 28px;
+    border-radius: 14px;
+    box-shadow: 0 6px 24px rgba(0,0,0,0.18);
+    animation: zoomIn 0.25s ease;
+    box-sizing: border-box;
+}
+
+/* Tiêu đề modal */
+#feedbackModal h2 {
+    font-size: 20px;
+    font-weight: 700;
+    color: #5a3a1d;
+    margin-bottom: 16px;
+    text-align: center;
+}
+
+/* Stars container */
+#feedbackModal .rating-stars {
+    text-align: center;
+    margin-bottom: 10px;
+}
+
+#feedbackModal .star {
+    font-size: 34px;
+    cursor: pointer;
+    margin: 0 5px;
+    color: #d1c3b1;
+    transition: 0.2s;
+}
+
+#feedbackModal .star.full {
+    color: #ffb400;
+}
+
+/* Rating text */
+#feedbackModal .rating-value {
+    text-align: center;
+    font-size: 15px;
+    margin-bottom: 14px;
+    color: #5a3a1d;
+}
+
+/* Textarea — scroll inside */
+#feedbackModal #feedbackText {
+    width: 100%;
+    min-height: 110px;
+    max-height: 260px;         /* ⭐ Tự scroll bên trong */
+    padding: 12px 14px;
+
+    border: 1px solid #d3c1ac;
+    border-radius: 10px;
+    background: var(--input-bg);
+
+    font-size: 15px;
+    line-height: 1.45;
+    white-space: pre-wrap;
+    word-break: break-word;
+
+    resize: vertical;
+    overflow-y: auto;
+}
+
+/* Thanh cuộn đẹp */
+#feedbackModal #feedbackText::-webkit-scrollbar {
+    width: 8px;
+}
+#feedbackModal #feedbackText::-webkit-scrollbar-thumb {
+    background: #c9b08a;
+    border-radius: 10px;
+}
+#feedbackModal #feedbackText::-webkit-scrollbar-track {
+    background: #f3e9dc;
+}
+
+/* Buttons */
+#feedbackModal .btn-group {
+    display: flex;
+    justify-content: center;
+    gap: 12px;
+    margin-top: 18px;
+}
+
+#feedbackModal .save-btn {
+    background: #8b5a2b !important;
+    color: #fff !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#feedbackModal .save-btn:hover {
+    background: #70471e !important;
+}
+
+#feedbackModal .close-btn {
+    background: #ccc !important;
+    color: #333 !important;
+    padding: 10px 20px;
+    border-radius: 10px;
+    cursor: pointer;
+    transition: 0.25s;
+}
+
+#feedbackModal .close-btn:hover {
+    background: #b5b5b5 !important;
+}
+
