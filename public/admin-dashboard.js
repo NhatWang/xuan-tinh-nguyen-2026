@@ -732,7 +732,7 @@ function goToTracker() {
 
 async function openFeedbackList() {
     try {
-        const res = await fetch("/api/user/feedback/all", {
+        const res = await fetch(API + "/admin/feedback/all", {
             credentials: "include"
         });
 
