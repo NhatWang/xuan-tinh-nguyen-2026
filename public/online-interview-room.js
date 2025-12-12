@@ -5,10 +5,10 @@ let regId = null;
 let roomName = null;
 
 /* ==========================
-   LẤY QUERY PARAM
+   LẤY QUERY PARAM (FIX)
 ========================== */
 const params = new URLSearchParams(window.location.search);
-regId = params.get("regId");
+regId = params.get("reg");   // ✅ FIX
 
 if (!regId) {
   alert("Thiếu regId!");
@@ -19,35 +19,30 @@ if (!regId) {
    KHỞI TẠO PHÒNG
 ========================== */
 async function initRoom() {
-  // 1️⃣ Lấy info registration
-  const res = await fetch(API + `/admin/registration/${regId}`, {
+  // 1️⃣ Lấy info phòng (API ĐÚNG)
+  const res = await fetch(API + `/admin/interview/room/${regId}`, {
     credentials: "include"
   });
 
   if (!res.ok) {
-    alert("Không tải được dữ liệu!");
+    alert("Không tải được dữ liệu phòng!");
     return;
   }
 
   const data = await res.json();
   const user = data.user;
-  const reg = data.reg;
+  const roomId = data.roomId || `room-${regId}`;
 
-  roomName = `XTN2026_${regId}`;
+  roomName = roomId;
 
   document.getElementById("roomInfo").textContent =
     `Phỏng vấn: ${user.fullName} (${user.studentId})`;
 
-  // 2️⃣ Update trạng thái: calling
-  await fetch(API + `/admin/interview-status/${regId}`, {
+  // 2️⃣ BÁO BẮT ĐẦU PHỎNG VẤN
+  await fetch(API + `/admin/interview/start/${regId}`, {
     method: "PUT",
     headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      interviewStatus: "calling",
-      interviewRoomId: roomName,
-      interviewStartedAt: new Date()
-    })
+    credentials: "include"
   });
 
   // 3️⃣ Tạo Jitsi
@@ -64,7 +59,7 @@ async function initRoom() {
     }
   });
 
-  // 4️⃣ Lắng nghe khi rời phòng
+  // 4️⃣ Khi đóng phòng
   api.addListener("readyToClose", endInterview);
 }
 
@@ -76,14 +71,9 @@ initRoom();
 async function endInterview() {
   if (api) api.dispose();
 
-  await fetch(API + `/admin/interview-status/${regId}`, {
+  await fetch(API + `/admin/interview/end/${regId}`, {
     method: "PUT",
-    headers: { "Content-Type": "application/json" },
-    credentials: "include",
-    body: JSON.stringify({
-      interviewStatus: "ended",
-      interviewEndedAt: new Date()
-    })
+    credentials: "include"
   });
 
   window.close();
