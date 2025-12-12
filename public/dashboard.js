@@ -1,6 +1,8 @@
 const API = "/api";
 let currentReg = null;
+let currentUserId = null;   // ⭐ THÊM
 let socket = null;
+
 /* ===== TOAST UI ===== */
 function showToast(message, type = "success") {
     const toastContainer = document.getElementById("toast");
@@ -38,13 +40,16 @@ function disableRegistrationForm() {
 
 /* ============ LOAD PROFILE ============ */
 async function loadProfile() {
+    // 1️⃣ LẤY USER
     const userRes = await fetch(API + "/auth/me", { credentials: "include" });
 
     if (userRes.status === 401) {
-        return window.location.href = "login.html";
+        window.location.href = "login.html";
+        return;
     }
 
     const user = await userRes.json();
+    currentUserId = user._id;   // ⭐ QUAN TRỌNG
 
     // Hiển thị thông tin tài khoản
     document.getElementById("pf_name").innerText = user.fullName;
@@ -55,23 +60,24 @@ async function loadProfile() {
     document.getElementById("pf_email").innerText = user.email;
     document.getElementById("pf_phone").innerText = user.phone;
 
-    // ===== LOAD REGISTRATION (Đội hình chuyên môn & địa phương) =====
-    const regRes = await fetch(API + "/registration/me", { credentials: "include" });
+    // 2️⃣ LẤY REGISTRATION
+    const regRes = await fetch(API + "/registration/me", {
+        credentials: "include"
+    });
 
     if (regRes.status === 200) {
         const reg = await regRes.json();
-
         currentReg = reg;
 
         // Ca phỏng vấn
         document.getElementById("pf_interviewCa").innerText =
             reg.interviewLocation || "Chưa có";
 
-        // Thời gian
+        // Thời gian phỏng vấn
         document.getElementById("pf_interviewTime").innerText =
             getInterviewTime(reg.interviewLocation);
 
-        // Kết quả
+        // Kết quả phỏng vấn
         document.getElementById("pf_interviewResult").innerText =
             reg.interviewResult || "Chưa phỏng vấn";
 
@@ -89,28 +95,24 @@ async function loadProfile() {
 
         // ===== ONLINE =====
         } else {
-            // Ẩn phòng vật lý
             roomRow.style.display = "none";
 
-            // Chỉ hiện nút khi admin gọi
+            // Chỉ hiện nút JOIN khi admin gọi
             if (reg.interviewStatus === "calling" && reg.interviewRoomId) {
                 joinRow.style.display = "flex";
             } else {
                 joinRow.style.display = "none";
             }
         }
-
-        // Kết quả phỏng vấn
-        document.getElementById("pf_interviewResult").innerText =
-            reg.interviewResult || "Chưa phỏng vấn";
     } else {
+        // Chưa đăng ký
         document.getElementById("pf_interviewResult").innerText = "Chưa đăng ký";
         document.getElementById("pf_interviewRoom").innerText = "Chưa có";
         document.getElementById("pf_interviewCa").innerText = "Chưa có";
         document.getElementById("pf_interviewTime").innerText = "Chưa có";
     }
 
-    // ===== LOAD MEDIA TEAM RESULT =====
+    // 3️⃣ LOAD MEDIA TEAM RESULT
     const mediaRes = await fetch(API + "/media/me", { credentials: "include" });
 
     if (mediaRes.status === 200) {
@@ -118,37 +120,40 @@ async function loadProfile() {
         document.getElementById("pf_media_interviewResult").innerText =
             media.interviewResult || "Chưa phỏng vấn";
     } else {
-        document.getElementById("pf_media_interviewResult").innerText = "Chưa đăng ký";
+        document.getElementById("pf_media_interviewResult").innerText =
+            "Chưa đăng ký";
     }
+
+    // 4️⃣ SOCKET INIT – SAU KHI CÓ USER
+    socket = io({ withCredentials: true });
+
+    // Join room riêng của user
+    socket.emit("join:user", currentUserId);
+
+    // Khi admin gọi phỏng vấn
+    socket.on("interview:calling", data => {
+        showToast("Đến lượt phỏng vấn online!", "success");
+
+        if (!currentReg) return;
+
+        currentReg.interviewRoomId = data.roomId;
+        currentReg.interviewStatus = "calling";
+
+        const joinRow = document.getElementById("joinOnlineRow");
+        if (joinRow) joinRow.style.display = "flex";
+    });
+
+    // Khi admin kết thúc phỏng vấn
+    socket.on("interview:ended", () => {
+        showToast("Buổi phỏng vấn đã kết thúc", "warning");
+
+        const joinRow = document.getElementById("joinOnlineRow");
+        if (joinRow) joinRow.style.display = "none";
+
+        const roomField = document.getElementById("pf_interviewRoom");
+        if (roomField) roomField.innerText = "Đã kết thúc";
+    });
 }
-
-// ===== SOCKET INIT =====
-socket = io();
-
-socket.emit("join:user", user._id);
-
-// Khi admin gọi phỏng vấn
-socket.on("interview:calling", data => {
-    showToast("Đến lượt phỏng vấn online!", "success");
-
-    currentReg.interviewRoomId = data.roomId;
-    currentReg.interviewStatus = "calling";
-
-    // HIỆN NÚT JOIN
-    document.getElementById("joinOnlineRow").style.display = "flex";
-});
-
-socket.on("interview:ended", () => {
-    showToast("Buổi phỏng vấn đã kết thúc", "warning");
-
-    // Ẩn nút vào phòng phỏng vấn
-    const joinRow = document.getElementById("joinOnlineRow");
-    if (joinRow) joinRow.style.display = "none";
-
-    // Cập nhật trạng thái
-    const roomField = document.getElementById("pf_interviewRoom");
-    if (roomField) roomField.innerText = "Đã kết thúc";
-});
 
 /* ============ LOAD REGISTRATION FORM ============ */
 async function loadRegistrationForm() {

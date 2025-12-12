@@ -106,6 +106,7 @@ async function loadUsers() {
     document.getElementById("filterStatus").parentElement.style.display = "flex";
     document.getElementById("filterCaRow").style.display = "flex";
     document.getElementById("totalRegRow").style.display = "flex";
+    document.getElementById("onlineInterviewTable").style.display = "none";
 
 
     try {
@@ -454,6 +455,7 @@ async function loadMediaList() {
     document.getElementById("totalRegRow").style.display = "none";
     document.getElementById("mediaFilterRow").style.display = "flex";
     document.getElementById("mediaTotalRow").style.display = "flex";
+    document.getElementById("onlineInterviewTable").style.display = "none";
 
 
     try {
