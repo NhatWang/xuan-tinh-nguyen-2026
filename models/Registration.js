@@ -63,6 +63,27 @@ const RegistrationSchema = new mongoose.Schema(
     attendance: { type: Boolean, default: false },
     interviewOrder: { type: Number, default: null },
 
+    interviewStatus: {
+    type: String,
+    enum: ["idle", "waiting", "calling", "ended"],
+    default: "idle"
+    },
+
+    interviewRoomId: {
+        type: String,
+        default: null
+    },
+
+    interviewStartedAt: {
+        type: Date,
+        default: null
+    },
+
+    interviewEndedAt: {
+        type: Date,
+        default: null
+    },
+
     //
 
     createdAt: { type: Date, default: Date.now }

@@ -4,6 +4,9 @@ let currentResultId = null;
 let currentResultNote = "";
 let currentResultInterviewer = "";
 
+const socket = io({
+    withCredentials: true
+});
 /* =====================================================
    UTILITIES
 ===================================================== */
@@ -812,6 +815,123 @@ function renderRatingBars(feedbackList) {
     }
 }
 
+async function loadOnlineInterviewList() {
+    document.getElementById("pageTitle").textContent = "Danh sách Phỏng vấn Online";
+
+    // Ẩn các bảng khác
+    document.getElementById("userTable").style.display = "none";
+    document.getElementById("mediaTable").style.display = "none";
+    document.getElementById("onlineInterviewTable").style.display = "table";
+
+    // Ẩn filter không cần
+    document.getElementById("mediaFilterRow").style.display = "none";
+    document.getElementById("mediaTotalRow").style.display = "none";
+    document.getElementById("filterNV").parentElement.style.display = "none";
+    document.getElementById("filterStatus").parentElement.style.display = "none";
+    document.getElementById("filterCaRow").style.display = "none";
+    document.getElementById("totalRegRow").style.display = "none";
+
+    // Nếu chưa load users thì load
+    if (allUsers.length === 0) {
+        const res = await fetch(API + "/admin/list", { credentials: "include" });
+        allUsers = await res.json();
+    }
+
+    const onlineUsers = allUsers.filter(
+        u => u.reg.interviewLocation === "Khác"
+    );
+
+    renderOnlineInterviewTable(onlineUsers);
+}
+
+function renderOnlineInterviewTable(list) {
+    const tbody = document.getElementById("onlineInterviewBody");
+    tbody.innerHTML = "";
+
+    list.forEach(item => {
+        const u = item.user;
+        const r = item.reg;
+
+        const tr = document.createElement("tr");
+        const disabled = r.interviewStatus === "ended" ? "disabled" : "";
+        tr.innerHTML = `
+            <td>${safe(u.fullName)}</td>
+            <td>${safe(u.studentId)}</td>
+            <td>${safe(u.email)}</td>
+            <td>${safe(r.interviewLocation)}</td>
+            <td>${safe(r.interviewer || "—")}</td>
+            <td>${renderStatus(r.interviewStatus)}</td>  
+            <td>
+                <button class="action-btn" ${disabled}
+                    onclick="openOnlineInterviewRoom(
+                        '${r._id}',
+                        '${r.interviewRoomId || ""}'
+                    )">
+                    Phỏng vấn online
+                </button>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+function openOnlineInterviewRoom(regId, roomId) {
+    if (!roomId) roomId = "room-" + regId;
+
+    window.open(
+        `/online-interview-room.html?room=${roomId}&reg=${regId}`,
+        "_blank"
+    );
+}
+
+/* =====================================================
+   REALTIME – ONLINE INTERVIEW STATUS
+===================================================== */
+
+socket.on("interview:update", data => {
+    /*
+        data = {
+            regId,
+            status: "waiting" | "calling" | "ended",
+            roomId
+        }
+    */
+
+    console.log("🔔 Realtime interview update:", data);
+
+    // Update local allUsers
+    const item = allUsers.find(u => u.reg._id === data.regId);
+    if (!item) return;
+
+    item.reg.interviewStatus = data.status;
+    if (data.roomId) item.reg.interviewRoomId = data.roomId;
+
+    // Nếu đang ở màn Online Interview → render lại bảng
+    const onlineTable = document.getElementById("onlineInterviewTable");
+    if (onlineTable && onlineTable.style.display === "table") {
+        const onlineUsers = allUsers.filter(
+            u => u.reg.interviewLocation === "Khác"
+        );
+        renderOnlineInterviewTable(onlineUsers);
+    }
+
+    // Optional: toast realtime
+    showToast(
+        `Ứng viên ${item.user.fullName}: ${data.status}`,
+        "success"
+    );
+});
+
+function renderStatus(status) {
+    const map = {
+        idle: "⚪ Chưa gán",
+        waiting: "🟡 Đã gán phòng",
+        calling: "🟢 Đang phỏng vấn",
+        ended: "🔴 Đã kết thúc"
+    };
+    return map[status] || status;
+}
 
 /* =====================================================
    INIT

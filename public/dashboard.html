@@ -3,6 +3,7 @@
 <head>
     <title>Dashboard - Xuân Tình Nguyện</title>
     <link rel="stylesheet" href="dashboard.css">
+    <script src="/socket.io/socket.io.js"></script>
     <script src="dashboard.js" defer></script>
     <!-- Favicon for all devices -->
     <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
@@ -55,15 +56,25 @@
                     <span id="pf_interviewCa"></span>
                 </div>
 
-                <div class="profile-field">
+                <!-- CHỈ OFFLINE MỚI HIỆN -->
+                <div class="profile-field" id="interviewRoomRow">
                     <label>Phòng:</label>
                     <span id="pf_interviewRoom"></span>
                 </div>
 
                 <div class="profile-field">
-                    <label>Thời gian phỏng vấn:</label>
-                    <span id="pf_interviewTime"></span>
+                    <label>Trạng thái:</label>
+                    <span id="pf_interviewStatus"></span>
                 </div>
+
+                <!-- CHỈ ONLINE MỚI HIỆN -->
+                <div class="profile-field" id="joinOnlineRow" style="display:none;">
+                    <label></label>
+                    <button class="submit-btn" onclick="joinOnlineInterview()">
+                        Vào phòng phỏng vấn
+                    </button>
+                </div>
+
 
 
                 <hr style="margin: 20px 0; border: none; border-top: 1px solid #e6c184;">

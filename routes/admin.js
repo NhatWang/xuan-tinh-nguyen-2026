@@ -7,6 +7,7 @@ const Registration = require("../models/Registration");
 const auth = require("../middleware/auth");
 const admin = require("../middleware/admin");
 const feedbackCtrl = require("../controllers/feedbackController");
+const adminCtrl = require("../controllers/adminController");
 
 const fs = require("fs");
 const path = require("path");
@@ -392,5 +393,39 @@ router.put("/attendance/:regId", auth, admin, async (req, res) => {
 
 router.get("/feedback/all", auth, admin, feedbackCtrl.getAllFeedback);
 
+/* =====================================================
+   ONLINE INTERVIEW – STEP 2
+===================================================== */
+
+// Gán phòng phỏng vấn online
+router.put(
+    "/interview/assign-room/:id",
+    auth,
+    admin,
+    adminCtrl.assignInterviewRoom
+);
+
+// Bắt đầu phỏng vấn online
+router.put(
+    "/interview/start/:id",
+    auth,
+    admin,
+    adminCtrl.startInterviewOnline
+);
+
+// Kết thúc phỏng vấn online
+router.put(
+    "/interview/end/:id",
+    auth,
+    admin,
+    adminCtrl.endInterviewOnline
+);
+
+router.get(
+  "/interview/room/:regId",
+  auth,
+  admin,
+  adminCtrl.getInterviewRoom
+);
 
 module.exports = router;

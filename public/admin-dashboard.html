@@ -44,6 +44,10 @@
         Đội hình Truyền thông
     </button>
 
+    <button class="menu-btn" onclick="loadOnlineInterviewList()">
+        Phỏng vấn Online
+    </button>
+
     <button class="menu-btn" onclick="openFeedbackList()">
         Feedback
     </button>
@@ -189,6 +193,24 @@
         <tbody id="mediaTableBody"></tbody>
     </table>
 </div>
+
+<div class="table-wrapper">
+<table id="onlineInterviewTable" style="display:none; margin-top:35px;">
+    <thead>
+        <tr>
+            <th>Họ tên</th>
+            <th>MSSV</th>
+            <th>Email</th>
+            <th>Ca phỏng vấn</th>
+            <th>Người phỏng vấn</th>
+            <th>Trạng thái</th>
+            <th>Phỏng vấn Online</th>
+        </tr>
+    </thead>
+    <tbody id="onlineInterviewBody"></tbody>
+</table>
+</div>
+
 
 <!-- =====================================
      PDF PREVIEW MODAL
@@ -343,7 +365,7 @@
     </div>
 </div>
 
-
+<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
 <script src="admin-dashboard.js"></script>
 
 </body>

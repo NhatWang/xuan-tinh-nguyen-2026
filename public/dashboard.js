@@ -1,5 +1,6 @@
 const API = "/api";
-
+let currentReg = null;
+let socket = null;
 /* ===== TOAST UI ===== */
 function showToast(message, type = "success") {
     const toastContainer = document.getElementById("toast");
@@ -60,16 +61,44 @@ async function loadProfile() {
     if (regRes.status === 200) {
         const reg = await regRes.json();
 
+        currentReg = reg;
+
+        // Ca phỏng vấn
         document.getElementById("pf_interviewCa").innerText =
             reg.interviewLocation || "Chưa có";
 
-        // PHÒNG PHỎNG VẤN — THÊM DÒNG NÀY
-        document.getElementById("pf_interviewRoom").innerText =
-            reg.interviewRoom || "Chưa có";
-
-        // Thời gian phỏng vấn theo Ca
+        // Thời gian
         document.getElementById("pf_interviewTime").innerText =
             getInterviewTime(reg.interviewLocation);
+
+        // Kết quả
+        document.getElementById("pf_interviewResult").innerText =
+            reg.interviewResult || "Chưa phỏng vấn";
+
+        // ===== DOM =====
+        const roomRow = document.getElementById("interviewRoomRow");
+        const joinRow = document.getElementById("joinOnlineRow");
+
+        // ===== OFFLINE =====
+        if (reg.interviewLocation !== "Khác") {
+            roomRow.style.display = "flex";
+            joinRow.style.display = "none";
+
+            document.getElementById("pf_interviewRoom").innerText =
+                reg.interviewRoom || "Thông báo sau";
+
+        // ===== ONLINE =====
+        } else {
+            // Ẩn phòng vật lý
+            roomRow.style.display = "none";
+
+            // Chỉ hiện nút khi admin gọi
+            if (reg.interviewStatus === "calling" && reg.interviewRoomId) {
+                joinRow.style.display = "flex";
+            } else {
+                joinRow.style.display = "none";
+            }
+        }
 
         // Kết quả phỏng vấn
         document.getElementById("pf_interviewResult").innerText =
@@ -93,7 +122,33 @@ async function loadProfile() {
     }
 }
 
+// ===== SOCKET INIT =====
+socket = io();
 
+socket.emit("join:user", user._id);
+
+// Khi admin gọi phỏng vấn
+socket.on("interview:calling", data => {
+    showToast("Đến lượt phỏng vấn online!", "success");
+
+    currentReg.interviewRoomId = data.roomId;
+    currentReg.interviewStatus = "calling";
+
+    // HIỆN NÚT JOIN
+    document.getElementById("joinOnlineRow").style.display = "flex";
+});
+
+socket.on("interview:ended", () => {
+    showToast("Buổi phỏng vấn đã kết thúc", "warning");
+
+    // Ẩn nút vào phòng phỏng vấn
+    const joinRow = document.getElementById("joinOnlineRow");
+    if (joinRow) joinRow.style.display = "none";
+
+    // Cập nhật trạng thái
+    const roomField = document.getElementById("pf_interviewRoom");
+    if (roomField) roomField.innerText = "Đã kết thúc";
+});
 
 /* ============ LOAD REGISTRATION FORM ============ */
 async function loadRegistrationForm() {
@@ -571,4 +626,16 @@ async function submitFeedback() {
     } catch {
         showToast("Không thể kết nối server!", "error");
     }
+}
+
+function joinOnlineInterview() {
+    if (!currentReg || !currentReg.interviewRoomId) {
+        showToast("Chưa đến lượt phỏng vấn!", "warning");
+        return;
+    }
+
+    window.open(
+        `/online-interview-room.html?room=${currentReg.interviewRoomId}&role=user`,
+        "_blank"
+    );
 }

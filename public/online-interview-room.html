@@ -1,0 +1,59 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="UTF-8">
+<title>Phòng phỏng vấn Online</title>
+
+<link rel="stylesheet" href="admin-dashboard.css">
+
+<style>
+  body {
+    margin: 0;
+    background: #f7f4ef;
+  }
+
+  .room-header {
+    padding: 12px 20px;
+    background: #8b5a2b;
+    color: white;
+    font-weight: 600;
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+  }
+
+  #jitsi {
+    height: calc(100vh - 56px);
+    width: 100%;
+  }
+
+  .end-btn {
+    background: #d46a6a;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .end-btn:hover {
+    background: #c25454;
+  }
+</style>
+</head>
+
+<body>
+
+<div class="room-header">
+  <div id="roomInfo">Đang tải phòng phỏng vấn...</div>
+  <button class="end-btn" onclick="endInterview()">Kết thúc</button>
+</div>
+
+<div id="jitsi"></div>
+
+<script src="https://meet.jit.si/external_api.js"></script>
+<script src="online-interview-room.js"></script>
+
+</body>
+</html>
