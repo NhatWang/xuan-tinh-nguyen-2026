@@ -425,14 +425,6 @@ router.get("/feedback/all", auth, admin, feedbackCtrl.getAllFeedback);
    ONLINE INTERVIEW – STEP 2
 ===================================================== */
 
-// Gán phòng phỏng vấn online
-router.put(
-    "/interview/assign-room/:id",
-    auth,
-    admin,
-    adminCtrl.assignInterviewRoom
-);
-
 // Bắt đầu phỏng vấn online
 router.put(
     "/interview/start/:id",
