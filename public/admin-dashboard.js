@@ -852,14 +852,28 @@ function renderOnlineInterviewTable(list) {
         const u = item.user;
         const r = item.reg;
 
+        // ⭐ XÁC ĐỊNH ĐỘI HÌNH
+        let teamLabel = "—";
+
+        if (r.nv1) {
+            teamLabel = shortName(r.nv1); // CX, KXA, XCS...
+        } 
+        else if (r.mediaRoles || r.mediaLocations) {
+            teamLabel = "Truyền thông";
+        }
+
         const tr = document.createElement("tr");
         const disabled = r.interviewStatus === "ended" ? "disabled" : "";
+
         tr.innerHTML = `
             <td>${safe(u.fullName)}</td>
             <td>${safe(u.studentId)}</td>
             <td>${safe(u.email)}</td>
             <td>${safe(r.interviewLocation)}</td>
-            <td>${safe(r.interviewer || "—")}</td>
+
+            <!-- ⭐ CỘT ĐỘI HÌNH (THAY NGƯỜI PHỎNG VẤN) -->
+            <td><strong>${teamLabel}</strong></td>
+
             <td>${renderStatus(r.interviewStatus)}</td>  
             <td>
                 <button class="action-btn" ${disabled}
@@ -875,6 +889,7 @@ function renderOnlineInterviewTable(list) {
         tbody.appendChild(tr);
     });
 }
+
 
 function openOnlineInterviewRoom(regId, roomId) {
     if (!roomId) roomId = "room-" + regId;

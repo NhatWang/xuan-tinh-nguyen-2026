@@ -45,6 +45,34 @@ router.get("/list", auth, admin, async (req, res) => {
     }
 });
 
+/* =====================================================
+   GET SINGLE REGISTRATION (FOR ONLINE INTERVIEW ROOM)
+   GET /api/admin/registration/:regId
+===================================================== */
+router.get(
+  "/registration/:regId",
+  auth,
+  admin,
+  async (req, res) => {
+    try {
+      const reg = await Registration
+        .findById(req.params.regId)
+        .populate("userId");
+
+      if (!reg)
+        return res.status(404).json({ msg: "Không tìm thấy hồ sơ" });
+
+      res.json({
+        user: reg.userId,
+        reg
+      });
+
+    } catch (err) {
+      console.error(err);
+      res.status(500).json({ msg: "Lỗi lấy hồ sơ phỏng vấn" });
+    }
+  }
+);
 
 /* ============================================================
    2. API: EXPORT PDF THEO registrationId

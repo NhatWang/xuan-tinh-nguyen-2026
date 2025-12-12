@@ -30,7 +30,11 @@ async function initRoom() {
   }
 
   const data = await res.json();
-  const user = data.user;
+  const { user, reg } = data;
+    if (!user || !reg) {
+    alert("Dữ liệu phỏng vấn không hợp lệ!");
+    return;
+    }
   const roomId = data.roomId || `room-${regId}`;
 
   roomName = roomId;
