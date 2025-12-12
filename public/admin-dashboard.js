@@ -182,6 +182,7 @@ function renderUserTable(list) {
             <td>${safe(u.fullName)}</td>
             <td>${safe(u.studentId)}</td>
             <td>${safe(u.email)}</td>
+            <td>${safe(u.phone || "—")}</td>
 
             <td>${shortName(r.nv1)}</td>
             <td>${shortName(r.nv2)}</td>
@@ -524,6 +525,7 @@ function renderMediaTable(list) {
             <td>${safe(u.fullName)}</td>
             <td>${safe(u.studentId)}</td>
             <td>${safe(u.email)}</td>
+            <td>${safe(u.phone || "—")}</td>
 
             <td>${(r.mediaRoles || []).join(", ")}</td>
             <td>${(r.mediaLocations || []).join(", ")}</td>
