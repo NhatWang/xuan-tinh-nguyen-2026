@@ -942,3 +942,42 @@ input[type="text"]:focus {
     background: #b5b5b5 !important;
 }
 
+/* ======================================
+   FEEDBACK RATING BARS
+====================================== */
+
+.rating-row {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    margin: 6px 0;
+}
+
+.rating-label {
+    width: 50px;
+    text-align: right;
+    font-weight: 600;
+    color: #5a3a1d;
+}
+
+.rating-progress {
+    flex: 1;
+    height: 10px;
+    background: #f3e9dc;        /* nền nhạt */
+    border-radius: 6px;
+    overflow: hidden;
+}
+
+.rating-fill {
+    height: 100%;
+    background: #ffbf47;        /* màu vàng cam */
+    border-radius: 6px;
+    transition: width 0.35s ease;
+}
+
+.rating-count {
+    width: 30px;
+    text-align: left;
+    font-weight: 600;
+    color: #5a3a1d;
+}
