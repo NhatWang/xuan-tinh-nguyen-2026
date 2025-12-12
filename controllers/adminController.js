@@ -71,6 +71,11 @@ exports.startInterviewOnline = async (req, res) => {
       roomUrl: reg.interviewRoomId
     });
 
+    io.to("admins").emit("interview:calling", {
+        regId: reg._id.toString(),
+        roomUrl: reg.interviewRoomId
+    });
+
     res.json({
       msg: "Đã bắt đầu phỏng vấn online",
       room: reg.interviewRoomId
@@ -103,7 +108,9 @@ exports.endInterviewOnline = async (req, res) => {
 
     // ⭐ SOCKET EMIT CHO USER
     const io = req.app.get("io");
-    io.to(reg.userId.toString()).emit("interview:ended");
+    io.to(reg.userId.toString()).emit("interview:ended", {
+    regId: reg._id.toString()
+    });
 
     res.json({ msg: "Đã kết thúc phỏng vấn online" });
 

@@ -938,8 +938,8 @@ function openOnlineInterviewRoom(regId, roomId) {
     if (!roomId) roomId = "room-" + regId;
 
     window.open(
-        `/online-interview-room.html?room=${roomId}&reg=${regId}`,
-        "_blank"
+    `/online-interview-room.html?reg=${regId}`,
+    "_blank"
     );
 }
 
