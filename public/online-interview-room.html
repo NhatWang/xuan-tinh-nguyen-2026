@@ -20,11 +20,27 @@
     display: flex;
     justify-content: space-between;
     align-items: center;
+    gap: 10px;
   }
 
-  #jitsi {
+  #daily {
     height: calc(100vh - 56px);
     width: 100%;
+  }
+
+  .start-btn {
+    background: #4caf50;
+    border: none;
+    padding: 8px 14px;
+    border-radius: 8px;
+    color: white;
+    cursor: pointer;
+    font-weight: 600;
+  }
+
+  .start-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
   }
 
   .end-btn {
@@ -37,7 +53,12 @@
     font-weight: 600;
   }
 
-  .end-btn:hover {
+  .end-btn:disabled {
+    opacity: 0.6;
+    cursor: not-allowed;
+  }
+
+  .end-btn:hover:not(:disabled) {
     background: #c25454;
   }
 </style>
@@ -47,9 +68,27 @@
 
 <div class="room-header">
   <div id="roomInfo">Đang tải phòng phỏng vấn...</div>
-  <button class="start-btn" onclick="startInterview()">Bắt đầu</button>
-  <button class="end-btn" onclick="endInterview()">Kết thúc</button>
+
+  <div>
+    <button
+      id="startBtn"
+      class="start-btn"
+      onclick="startInterview()">
+      Bắt đầu
+    </button>
+
+    <button
+      id="endBtn"
+      class="end-btn"
+      onclick="endInterview()"
+      disabled>
+      Kết thúc
+    </button>
+  </div>
 </div>
+
+<!-- ⭐ DAILY IFRAME CONTAINER -->
+<div id="daily"></div>
 
 <script src="https://unpkg.com/@daily-co/daily-js"></script>
 <script src="online-interview-room.js"></script>
