@@ -1,6 +1,8 @@
 let callFrame = null;
 let roomUrl = null;
 let interviewStarted = false;
+const params = new URLSearchParams(window.location.search);
+const regId = params.get("reg");
 
 /* ============================================
    INIT ROOM (CHỈ LOAD INFO – KHÔNG JOIN)
