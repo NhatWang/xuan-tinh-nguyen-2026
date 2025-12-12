@@ -343,7 +343,7 @@ async function saveFinalResult() {
         item.reg.interviewResult = result;
         item.reg.interviewer = currentResultInterviewer;
 
-        updateInterviewRow(currentResultId);
+        renderUserTable(allUsers);
 
     } catch {
         showToast("Lỗi kết nối server!", "error");
@@ -407,7 +407,7 @@ async function saveInterview() {
         item.reg.interviewer = interviewer;
 
         // cập nhật UI cho dòng đó
-        updateInterviewRow(currentRegId);
+        renderUserTable(allUsers);
 
     } catch {
         showToast("Lỗi kết nối server!", "error");
@@ -729,6 +729,89 @@ function updateSingleRow(id) {
 function goToTracker() {
     window.open("/tracker.html", "_blank"); // mở tab mới
 }
+
+async function openFeedbackList() {
+    try {
+        const res = await fetch("/api/user/feedback/all", {
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            showToast("Không thể tải feedback!", "error");
+            return;
+        }
+
+        const data = await res.json();
+        const tbody = document.getElementById("feedbackListBody");
+        tbody.innerHTML = "";
+
+        // ⭐ Tính điểm trung bình
+        let total = data.length;
+        let totalStars = data.reduce((sum, fb) => sum + fb.rating, 0);
+        let avg = total > 0 ? (totalStars / total).toFixed(1) : "0.0";
+
+        document.getElementById("avgRating").textContent = avg;
+        document.getElementById("totalFeedback").textContent = total;
+        renderRatingBars(data);
+
+        // ⭐ Render table
+        data.forEach(fb => {
+            const tr = document.createElement("tr");
+            tr.innerHTML = `
+                <td style="padding:10px; border-bottom:1px solid #eee;">${safe(fb.fullName)}</td>
+                <td style="padding:10px; border-bottom:1px solid #eee;">${fb.rating} ⭐</td>
+                <td style="padding:10px; border-bottom:1px solid #eee;">${safe(fb.feedback || "—")}</td>
+            `;
+            tbody.appendChild(tr);
+        });
+
+        document.getElementById("feedbackListModal").style.display = "flex";
+
+    } catch {
+        showToast("Không thể kết nối server!", "error");
+    }
+}
+
+function closeFeedbackList() {
+    document.getElementById("feedbackListModal").style.display = "none";
+}
+
+function renderRatingBars(feedbackList) {
+    const ratingBars = document.getElementById("ratingBars");
+    ratingBars.innerHTML = "";
+
+    const total = feedbackList.length;
+
+    // Đếm số người đánh từng số sao
+    let counts = { 5:0, 4:0, 3:0, 2:0, 1:0 };
+
+    feedbackList.forEach(fb => {
+        let rounded = Math.round(fb.rating); // nếu có 4.5 sao → làm tròn thành 5
+        if (rounded < 1) rounded = 1;
+        if (rounded > 5) rounded = 5;
+        counts[rounded]++;
+    });
+
+    // Tạo row 5 → 1 sao
+    for (let star = 5; star >= 1; star--) {
+        const count = counts[star];
+        const percent = total > 0 ? (count / total) * 100 : 0;
+
+        const row = document.createElement("div");
+        row.className = "rating-row";
+
+        row.innerHTML = `
+            <div class="rating-label">${star} ⭐</div>
+            <div class="rating-progress">
+                <div class="rating-fill" style="width:${percent}%;"></div>
+            </div>
+            <div class="rating-count">${count}</div>
+        `;
+
+        ratingBars.appendChild(row);
+    }
+}
+
 
 /* =====================================================
    INIT

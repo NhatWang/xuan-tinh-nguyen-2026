@@ -471,3 +471,92 @@ function getInterviewTime(ca) {
     return map[ca] || "Chưa cập nhật";
 }
 
+/* ============================================
+   FEEDBACK FLOATING BUTTON + MODAL
+============================================ */
+
+let selectedRating = 0;
+
+function initStars() {
+    const starsContainer = document.getElementById("ratingStars");
+    starsContainer.innerHTML = "";
+    selectedRating = 0;
+    updateRatingText(0);
+
+    for (let i = 1; i <= 5; i++) {
+        const star = document.createElement("span");
+        star.classList.add("star");
+        star.dataset.value = i;
+
+        // Hover
+        star.onmousemove = (e) => {
+            const half = e.offsetX < star.clientWidth / 2;
+            const val = i - (half ? 0.5 : 0);
+            highlight(val);
+        };
+
+        // Click
+        star.onclick = (e) => {
+            const half = e.offsetX < star.clientWidth / 2;
+            selectedRating = i - (half ? 0.5 : 0);
+            highlight(selectedRating);
+            updateRatingText(selectedRating);
+        };
+
+        // Rời chuột
+        star.onmouseleave = () => highlight(selectedRating);
+
+        starsContainer.appendChild(star);
+    }
+}
+
+function highlight(rating) {
+    const stars = document.querySelectorAll(".star");
+
+    stars.forEach((star, idx) => {
+        const starIndex = idx + 1;
+        star.classList.remove("full", "half");
+
+        if (rating >= starIndex) {
+            star.classList.add("full");
+        } else if (rating + 0.5 >= starIndex) {
+            star.classList.add("half");
+        }
+    });
+}
+
+function updateRatingText(val) {
+    document.getElementById("ratingValue").innerText = `${val} / 5`;
+}
+
+
+
+// Gửi đánh giá
+async function submitFeedback() {
+    const text = document.getElementById("feedbackText").value.trim();
+
+    if (selectedRating === 0)
+        return showToast("Vui lòng chọn số sao!", "warning");
+
+    try {
+        const res = await fetch("/api/user/feedback", {
+            method: "POST",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({
+                rating: selectedRating,
+                feedback: text
+            })
+        });
+
+        if (!res.ok) return showToast("Gửi thất bại!", "error");
+
+        showToast("Cảm ơn bạn đã góp ý ❤️", "success");
+
+        closeFeedback();
+        document.getElementById("feedbackText").value = "";
+
+    } catch {
+        showToast("Không thể kết nối server!", "error");
+    }
+}

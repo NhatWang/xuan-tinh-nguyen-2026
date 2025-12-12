@@ -44,13 +44,17 @@
         Đội hình Truyền thông
     </button>
 
-    <!-- LOGOUT -->
-    <button class="logout-btn" onclick="logoutAdmin()">
-        Đăng xuất
+    <button class="menu-btn" onclick="openFeedbackList()">
+        Feedback
     </button>
 
     <button class="menu-btn" onclick="goToTracker()">
         Theo dõi phỏng vấn
+    </button>
+
+    <!-- LOGOUT -->
+    <button class="logout-btn" onclick="logoutAdmin()">
+        Đăng xuất
     </button>
 
 </div>
@@ -290,6 +294,55 @@
         <button class="close-btn" onclick="closeNoteModal()">Đóng</button>
     </div>
 </div>
+
+<!-- =====================================
+     FEEDBACK LIST MODAL
+===================================== -->
+<div id="feedbackListModal" class="modal">
+    <div class="modal-content large">
+
+        <h2 style="margin-bottom: 15px;">Danh sách Feedback</h2>
+
+        <!-- ⭐ AVERAGE RATING BOX ⭐ -->
+        <div id="avgRatingBox" style="
+            background:#fff8e6;
+            border:1px solid #f0d48c;
+            padding:15px;
+            border-radius:10px;
+            margin-bottom:20px;
+        ">
+            <h3 style="margin:0 0 8px 0;">Đánh giá chung</h3>
+            <div style="font-size:26px; font-weight:600;">
+                ⭐ <span id="avgRating">0.0</span> / 5
+            </div>
+            <div style="margin-top:5px; font-size:14px; color:#555;">
+                Tổng số đánh giá: <span id="totalFeedback">0</span>
+            </div>
+        </div>
+        <!-- ⭐ RATING BAR SECTION ⭐ -->
+        <div id="ratingBars" style="margin-bottom: 20px;">
+            <!-- Sẽ được render bằng JS -->
+        </div>
+
+        <!-- ⭐ TABLE FEEDBACK ⭐ -->
+        <table style="width:100%; border-collapse: collapse;">
+            <thead>
+                <tr>
+                    <th style="padding: 10px; border-bottom: 1px solid #ccc; text-align:left;">Họ tên</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ccc; text-align:left;">Số sao</th>
+                    <th style="padding: 10px; border-bottom: 1px solid #ccc; text-align:left;">Feedback</th>
+                </tr>
+            </thead>
+            <tbody id="feedbackListBody"></tbody>
+        </table>
+
+        <div class="btn-group" style="margin-top:30px;">
+            <button class="close-btn" onclick="closeFeedbackList()">Đóng</button>
+        </div>
+
+    </div>
+</div>
+
 
 <script src="admin-dashboard.js"></script>
 

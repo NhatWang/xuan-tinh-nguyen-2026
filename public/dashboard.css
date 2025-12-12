@@ -288,3 +288,114 @@ textarea {
     user-select: none;
     z-index: 9999;
 }
+
+/* Floating Feedback Icon */
+#feedbackButton {
+    position: fixed;
+    bottom: 20px;
+    right: 30px;
+    width: 55px;
+    height: 55px;
+    background: none;
+    cursor: pointer;
+    z-index: 9999;
+}
+
+#feedbackButton img {
+    width: 100%;
+    height: 100%;
+    object-fit: contain;
+}
+
+#feedbackButton:hover {
+    transform: scale(1.15);
+}
+
+/* Modal Background */
+.feedback-modal {
+    position: fixed;
+    inset: 0;
+    background: rgba(0,0,0,0.45);
+    display: none;
+    justify-content: center;
+    align-items: center;
+    z-index: 9998;
+}
+
+/* Feedback Box */
+.feedback-box {
+    background: #fffdf8;
+    padding: 22px;
+    width: 330px;
+    border-radius: 14px;
+    box-shadow: 0 5px 18px rgba(0,0,0,0.25);
+    text-align: center;
+    animation: fadeIn 0.25s ease;
+}
+
+/* Stars */
+.rating-stars {
+    font-size: 30px;
+    color: #ccc;
+    margin: 10px 0 15px;
+    cursor: pointer;
+}
+.rating-stars .star.active {
+    color: #ffb400;
+}
+.rating-stars .star:hover {
+    color: #ffd45c;
+}
+
+.star {
+    font-size: 32px;
+    cursor: pointer;
+    color: #ccc;
+    display: inline-block;
+    position: relative;
+}
+
+.star.full {
+    color: #FFD700;
+}
+
+.star.half::before {
+    content: "★";
+    color: #FFD700;
+    position: absolute;
+    left: 0;
+    width: 50%;
+    overflow: hidden;
+}
+
+#ratingValue {
+    margin-top: 6px;
+    font-size: 15px;
+    color: #444;
+    font-weight: 500;
+}
+
+
+/* Textarea */
+#feedbackText {
+    width: 100%;
+    height: 90px;
+    padding: 10px;
+    border-radius: 8px;
+    border: 1px solid #d1a065;
+    resize: none;
+    outline: none;
+    background: #fff;
+}
+
+/* Close Button */
+.close-btn {
+    background: #c75d5d;
+    color: white;
+    border: none;
+    margin-top: 10px;
+    padding: 8px 14px;
+    border-radius: 6px;
+    cursor: pointer;
+}
+
