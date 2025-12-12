@@ -825,7 +825,7 @@ input[type="text"]:focus {
 ====================================== */
 
 /* Khung modal */
-#feedbackModal .modal-content {
+#feedbackListModal .modal-content {
     width: 420px;
     max-width: 95vw;
 
@@ -842,7 +842,7 @@ input[type="text"]:focus {
 }
 
 /* Tiêu đề modal */
-#feedbackModal h2 {
+#feedbackListModal h2 {
     font-size: 20px;
     font-weight: 700;
     color: #5a3a1d;
@@ -851,12 +851,12 @@ input[type="text"]:focus {
 }
 
 /* Stars container */
-#feedbackModal .rating-stars {
+#feedbackListModal .rating-stars {
     text-align: center;
     margin-bottom: 10px;
 }
 
-#feedbackModal .star {
+#feedbackListModal .star {
     font-size: 34px;
     cursor: pointer;
     margin: 0 5px;
@@ -864,12 +864,12 @@ input[type="text"]:focus {
     transition: 0.2s;
 }
 
-#feedbackModal .star.full {
+#feedbackListModal .star.full {
     color: #ffb400;
 }
 
 /* Rating text */
-#feedbackModal .rating-value {
+#feedbackListModal .rating-value {
     text-align: center;
     font-size: 15px;
     margin-bottom: 14px;
@@ -877,7 +877,7 @@ input[type="text"]:focus {
 }
 
 /* Textarea — scroll inside */
-#feedbackModal #feedbackText {
+#feedbackListModal #feedbackText {
     width: 100%;
     min-height: 110px;
     max-height: 260px;         /* ⭐ Tự scroll bên trong */
@@ -897,26 +897,26 @@ input[type="text"]:focus {
 }
 
 /* Thanh cuộn đẹp */
-#feedbackModal #feedbackText::-webkit-scrollbar {
+#feedbackListModal #feedbackText::-webkit-scrollbar {
     width: 8px;
 }
-#feedbackModal #feedbackText::-webkit-scrollbar-thumb {
+#feedbackListModal #feedbackText::-webkit-scrollbar-thumb {
     background: #c9b08a;
     border-radius: 10px;
 }
-#feedbackModal #feedbackText::-webkit-scrollbar-track {
+#feedbackListModal #feedbackText::-webkit-scrollbar-track {
     background: #f3e9dc;
 }
 
 /* Buttons */
-#feedbackModal .btn-group {
+#feedbackListModal .btn-group {
     display: flex;
     justify-content: center;
     gap: 12px;
     margin-top: 18px;
 }
 
-#feedbackModal .save-btn {
+#feedbackListModal .save-btn {
     background: #8b5a2b !important;
     color: #fff !important;
     padding: 10px 20px;
@@ -925,11 +925,11 @@ input[type="text"]:focus {
     transition: 0.25s;
 }
 
-#feedbackModal .save-btn:hover {
+#feedbackListModal .save-btn:hover {
     background: #70471e !important;
 }
 
-#feedbackModal .close-btn {
+#feedbackListModal .close-btn {
     background: #ccc !important;
     color: #333 !important;
     padding: 10px 20px;
@@ -938,7 +938,7 @@ input[type="text"]:focus {
     transition: 0.25s;
 }
 
-#feedbackModal .close-btn:hover {
+#feedbackListModal .close-btn:hover {
     background: #b5b5b5 !important;
 }
 
