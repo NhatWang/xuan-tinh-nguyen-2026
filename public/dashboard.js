@@ -92,6 +92,7 @@ async function loadProfile() {
         if (reg.interviewLocation !== "Khác") {
             roomRow.style.display = "flex";
             joinRow.style.display = "none";
+            statusRow.style.display = "none";
 
             document.getElementById("pf_interviewRoom").innerText =
                 reg.interviewRoom || "Thông báo sau";
@@ -99,6 +100,7 @@ async function loadProfile() {
         // ===== ONLINE =====
         } else {
             roomRow.style.display = "none";
+            statusRow.style.display = "flex";
             joinRow.style.display =
                 reg.interviewStatus === "calling" && reg.interviewRoomId
                     ? "flex"
