@@ -87,7 +87,8 @@ async function startInterview() {
       console.warn("Admin rời phòng");
     });
 
-    document.querySelector(".start-btn")?.setAttribute("disabled", true);
+    document.getElementById("startBtn")?.setAttribute("disabled", true);
+    document.getElementById("endBtn")?.removeAttribute("disabled");
 
   } catch (err) {
     console.error("startInterview error:", err);
@@ -117,7 +118,7 @@ async function endInterview() {
   } catch (err) {
     console.error("endInterview error:", err);
   }
-
+  document.getElementById("endBtn")?.setAttribute("disabled", true);
   window.close();
 }
 
