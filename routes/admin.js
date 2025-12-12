@@ -390,7 +390,7 @@ router.put("/attendance/:regId", auth, admin, async (req, res) => {
     }
 });
 
-router.get("/feedback/all", auth, adminOnly, feedbackCtrl.getAllFeedback);
+router.get("/feedback/all", auth, admin, feedbackCtrl.getAllFeedback);
 
 
 module.exports = router;
