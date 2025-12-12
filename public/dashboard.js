@@ -486,44 +486,47 @@ function initStars() {
     for (let i = 1; i <= 5; i++) {
         const star = document.createElement("span");
         star.classList.add("star");
+        star.innerHTML = "★";       // ⭐ QUAN TRỌNG!
+
         star.dataset.value = i;
 
         // Hover
         star.onmousemove = (e) => {
             const half = e.offsetX < star.clientWidth / 2;
-            const val = i - (half ? 0.5 : 0);
-            highlight(val);
+            const value = i - (half ? 0.5 : 0);
+            highlightStars(value);
         };
 
         // Click
         star.onclick = (e) => {
             const half = e.offsetX < star.clientWidth / 2;
             selectedRating = i - (half ? 0.5 : 0);
-            highlight(selectedRating);
+            highlightStars(selectedRating);
             updateRatingText(selectedRating);
         };
 
-        // Rời chuột
-        star.onmouseleave = () => highlight(selectedRating);
+        // Mouse out → giữ rating đã chọn
+        star.onmouseleave = () => highlightStars(selectedRating);
 
         starsContainer.appendChild(star);
     }
 }
 
-function highlight(rating) {
+function highlightStars(rating) {
     const stars = document.querySelectorAll(".star");
 
     stars.forEach((star, idx) => {
-        const starIndex = idx + 1;
+        const index = idx + 1;
         star.classList.remove("full", "half");
 
-        if (rating >= starIndex) {
+        if (rating >= index) {
             star.classList.add("full");
-        } else if (rating + 0.5 >= starIndex) {
+        } else if (rating + 0.5 >= index) {
             star.classList.add("half");
         }
     });
 }
+
 
 function updateRatingText(val) {
     document.getElementById("ratingValue").innerText = `${val} / 5`;

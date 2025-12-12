@@ -67,6 +67,8 @@ app.use("/api/admin", require("./routes/admin"));
 app.use("/api/admin/media", require("./routes/adminMedia"));
 app.use("/api/media", require("./routes/media"));
 app.use("/api/interview-queue", require("./routes/interviewQueue"));
+app.use("/api/user", require("./routes/userRoutes"));
+
 
 // ===============================
 // 5. STATIC FRONTEND (nếu cần)

@@ -357,18 +357,19 @@
 </div>
 
 
-<!-- Feedback Modal -->
-<div id="feedbackModal" class="feedback-modal">
-    <div class="feedback-box">
-        <h3>Gửi Feedback</h3>
+<div id="feedbackModal" class="modal">
+    <div class="modal-content small">
+        <h2 style="text-align:center; color:#5a3a1d;">Gửi Feedback</h2>
 
         <div id="ratingStars" class="rating-stars"></div>
-        <div id="ratingValue">0 / 5</div>
+        <div id="ratingValue" class="rating-value">0 / 5</div>
 
         <textarea id="feedbackText" placeholder="Góp ý của bạn giúp chúng mình cải thiện hơn ❤️"></textarea>
 
-        <button class="submit-btn" onclick="submitFeedback()">Gửi đánh giá</button>
-        <button class="close-btn" onclick="closeFeedback()">Đóng</button>
+        <div class="btn-group" style="margin-top:10px;">
+            <button class="save-btn" onclick="submitFeedback()">Gửi đánh giá</button>
+            <button class="close-btn" onclick="closeFeedback()">Đóng</button>
+        </div>
     </div>
 </div>
 
