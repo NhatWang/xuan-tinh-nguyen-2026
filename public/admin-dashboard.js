@@ -881,11 +881,11 @@ async function loadOnlineInterviewList() {
     // Ẩn filter không cần
     document.getElementById("mediaFilterRow").style.display = "none";
     document.getElementById("mediaTotalRow").style.display = "none";
-    document.getElementById("filterNV").parentElement.style.display = "none";
+    document.getElementById("filterNV").parentElement.style.display = "flex";
     document.getElementById("filterStatus").parentElement.style.display = "none";
     document.getElementById("filterCaRow").style.display = "none";
     document.getElementById("totalRegRow").style.display = "none";
-    document.getElementById("searchText").parentElement.style.display = "none";
+    document.getElementById("searchText").parentElement.style.display = "flex";
 
     // Nếu chưa load users thì load
     if (allUsers.length === 0) {

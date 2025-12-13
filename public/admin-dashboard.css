@@ -164,8 +164,7 @@ table {
     background: var(--card-bg);
     border-radius: 14px;
     overflow: hidden;
-    margin-top: 20px;
-    table-layout: fixed;   
+    margin-top: 20px;  
 }
 
 #userTable {
