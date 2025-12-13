@@ -1,25 +1,20 @@
 <!DOCTYPE html>
 <html lang="vi">
 <head>
-<meta charset="UTF-8">
-<title>Admin Dashboard – XTN 2026</title>
-<link rel="stylesheet" href="admin-dashboard.css">
-<!-- Favicon for all devices -->
-    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
-    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
-    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon.png">
+  <meta charset="UTF-8">
+  <title>Admin Dashboard – XTN 2026</title>
+  <link rel="stylesheet" href="admin-dashboard.css">
 
-    <!-- For iPhone/iPad (Home screen icon) -->
-    <link rel="apple-touch-icon" href="/images/favicon.png">
-
-    <!-- For Android Chrome -->
-    <link rel="manifest" href="/manifest.json">
-
-    <!-- Theme color for mobile browsers -->
-    <meta name="theme-color" content="#8b5a2b">
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#8b5a2b">
 </head>
-
 <body>
+<script src="/socket.io/socket.io.js"></script>
+<script src="admin-dashboard.js"></script>
 
 <!-- Toast -->
 <div id="toast"></div>
@@ -368,8 +363,7 @@
     </div>
 </div>
 
-<script src="https://cdn.socket.io/4.7.5/socket.io.min.js"></script>
-<script src="admin-dashboard.js"></script>
+
 
 </body>
 </html>
