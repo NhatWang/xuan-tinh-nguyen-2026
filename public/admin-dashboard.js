@@ -968,34 +968,29 @@ function renderStatus(status) {
 
 async function updateInterviewLocation(regId, newLocation) {
     try {
-        const res = await fetch(API + `/admin/interview/${regId}`, {
-            method: "PUT",
-            headers: { "Content-Type": "application/json" },
-            credentials: "include",
-            body: JSON.stringify({ interviewLocation: newLocation })
-        });
+        const res = await fetch(
+            API + `/admin/registration/${regId}/location`,
+            {
+                method: "PUT",
+                headers: { "Content-Type": "application/json" },
+                credentials: "include",
+                body: JSON.stringify({ interviewLocation: newLocation })
+            }
+        );
 
         if (!res.ok) {
             showToast("Cập nhật ca thất bại!", "error");
             return;
         }
 
-        // 1️⃣ update local state
         const item = allUsers.find(u => u.reg._id === regId);
         if (!item) return;
 
-        const oldLocation = item.reg.interviewLocation;
-
         item.reg.interviewLocation = newLocation;
+        item.reg.attendance = false;
+        item.reg.interviewOrder = null;
 
-        // 2️⃣ nếu đổi ca → reset attendance + STT
-        if (oldLocation !== newLocation) {
-            item.reg.attendance = false;
-            item.reg.interviewOrder = null;
-
-            // 👉 chỉ update UI đúng dòng này
-            updateRowAfterLocationChange(regId);
-        }
+        updateRowAfterLocationChange(regId);
 
         showToast("Đã cập nhật ca phỏng vấn", "success");
 
