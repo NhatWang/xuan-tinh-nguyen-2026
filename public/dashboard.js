@@ -280,6 +280,7 @@ async function initDashboard() {
     await loadProfile();
     await loadRegistrationForm();
     await loadMediaForm();
+    await checkRegistrationClosed();
 }
 initDashboard();
 
@@ -721,3 +722,37 @@ function renderInterviewStatus(status) {
   };
   return map[status] || "Chưa xếp lịch";
 }
+
+async function checkRegistrationClosed() {
+    try {
+        const res = await fetch(API + "/registration/status", {
+            credentials: "include"
+        });
+
+        if (!res.ok) return;
+
+        const data = await res.json();
+
+        /* ===============================
+           LOCAL REGISTRATION
+        =============================== */
+        if (data.registrationClosed && !data.hasLocalRegistration) {
+            const tab = document.getElementById("registration");
+            tab.querySelector(".registration-form").style.display = "none";
+            tab.querySelector(".registration-closed").style.display = "block";
+        }
+
+        /* ===============================
+           MEDIA TEAM
+        =============================== */
+        if (data.registrationClosed && !data.hasMediaRegistration) {
+            const tab = document.getElementById("mediaTeam");
+            tab.querySelector(".media-form").style.display = "none";
+            tab.querySelector(".registration-closed").style.display = "block";
+        }
+
+    } catch (err) {
+        console.error("checkRegistrationClosed error:", err);
+    }
+}
+

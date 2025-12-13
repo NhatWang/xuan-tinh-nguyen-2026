@@ -10,6 +10,11 @@ const authMiddleware = require("../middleware/auth");
 ============================================================ */
 router.post("/", authMiddleware, async (req, res) => {
   try {
+
+    if (process.env.REGISTRATION_CLOSED === "true") {
+      return res.status(403).json({ msg: "Đã hết thời gian đăng ký." });
+    }
+    
     const {
       dob,
       gender,

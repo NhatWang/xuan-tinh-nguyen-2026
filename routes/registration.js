@@ -1,10 +1,16 @@
 const express = require("express");
 const router = express.Router();
 const Registration = require("../models/Registration");
+const MediaRegistration = require("../models/MediaRegistration");
 const authMiddleware = require("../middleware/auth");
 
 router.post("/", authMiddleware, async (req, res) => {
   try {
+
+    if (process.env.REGISTRATION_CLOSED === "true") {
+      return res.status(403).json({ msg: "Đã hết thời gian đăng ký." });
+    }
+    
     const {
       dob,
       gender,
@@ -86,5 +92,34 @@ router.get("/me", authMiddleware, async (req, res) => {
     res.status(500).json({ msg: "Server error" });
   }
 });
+
+/* ============================================================
+   CHECK REGISTRATION STATUS (DASHBOARD)
+   GET /api/registration/status
+============================================================ */
+router.get("/status", authMiddleware, async (req, res) => {
+  try {
+    const userId = req.user.id;
+
+    const hasLocalRegistration = await Registration.exists({ userId });
+    const hasMediaRegistration = await MediaRegistration.exists({ userId });
+
+    // 🔴 CỜ ĐÓNG FORM — chỉnh tại đây
+    const registrationClosed = true; 
+    // sau này có thể dùng env:
+    // const registrationClosed = process.env.REGISTRATION_CLOSED === "true";
+
+    res.json({
+      registrationClosed,
+      hasLocalRegistration: !!hasLocalRegistration,
+      hasMediaRegistration: !!hasMediaRegistration
+    });
+
+  } catch (err) {
+    console.error("ERR /registration/status:", err);
+    res.status(500).json({ msg: "Server error" });
+  }
+});
+
 
 module.exports = router;
