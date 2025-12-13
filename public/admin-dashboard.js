@@ -922,11 +922,8 @@ function renderOnlineInterviewTable(list) {
             <td>${renderStatus(r.interviewStatus)}</td>  
             <td>
                 <button class="action-btn" ${disabled}
-                    onclick="openOnlineInterviewRoom(
-                        '${r._id}',
-                        '${r.interviewRoomId || ""}'
-                    )">
-                    Phỏng vấn online
+                    onclick="openOnlineInterviewRoom('${r._id}')"
+                >Phỏng vấn online
                 </button>
             </td>
         `;
@@ -936,8 +933,7 @@ function renderOnlineInterviewTable(list) {
 }
 
 
-function openOnlineInterviewRoom(regId, roomId) {
-    if (!roomId) roomId = "room-" + regId;
+function openOnlineInterviewRoom(regId) {
 
     window.open(
     `/online-interview-room.html?reg=${regId}`,
