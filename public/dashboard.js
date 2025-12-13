@@ -740,8 +740,11 @@ async function checkRegistrationClosed() {
         =============================== */
         if (data.registrationClosed && !data.hasLocalRegistration) {
             const tab = document.getElementById("registration");
-            tab.querySelector(".registration-form").style.display = "none";
-            tab.querySelector(".registration-closed").style.display = "block";
+            const form = tab.querySelector(".registration-form");
+const msg = tab.querySelector(".registration-closed");
+
+if (form) form.style.display = "none";
+if (msg) msg.style.display = "block";
         }
 
         /* ===============================
@@ -749,8 +752,12 @@ async function checkRegistrationClosed() {
         =============================== */
         if (data.registrationClosed && !data.hasMediaRegistration) {
             const tab = document.getElementById("mediaTeam");
-            tab.querySelector(".media-form").style.display = "none";
-            tab.querySelector(".registration-closed").style.display = "block";
+            const form = tab.querySelector(".media-form");
+const msg = tab.querySelector(".registration-closed");
+
+if (form) form.style.display = "none";
+if (msg) msg.style.display = "block";
+
         }
 
     } catch (err) {
