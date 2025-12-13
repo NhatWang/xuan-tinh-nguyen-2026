@@ -147,6 +147,7 @@ async function loadUsers() {
     document.getElementById("filterCaRow").style.display = "flex";
     document.getElementById("totalRegRow").style.display = "flex";
     document.getElementById("onlineInterviewTable").style.display = "none";
+    document.getElementById("searchText").value = "";
 
 
     try {
@@ -873,6 +874,8 @@ function renderRatingBars(feedbackList) {
 async function loadOnlineInterviewList() {
     document.getElementById("pageTitle").textContent = "Danh sách Phỏng vấn Online";
 
+    document.getElementById("searchText").value = "";
+    document.getElementById("filterNV").value = "";
     // Ẩn các bảng khác
     document.getElementById("userTable").style.display = "none";
     document.getElementById("mediaTable").style.display = "none";
@@ -881,11 +884,9 @@ async function loadOnlineInterviewList() {
     // Ẩn filter không cần
     document.getElementById("mediaFilterRow").style.display = "none";
     document.getElementById("mediaTotalRow").style.display = "none";
-    document.getElementById("filterNV").parentElement.style.display = "flex";
     document.getElementById("filterStatus").parentElement.style.display = "none";
     document.getElementById("filterCaRow").style.display = "none";
     document.getElementById("totalRegRow").style.display = "none";
-    document.getElementById("searchText").parentElement.style.display = "flex";
 
     // Nếu chưa load users thì load
     if (allUsers.length === 0) {
@@ -1027,6 +1028,80 @@ function updateRowAfterLocationChange(regId) {
         tds[15].textContent = "—";
     });
 }
+
+function filterOnlineInterview() {
+    const text = document
+        .getElementById("searchText")
+        .value
+        .trim()
+        .toLowerCase();
+
+    // chỉ lấy user phỏng vấn online
+    let onlineUsers = allUsers.filter(
+        u => u.reg.interviewLocation === "Khác"
+    );
+
+    if (text) {
+        onlineUsers = onlineUsers.filter(u =>
+            u.user.fullName.toLowerCase().includes(text) ||
+            u.user.studentId.toLowerCase().includes(text)
+        );
+    }
+
+    renderOnlineInterviewTable(onlineUsers);
+}
+
+function handleOnlineSearch() {
+    const onlineTable = document.getElementById("onlineInterviewTable");
+
+    if (onlineTable && onlineTable.style.display === "table") {
+        filterOnlineByNVAndName();
+    } else {
+        filterUsers();
+    }
+}
+
+function filterOnlineByNVAndName() {
+    const nvFilter = document.getElementById("filterNV").value;
+    const text = document
+        .getElementById("searchText")
+        .value
+        .trim()
+        .toLowerCase();
+
+    // chỉ lấy danh sách online
+    let result = allUsers.filter(
+        u => u.reg.interviewLocation === "Khác"
+    );
+
+    // 🔹 lọc theo NV1
+    if (nvFilter) {
+        result = result.filter(u =>
+            shortName(u.reg.nv1) === shortName(nvFilter)
+        );
+    }
+
+    // 🔹 lọc theo tên hoặc MSSV
+    if (text) {
+        result = result.filter(u =>
+            u.user.fullName.toLowerCase().includes(text) ||
+            u.user.studentId.toLowerCase().includes(text)
+        );
+    }
+
+    renderOnlineInterviewTable(result);
+}
+
+function handleOnlineNVFilter() {
+    const onlineTable = document.getElementById("onlineInterviewTable");
+
+    if (onlineTable && onlineTable.style.display === "table") {
+        filterOnlineByNVAndName();
+    } else {
+        filterUsers();
+    }
+}
+
 
 /* =====================================================
    INIT

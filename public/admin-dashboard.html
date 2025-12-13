@@ -64,18 +64,15 @@
 
     <!-- FILTER AREA -->
     <div class="filter-box">
+        <input
+    id="searchText"
+    type="text"
+    placeholder="Tìm theo tên hoặc MSSV..."
+    onkeyup="handleOnlineSearch()"
+    />
 
         <div class="filter-row">
-            <input 
-                id="searchText" 
-                type="text" 
-                placeholder="Tìm theo tên hoặc MSSV..." 
-                onkeyup="filterUsers()"
-            />
-        </div>
-
-        <div class="filter-row">
-            <select id="filterNV" onchange="filterUsers()">
+            <select id="filterNV" onchange="handleOnlineNVFilter()">
                 <option value="">Lọc theo nguyện vọng 1</option>
                 <option value="Đội hình Chồi xuân">CX</option>
                 <option value="Đội hình Khởi xuân an">KXA</option>
