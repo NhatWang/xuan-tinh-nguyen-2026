@@ -17,13 +17,15 @@ function showToast(message, type = "success") {
 }
 
 /* ============ TABS ============ */
-function showTab(tab) {
+window.showTab = function (tab) {
     document.querySelectorAll(".tab").forEach(t => t.classList.remove("active"));
     document.getElementById(tab).classList.add("active");
 
     document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("active"));
-    document.querySelector(`.menu-btn[onclick="showTab('${tab}')"]`).classList.add("active");
-}
+    document
+        .querySelector(`.menu-btn[onclick="showTab('${tab}')"]`)
+        ?.classList.add("active");
+};
 
 /* ============ DISABLE FORM ============ */
 function disableRegistrationForm() {
