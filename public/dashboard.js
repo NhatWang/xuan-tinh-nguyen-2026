@@ -87,6 +87,7 @@ async function loadProfile() {
 
         const roomRow = document.getElementById("interviewRoomRow");
         const joinRow = document.getElementById("joinOnlineRow");
+        const statusRow = document.getElementById("statusRow");
 
         // ===== OFFLINE =====
         if (reg.interviewLocation !== "Khác") {
