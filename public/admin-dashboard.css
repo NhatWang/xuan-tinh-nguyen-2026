@@ -981,3 +981,13 @@ input[type="text"]:focus {
     font-weight: 600;
     color: #5a3a1d;
 }
+.inline-select {
+    border: none;
+    background: transparent;
+    font-size: 14px;
+    cursor: pointer;
+}
+.inline-select:focus {
+    outline: none;
+    background: #fff8e6;
+}

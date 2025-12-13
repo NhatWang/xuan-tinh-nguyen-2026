@@ -192,7 +192,18 @@ function renderUserTable(list) {
             <td>${shortName(r.nv6)}</td>
 
             <td><a href="${r.facebook}" target="_blank">${safe(u.fullName)}</a></td>
-            <td>${safe(r.interviewLocation || "—")}</td>
+            <td>
+                <select class="inline-select"
+                    onchange="updateInterviewLocation('${r._id}', this.value)"
+                >
+                    <option value="">—</option>
+                    <option value="Ca 1" ${r.interviewLocation==="Ca 1"?"selected":""}>Ca 1</option>
+                    <option value="Ca 2" ${r.interviewLocation==="Ca 2"?"selected":""}>Ca 2</option>
+                    <option value="Ca 3" ${r.interviewLocation==="Ca 3"?"selected":""}>Ca 3</option>
+                    <option value="Ca 4" ${r.interviewLocation==="Ca 4"?"selected":""}>Ca 4</option>
+                    <option value="Khác" ${r.interviewLocation==="Khác"?"selected":""}>Khác</option>
+                </select>
+            </td>
             <td>${safe(r.interviewResult || "Chưa phỏng vấn")}</td>
 
             <td>
@@ -954,6 +965,74 @@ function renderStatus(status) {
     };
     return map[status] || "⚪ Chưa gán";
 }
+
+async function updateInterviewLocation(regId, newLocation) {
+    try {
+        const res = await fetch(API + `/admin/interview/${regId}`, {
+            method: "PUT",
+            headers: { "Content-Type": "application/json" },
+            credentials: "include",
+            body: JSON.stringify({ interviewLocation: newLocation })
+        });
+
+        if (!res.ok) {
+            showToast("Cập nhật ca thất bại!", "error");
+            return;
+        }
+
+        // 1️⃣ update local state
+        const item = allUsers.find(u => u.reg._id === regId);
+        if (!item) return;
+
+        const oldLocation = item.reg.interviewLocation;
+
+        item.reg.interviewLocation = newLocation;
+
+        // 2️⃣ nếu đổi ca → reset attendance + STT
+        if (oldLocation !== newLocation) {
+            item.reg.attendance = false;
+            item.reg.interviewOrder = null;
+
+            // 👉 chỉ update UI đúng dòng này
+            updateRowAfterLocationChange(regId);
+        }
+
+        showToast("Đã cập nhật ca phỏng vấn", "success");
+
+    } catch {
+        showToast("Lỗi kết nối server!", "error");
+    }
+}
+
+function updateRowAfterLocationChange(regId) {
+    const rows = document.querySelectorAll("#tableBody tr");
+
+    rows.forEach(row => {
+        if (row.getAttribute("data-id") !== regId) return;
+
+        const item = allUsers.find(u => u.reg._id === regId);
+        if (!item) return;
+
+        const tds = row.querySelectorAll("td");
+
+        // 🔁 CỘT CA PHỎNG VẤN (index 11)
+        const select = tds[11].querySelector("select");
+        if (select) {
+            select.value = item.reg.interviewLocation || "";
+        }
+
+        // 🔁 CỘT ĐIỂM DANH (index 14)
+        tds[14].innerHTML = `
+            <input type="checkbox"
+                ${item.reg.attendance ? "checked" : ""}
+                onclick="toggleAttendance('${regId}', this.checked)">
+        `;
+
+        // 🔁 CỘT STT (index 15)
+        tds[15].textContent = "—";
+    });
+}
+
 
 /* =====================================================
    INIT
