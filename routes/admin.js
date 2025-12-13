@@ -448,4 +448,10 @@ router.get(
   adminCtrl.getInterviewRoom
 );
 
+router.put(
+    "/registration/:id/location",
+    auth,
+    admin,
+    adminCtrl.updateInterviewLocation
+);
 module.exports = router;

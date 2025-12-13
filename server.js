@@ -96,8 +96,8 @@ io.on("connection", socket => {
 
   // ⭐ USER JOIN ROOM RIÊNG
   socket.on("join:user", userId => {
-    if (!userId) return;
-    socket.join(userId);
+    if (!userId)
+return; socket.join(userId);
     console.log("👤 User joined room:", userId);
   });
 

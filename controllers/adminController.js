@@ -119,3 +119,28 @@ exports.endInterviewOnline = async (req, res) => {
     res.status(500).json({ msg: "Lỗi kết thúc phỏng vấn online" });
   }
 };
+
+// adminController.js
+exports.updateInterviewLocation = async (req, res) => {
+    try {
+        const { id } = req.params;
+        const { interviewLocation } = req.body;
+
+        if (!interviewLocation) {
+            return res.status(400).json({ msg: "Thiếu ca phỏng vấn" });
+        }
+
+        await Registration.findByIdAndUpdate(id, {
+            interviewLocation,
+            attendance: false,
+            interviewOrder: null
+        });
+
+        res.json({ msg: "Đã cập nhật ca phỏng vấn" });
+
+    } catch (err) {
+        console.error(err);
+        res.status(500).json({ msg: "Lỗi server!" });
+    }
+};
+
