@@ -33,10 +33,12 @@ router.get("/list", auth, admin, async (req, res) => {
             .populate("userId")
             .sort({ createdAt: -1 });
 
-        const data = registrations.map(reg => ({
-            user: reg.userId,
-            reg
-        }));
+       const clean = registrations.filter(reg => reg.userId);
+
+const data = clean.map(reg => ({
+    user: reg.userId,
+    reg
+}));
 
         res.json(data);
     } catch (err) {

@@ -176,6 +176,10 @@ function renderUserTable(list) {
     tbody.innerHTML = "";
 
     list.forEach(item => {
+        if (!item.user || !item.user.fullName) {
+        console.warn("⚠️ Bỏ qua record lỗi:", item);
+        return;
+    }
         const u = item.user;
         const r = item.reg;
 
