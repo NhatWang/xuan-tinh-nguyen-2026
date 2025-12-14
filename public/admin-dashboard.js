@@ -8,6 +8,10 @@ const socket = io({
     withCredentials: true
 });
 
+function safeLower(text) {
+    return (text || "").toString().toLowerCase();
+}
+
 /* =====================================================
    REALTIME – INTERVIEW STATUS (ADMIN)
 ===================================================== */
@@ -273,11 +277,14 @@ function filterUsers() {
     let filtered = [...allUsers];
 
     if (text) {
-        filtered = filtered.filter(u =>
-            u.user.fullName.toLowerCase().includes(text) ||
-            u.user.studentId.toLowerCase().includes(text)
-        );
-    }
+    filtered = filtered.filter(u =>
+        u.user &&
+        (
+            safeLower(u.user.fullName).includes(text) ||
+            safeLower(u.user.studentId).includes(text)
+        )
+    );
+}
 
     if (nvFilter) {
         filtered = filtered.filter(u =>
@@ -1043,9 +1050,12 @@ function filterOnlineInterview() {
 
     if (text) {
         onlineUsers = onlineUsers.filter(u =>
-            u.user.fullName.toLowerCase().includes(text) ||
-            u.user.studentId.toLowerCase().includes(text)
-        );
+    u.user &&
+    (
+        safeLower(u.user.fullName).includes(text) ||
+        safeLower(u.user.studentId).includes(text)
+    )
+);
     }
 
     renderOnlineInterviewTable(onlineUsers);
@@ -1084,9 +1094,12 @@ function filterOnlineByNVAndName() {
     // 🔹 lọc theo tên hoặc MSSV
     if (text) {
         result = result.filter(u =>
-            u.user.fullName.toLowerCase().includes(text) ||
-            u.user.studentId.toLowerCase().includes(text)
-        );
+    u.user &&
+    (
+        safeLower(u.user.fullName).includes(text) ||
+        safeLower(u.user.studentId).includes(text)
+    )
+);
     }
 
     renderOnlineInterviewTable(result);
