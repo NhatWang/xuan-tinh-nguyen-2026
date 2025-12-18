@@ -125,6 +125,7 @@ h2 {
 .profile-field label {
   color: #a86b1f;
   font-weight: 600;
+  align-content: center;
 }
 
 /* INPUT & TEXTAREA */
@@ -496,8 +497,8 @@ textarea {
 
 /* UPLOAD BUTTON */
 .upload-btn {
-  display: block;
-  width: 100%;
+  display: inline;
+  width: 75%;
   margin-top: 10px;
   padding: 13px;
   border-radius: 14px;
@@ -526,7 +527,7 @@ textarea {
 
 /* ===== ZALO BUTTON ===== */
 .zalo-btn {
-  width: 100%;
+  width: 65%;
   padding: 14px 18px;
   border-radius: 14px;
   border: 1.5px solid #e6c184;
