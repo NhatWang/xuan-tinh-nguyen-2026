@@ -841,7 +841,7 @@ async function uploadPhoto3x4() {
     formData.append("photo", input.files[0]);
 
     try {
-        const res = await fetch("/api/user/upload-3x4", {
+        const res = await fetch("/api/user/upload-photo-3x4", {
             method: "POST",
             credentials: "include",
             body: formData
