@@ -13,8 +13,8 @@
   <meta name="theme-color" content="#8b5a2b">
 </head>
 <body>
-<script src="/socket.io/socket.io.js"></script>
-<script src="admin-dashboard.js"></script>
+<script src="/socket.io/socket.io.js" defer></script>
+<script src="admin-dashboard.js" defer></script>
 
 <!-- Toast -->
 <div id="toast"></div>
@@ -213,6 +213,12 @@
     <!-- ===========================
         PHOTO 3x4 TABLE
     =========================== -->
+    <!-- ACTION BAR -->
+    <div id="photoActionBar" style="display:none; margin-top:15px;">
+        <button class="action-btn" onclick="downloadAllPhotos()">
+            Tải toàn bộ ảnh 3x4
+        </button>
+    </div>
     <div class="table-wrapper">
     <table id="photoTable" style="display:none; margin-top:30px;">
         <thead>
@@ -227,16 +233,6 @@
         <tbody id="photoTableBody"></tbody>
     </table>
     </div>
-
-    <!-- ACTION BAR -->
-    <div id="photoActionBar" style="display:none; margin-top:15px;">
-        <button class="action-btn" onclick="downloadAllPhotos()">
-            Tải toàn bộ ảnh 3x4
-        </button>
-    </div>
-
-
-
 <!-- =====================================
      PDF PREVIEW MODAL
 ===================================== -->

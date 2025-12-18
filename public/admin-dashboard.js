@@ -1183,7 +1183,8 @@ function downloadAllPhotos() {
     window.open("/api/admin/photos/download", "_blank");
 }
 
-
+window.openPhotoModal = openPhotoModal;
+window.closePhotoModal = closePhotoModal;
 
 /* =====================================================
    INIT
