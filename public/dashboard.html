@@ -111,38 +111,38 @@
 
                             <!-- UPLOAD ẢNH 3x4 -->
                             <label class="photo-label">
-                                Ảnh thẻ 3x4 (300x400)
+                                Ảnh thẻ 3x4 
                             </label>
+                            <div class="photo-upload-card">
+                            <img
+                                id="photoPreview"
+                                class="photo-preview"
+                                alt="Ảnh 3x4"
+                            />
 
-                            <div class="photo-upload-row">
-                                <!-- Preview -->
-                                <img
-                                    id="photoPreview"
-                                    class="photo-preview"
-                                    alt="Ảnh 3x4"
+                            <div class="photo-upload-actions">
+                                <label class="photo-file-label">
+                                Chọn ảnh
+                                <input
+                                    type="file"
+                                    id="photoInput"
+                                    accept="image/png,image/jpeg"
+                                    hidden
                                 />
+                                </label>
 
-                                <!-- Upload -->
-                                <div class="photo-upload-box">
-                                    <input
-                                        type="file"
-                                        id="photoInput"
-                                        accept="image/png,image/jpeg"
-                                        class="input"
-                                    />
+                                <button
+                                class="upload-btn"
+                                onclick="uploadPhoto3x4()"
+                                >
+                                Tải ảnh lên
+                                </button>
 
-                                    <button
-                                        class="submit-btn photo-upload-btn"
-                                        onclick="uploadPhoto3x4()"
-                                    >
-                                        Tải ảnh lên
-                                    </button>
-
-                                    <p class="photo-note">
-                                        • Ảnh sẽ được tự động cắt & chuẩn hóa về 300x400<br>
-                                        • Có thể thay đổi ảnh nhiều lần
-                                    </p>
-                                </div>
+                                <p class="photo-note">
+                                Ảnh sẽ được tự động cắt & chuẩn hóa về <strong>300×400</strong><br>
+                                Có thể thay đổi ảnh nhiều lần
+                                </p>
+                            </div>
                             </div>
                         </div>
                 <h3 style="margin: 25px 0 15px; color: #8f4e00;">KẾT QUẢ PHỎNG VẤN ĐỘI HÌNH TRUYỀN THÔNG</h3>

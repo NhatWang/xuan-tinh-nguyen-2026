@@ -453,12 +453,12 @@ textarea {
   color: #8f4e00;
 }
 
-/* UPLOAD ROW */
-.photo-upload-row {
+/* ===== PHOTO UPLOAD CARD ===== */
+.photo-upload-card {
   display: flex;
-  gap: 20px;
+  gap: 22px;
+  margin-top: 14px;
   align-items: flex-start;
-  margin-top: 10px;
 }
 
 /* PREVIEW */
@@ -466,19 +466,54 @@ textarea {
   width: 150px;
   height: 200px;
   object-fit: cover;
-  border-radius: 8px;
-  border: 1px solid #f1c78d;
-  display: none;
+  border-radius: 10px;
+  border: 1.5px solid #f1c78d;
   background: #fffaf2;
+  display: none;
 }
 
-/* UPLOAD BOX */
-.photo-upload-box {
+/* ACTIONS */
+.photo-upload-actions {
   flex: 1;
 }
 
-.photo-upload-btn {
+/* FILE PICKER */
+.photo-file-label {
+  display: inline-block;
+  padding: 10px 16px;
+  border-radius: 12px;
+  border: 1.5px dashed #d9a75f;
+  color: #8f4e00;
+  font-weight: 600;
+  cursor: pointer;
+  background: #fffaf2;
+  transition: 0.25s;
+}
+
+.photo-file-label:hover {
+  background: #fff1da;
+}
+
+/* UPLOAD BUTTON */
+.upload-btn {
+  display: block;
+  width: 100%;
   margin-top: 10px;
+  padding: 13px;
+  border-radius: 14px;
+  border: none;
+  background: linear-gradient(135deg, #d99227, #cd7a13);
+  color: #fff;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+}
+
+.upload-btn:hover {
+  background: linear-gradient(135deg, #c78120, #b4680f);
+  box-shadow: 0 6px 16px rgba(155, 85, 0, 0.25);
+  transform: translateY(-1px);
 }
 
 /* NOTE */
@@ -486,6 +521,37 @@ textarea {
   font-size: 13px;
   margin-top: 8px;
   color: #8f4e00;
-  line-height: 1.45;
+  line-height: 1.5;
 }
+
+/* ===== ZALO BUTTON ===== */
+.zalo-btn {
+  width: 100%;
+  padding: 14px 18px;
+  border-radius: 14px;
+  border: 1.5px solid #e6c184;
+  background: linear-gradient(135deg, #e7c79b, #deb680);
+  color: #6b3e00;
+  font-weight: 600;
+  font-size: 15px;
+  cursor: pointer;
+  transition: 0.25s;
+  text-align: center;
+}
+
+.zalo-btn:not(:disabled):hover {
+  background: linear-gradient(135deg, #d99227, #cd7a13);
+  color: #fff;
+  box-shadow: 0 6px 16px rgba(155, 85, 0, 0.25);
+  transform: translateY(-1px);
+}
+
+.zalo-btn:disabled {
+  cursor: not-allowed;
+  opacity: 0.85;
+}
+
+/* zaloBtn.disabled = false;
+zaloBtn.textContent = "Vào nhóm Zalo đội hình"; */
+
 
