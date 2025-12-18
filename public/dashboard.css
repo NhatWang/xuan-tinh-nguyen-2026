@@ -425,4 +425,66 @@ textarea {
     gap: 10px;
 }
 
+/* ======================================
+   PASSED BLOCK – SAU KHI TRÚNG TUYỂN
+====================================== */
+
+.passed-block {
+  display: none;
+  margin-top: 30px;
+}
+
+.passed-title {
+  margin-bottom: 15px;
+  color: #8f4e00;
+  font-weight: 600;
+}
+
+.passed-divider {
+  margin: 20px 0;
+  border: none;
+  border-top: 1px solid #e6c184;
+}
+
+/* LABEL */
+.photo-label {
+  font-weight: 600;
+  color: #8f4e00;
+}
+
+/* UPLOAD ROW */
+.photo-upload-row {
+  display: flex;
+  gap: 20px;
+  align-items: flex-start;
+  margin-top: 10px;
+}
+
+/* PREVIEW */
+.photo-preview {
+  width: 150px;
+  height: 200px;
+  object-fit: cover;
+  border-radius: 8px;
+  border: 1px solid #f1c78d;
+  display: none;
+  background: #fffaf2;
+}
+
+/* UPLOAD BOX */
+.photo-upload-box {
+  flex: 1;
+}
+
+.photo-upload-btn {
+  margin-top: 10px;
+}
+
+/* NOTE */
+.photo-note {
+  font-size: 13px;
+  margin-top: 8px;
+  color: #8f4e00;
+  line-height: 1.45;
+}
 

@@ -1,5 +1,10 @@
 const Registration = require("../models/Registration");
 const { createDailyRoom } = require("../utils/daily");
+const archiver = require("archiver");
+const path = require("path");
+const fs = require("fs");
+const User = require("../models/User");
+
 
 /* =====================================================
    ONLINE INTERVIEW – DAILY.CO (PRODUCTION FLOW)
@@ -144,3 +149,31 @@ exports.updateInterviewLocation = async (req, res) => {
     }
 };
 
+exports.listPhotos3x4 = async (req, res) => {
+  const users = await User.find({
+    photo3x4: { $ne: null }
+  }).select("fullName studentId photo3x4");
+
+  res.json(users);
+};
+
+exports.downloadAllPhotos = async (req, res) => {
+  const users = await User.find({ photo3x4: { $ne: null } });
+
+  res.setHeader("Content-Type", "application/zip");
+  res.setHeader("Content-Disposition", "attachment; filename=photos_3x4.zip");
+
+  const archive = archiver("zip");
+  archive.pipe(res);
+
+  users.forEach(u => {
+    const filePath = path.join(__dirname, "../public", u.photo3x4);
+    if (fs.existsSync(filePath)) {
+      archive.file(filePath, {
+        name: `${u.studentId || u._id}.jpg`
+      });
+    }
+  });
+
+  archive.finalize();
+};

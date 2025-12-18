@@ -1119,6 +1119,71 @@ function handleOnlineNVFilter() {
     }
 }
 
+async function loadPhotoTab() {
+    // UI toggle
+    document.getElementById("pageTitle").textContent = "Ảnh thẻ 3x4";
+    document.getElementById("userTable").style.display = "none";
+    document.getElementById("mediaTable").style.display = "none";
+    document.getElementById("onlineInterviewTable").style.display = "none";
+    document.getElementById("photoTable").style.display = "table";
+    document.getElementById("photoActionBar").style.display = "block";
+
+    document.querySelectorAll(".menu-btn").forEach(btn => btn.classList.remove("active"));
+    event.target.classList.add("active");
+
+    try {
+        const res = await fetch("/api/admin/photos", {
+            credentials: "include"
+        });
+
+        if (!res.ok) {
+            showToast("Không thể tải danh sách ảnh!", "error");
+            return;
+        }
+
+        const list = await res.json();
+        renderPhotoTable(list);
+
+    } catch {
+        showToast("Lỗi kết nối server!", "error");
+    }
+}
+
+function renderPhotoTable(list) {
+    const tbody = document.getElementById("photoTableBody");
+    tbody.innerHTML = "";
+
+    list.forEach(u => {
+        const tr = document.createElement("tr");
+
+        tr.innerHTML = `
+            <td>${safe(u.fullName)}</td>
+            <td>${safe(u.studentId)}</td>
+            <td>
+                <img src="${u.photo3x4}" 
+                     style="width:45px;height:60px;object-fit:cover;border-radius:4px;">
+            </td>
+            <td>
+                <button class="action-btn" onclick="openPhotoModal('${u.photo3x4}')">
+                    Xem
+                </button>
+            </td>
+            <td>
+                <a class="action-btn" href="${u.photo3x4}" download>
+                    Tải
+                </a>
+            </td>
+        `;
+
+        tbody.appendChild(tr);
+    });
+}
+
+function downloadAllPhotos() {
+    window.open("/api/admin/photos/download", "_blank");
+}
+
+
 
 /* =====================================================
    INIT

@@ -85,7 +85,66 @@
                 <h3 style="margin-bottom: 15px; color: #8f4e00;">KẾT QUẢ PHỎNG VẤN ĐỘI HÌNH CHUYÊN MÔN & ĐỊA PHƯƠNG</h3>
 
                     <div class="profile-field"><label>Trạng thái phỏng vấn:</label><span id="pf_interviewResult"></span></div>
+                
+                    <!-- ================================
+                            BLOCK DÀNH CHO THÍ SINH ĐẬU
+                        ================================ -->
+                        <div id="passedBlock" class="passed-block">
 
+                            <h3 class="passed-title">
+                                THÔNG TIN SAU KHI TRÚNG TUYỂN
+                            </h3>
+
+                            <!-- ZALO GROUP -->
+                            <div class="profile-field">
+                                <label>Nhóm Zalo đội hình:</label>
+                                <button
+                                    id="zaloBtn"
+                                    class="submit-btn"
+                                    disabled
+                                >
+                                    Link Zalo sẽ được cập nhật sau
+                                </button>
+                            </div>
+
+                            <hr class="passed-divider">
+
+                            <!-- UPLOAD ẢNH 3x4 -->
+                            <label class="photo-label">
+                                Ảnh thẻ 3x4 (300x400)
+                            </label>
+
+                            <div class="photo-upload-row">
+                                <!-- Preview -->
+                                <img
+                                    id="photoPreview"
+                                    class="photo-preview"
+                                    alt="Ảnh 3x4"
+                                />
+
+                                <!-- Upload -->
+                                <div class="photo-upload-box">
+                                    <input
+                                        type="file"
+                                        id="photoInput"
+                                        accept="image/png,image/jpeg"
+                                        class="input"
+                                    />
+
+                                    <button
+                                        class="submit-btn photo-upload-btn"
+                                        onclick="uploadPhoto3x4()"
+                                    >
+                                        Tải ảnh lên
+                                    </button>
+
+                                    <p class="photo-note">
+                                        • Ảnh sẽ được tự động cắt & chuẩn hóa về 300x400<br>
+                                        • Có thể thay đổi ảnh nhiều lần
+                                    </p>
+                                </div>
+                            </div>
+                        </div>
                 <h3 style="margin: 25px 0 15px; color: #8f4e00;">KẾT QUẢ PHỎNG VẤN ĐỘI HÌNH TRUYỀN THÔNG</h3>
 
                     <div class="profile-field"><label>Trạng thái phỏng vấn:</label><span id="pf_media_interviewResult"></span></div>

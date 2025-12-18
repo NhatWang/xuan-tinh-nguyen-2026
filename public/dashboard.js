@@ -2,7 +2,28 @@ const API = "/api";
 let currentReg = null;
 let currentUserId = null;   // ⭐ THÊM
 let socket = null;
+/* =============================
+   NV → ĐỘI HÌNH + ZALO GROUP
+============================= */
 
+const NV_FIELD_MAP = {
+    "Đậu NV1": "nv1",
+    "Đậu NV2": "nv2",
+    "Đậu NV3": "nv3",
+    "Đậu NV4": "nv4",
+    "Đậu NV5": "nv5",
+    "Đậu NV6": "nv6"
+};
+
+// Chưa có link chính thức → để null
+const ZALO_GROUPS = {
+    "Đội hình Chồi xuân": null,
+    "Đội hình Khởi xuân an": null,
+    "Đội hình Xuân chiến sĩ": null,
+    "Đội hình Xuân gắn kết": null,
+    "Đội hình Xuân đất thép": null,
+    "Đội hình Xuân Bác Ái": null
+};
 /* ===== TOAST UI ===== */
 function showToast(message, type = "success") {
     const toastContainer = document.getElementById("toast");
@@ -116,6 +137,47 @@ async function loadProfile() {
         document.getElementById("pf_interviewTime").innerText = "Chưa có";
         document.getElementById("pf_interviewStatus").innerText =
             renderInterviewStatus("idle");
+    }
+
+    /* ===============================
+   HIỂN THỊ BLOCK SAU KHI ĐẬU
+=============================== */
+
+    const passedBlock = document.getElementById("passedBlock");
+
+    if (
+        currentReg &&
+        currentReg.interviewResult &&
+        currentReg.interviewResult.startsWith("Đậu NV")
+    ) {
+        passedBlock.style.display = "block";
+
+        // Xác định đội hình đậu
+        const nvField = NV_FIELD_MAP[currentReg.interviewResult];
+        const teamName = currentReg[nvField];
+
+        // Zalo button
+        const zaloBtn = document.getElementById("zaloBtn");
+        const zaloLink = ZALO_GROUPS[teamName];
+
+        if (zaloLink) {
+            zaloBtn.disabled = false;
+            zaloBtn.innerText = "Vào nhóm Zalo đội hình";
+            zaloBtn.onclick = () => window.open(zaloLink, "_blank");
+        } else {
+            zaloBtn.disabled = true;
+            zaloBtn.innerText = "Link Zalo sẽ được cập nhật sau";
+        }
+
+        // Preview ảnh nếu đã upload
+        if (user.photo3x4) {
+            const img = document.getElementById("photoPreview");
+            img.src = user.photo3x4;
+            img.style.display = "block";
+        }
+
+    } else {
+        passedBlock.style.display = "none";
     }
 
     /* =========================
@@ -765,3 +827,41 @@ if (msg) msg.style.display = "block";
     }
 }
 
+/* =============================
+   UPLOAD ẢNH 3x4
+============================= */
+async function uploadPhoto3x4() {
+    const input = document.getElementById("photoInput");
+
+    if (!input || !input.files.length) {
+        return showToast("Vui lòng chọn ảnh!", "warning");
+    }
+
+    const formData = new FormData();
+    formData.append("photo", input.files[0]);
+
+    try {
+        const res = await fetch("/api/user/upload-3x4", {
+            method: "POST",
+            credentials: "include",
+            body: formData
+        });
+
+        const data = await res.json();
+
+        if (!res.ok) {
+            return showToast(data.msg || "Upload thất bại!", "error");
+        }
+
+        // Update preview (tránh cache)
+        const img = document.getElementById("photoPreview");
+        img.src = data.photo3x4 + "?t=" + Date.now();
+        img.style.display = "block";
+
+        showToast("Đã upload ảnh 3x4 thành công!", "success");
+
+    } catch (err) {
+        console.error(err);
+        showToast("Lỗi kết nối server!", "error");
+    }
+}

@@ -42,6 +42,10 @@
     <button class="menu-btn" onclick="loadOnlineInterviewList()">
         Phỏng vấn Online
     </button>
+    <button class="menu-btn" onclick="loadPhotoTab()">
+        Ảnh 3x4
+    </button>
+
 
     <button class="menu-btn" onclick="openFeedbackList()">
         Feedback
@@ -184,27 +188,53 @@
             </tr>
         </thead>
 
-        <tbody id="mediaTableBody"></tbody>
+            <tbody id="mediaTableBody"></tbody>
+        </table>
+    </div>
+
+    <div class="table-wrapper">
+    <table id="onlineInterviewTable" style="display:none; margin-top:35px;">
+        <thead>
+            <tr>
+                <th>Họ tên</th>
+                <th>MSSV</th>
+                <th>Email</th>
+                <th>Ca phỏng vấn</th>
+                <th>Đội hình</th>
+                <th>Trạng thái</th>
+                <th>Phỏng vấn Online</th>
+
+            </tr>
+        </thead>
+        <tbody id="onlineInterviewBody"></tbody>
     </table>
-</div>
+    </div>
 
-<div class="table-wrapper">
-<table id="onlineInterviewTable" style="display:none; margin-top:35px;">
-    <thead>
-        <tr>
-            <th>Họ tên</th>
-            <th>MSSV</th>
-            <th>Email</th>
-            <th>Ca phỏng vấn</th>
-            <th>Đội hình</th>
-            <th>Trạng thái</th>
-            <th>Phỏng vấn Online</th>
+    <!-- ===========================
+        PHOTO 3x4 TABLE
+    =========================== -->
+    <div class="table-wrapper">
+    <table id="photoTable" style="display:none; margin-top:30px;">
+        <thead>
+            <tr>
+                <th>Họ và tên</th>
+                <th>MSSV</th>
+                <th>Ảnh 3x4</th>
+                <th>Xem trước</th>
+                <th>Tải xuống</th>
+            </tr>
+        </thead>
+        <tbody id="photoTableBody"></tbody>
+    </table>
+    </div>
 
-        </tr>
-    </thead>
-    <tbody id="onlineInterviewBody"></tbody>
-</table>
-</div>
+    <!-- ACTION BAR -->
+    <div id="photoActionBar" style="display:none; margin-top:15px;">
+        <button class="action-btn" onclick="downloadAllPhotos()">
+            Tải toàn bộ ảnh 3x4
+        </button>
+    </div>
+
 
 
 <!-- =====================================
@@ -359,8 +389,18 @@
 
     </div>
 </div>
-
-
+<!-- =====================================
+     PHOTO 3x4 MODAL
+===================================== -->
+<div id="photoModal" class="modal">
+  <div class="modal-content">
+    <h2>Ảnh thẻ 3x4</h2>
+    <img id="photoModalImg" />
+    <div class="btn-group">
+      <button class="action-btn close-btn" onclick="closePhotoModal()">Đóng</button>
+    </div>
+  </div>
+</div>
 
 </body>
 </html>

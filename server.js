@@ -68,6 +68,8 @@ app.use("/api/user", require("./routes/userRoutes"));
 app.use(express.static("public"));
 app.use("/avatars", express.static("public/avatars"));
 
+app.use("/uploads", express.static("public/uploads"));
+
 app.get("/", (req, res) => {
   res.sendFile(__dirname + "/public/login.html");
 });

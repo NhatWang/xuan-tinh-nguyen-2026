@@ -20,6 +20,11 @@ const userSchema = new mongoose.Schema({
     default: "participant"
   },
 
+  photo3x4: {
+  type: String, // /uploads/3x4/abc.jpg
+  default: null
+},
+
   resetPasswordToken: String,
   resetPasswordExpire: Date,
 

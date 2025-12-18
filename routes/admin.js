@@ -456,4 +456,8 @@ router.put(
     admin,
     adminCtrl.updateInterviewLocation
 );
+
+router.get("/photos", auth, admin, adminCtrl.listPhotos3x4);
+router.get("/photos/download", auth, admin, adminCtrl.downloadAllPhotos);
+
 module.exports = router;
