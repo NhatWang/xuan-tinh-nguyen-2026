@@ -76,17 +76,19 @@ function safe(text) {
     })[c]) || "";
 }
 
-const BASE = "https://xuan-tinh-nguyen-2026-production.up.railway.app";
 const ADMIN_AVATARS = {
-    "lchhh.hcmus@gmail.com": BASE + "/avatars/lch.png",
-    "hoahoc.kttt@gmail.com": BASE + "/avatars/chemme.jpg",
-    "dsvtn.hh.khtn@gmail.com": BASE + "/avatars/svtn.jpg"
+    // Admin đăng ký thủ công (có email)
+    "lchhh.hcmus@gmail.com": "/avatars/lch.png",
+    "hoahoc.kttt@gmail.com": "/avatars/chemme.jpg",
+    "dsvtn.hh.khtn@gmail.com": "/avatars/svtn.jpg",
+    // Admin đăng nhập qua SV5T (có username, không có email)
+    "lch_admin": "/avatars/lch.png"
 };
 
-function loadAdminAvatar(email) {
+function loadAdminAvatar(user) {
     const img = document.getElementById("adminAvatar");
     if (!img) return;
-    img.src = ADMIN_AVATARS[email] || (BASE + "/avatars/default.jpg");
+    img.src = ADMIN_AVATARS[user.email] || ADMIN_AVATARS[user.username] || "/avatars/default.jpg";
 }
 
 /* =====================================================
@@ -125,8 +127,8 @@ async function checkAdmin() {
         }
 
         document.getElementById("adminName").textContent = user.fullName;
-        document.getElementById("adminEmail").textContent = user.email;
-        loadAdminAvatar(user.email);
+        document.getElementById("adminEmail").textContent = user.email || user.username || "";
+        loadAdminAvatar(user);
         return true;
 
     } catch (err) {

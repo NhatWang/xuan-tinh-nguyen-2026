@@ -177,6 +177,7 @@ sinh viên khoa Hóa đã có tài khoản SV5T; mọi sinh viên khác bắt bu
 - **`GET /api/interview-queue` không có auth** — public theo thiết kế (để `tracker.html` hoạt động không cần đăng nhập), nhưng lộ họ tên + MSSV ứng viên cho bất kỳ ai gọi API.
 - **`GET /api/registration/status` đang hardcode** `registrationClosed = true`, biến môi trường `REGISTRATION_CLOSED` hiện bị bỏ qua ở endpoint này (có comment trong code ghi chú việc này).
 - **`config/adminAvatar.js` là dead code** — mapping email→avatar admin bị trùng lặp viết thẳng trong `public/admin-dashboard.js` thay vì dùng file config này.
+- **Avatar admin** (`public/admin-dashboard.js`): map theo cả `email` (admin đăng ký thủ công) lẫn `username` (admin đăng nhập qua SV5T, vd `lch_admin`), serve từ chính server (`/avatars/...`) — trước đó trỏ nhầm sang 1 domain Railway cũ đã ngừng hoạt động (404) và chỉ map theo email nên admin vào qua SV5T luôn hiện ảnh mặc định.
 - **Socket.io** chỉ dùng cho báo hiệu phỏng vấn online (`interview:calling`, `interview:ended`), không dùng cho chat hay cập nhật hàng đợi real-time.
 - **PDF xuất bằng Puppeteer** (headless Chrome) render HTML có nhúng font tiếng Việt base64, không dùng thư viện PDF riêng — cần Chromium khi deploy (xem `render.yaml`).
 - **2 luồng đăng nhập tạo `User` độc lập, không tự liên kết**: một sinh viên khoa Hóa đăng ký thủ công (email X) rồi sau đó bấm "Đăng nhập nhanh bằng SV5T" sẽ có 2 tài khoản khác nhau trong DB (trừ khi chủ động không dùng SV5T, hoặc về sau có cơ chế liên kết tài khoản).
