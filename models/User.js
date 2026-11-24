@@ -6,8 +6,9 @@ const userSchema = new mongoose.Schema({
   faculty: { type: String },
   university: { type: String },
 
-  // Đăng nhập qua tài khoản SV5T — studentId là định danh chính
-  studentId: { type: String, unique: true, required: true },
+  // Đăng nhập qua tài khoản SV5T — participant dùng studentId, admin dùng username
+  studentId: { type: String, unique: true, sparse: true },
+  username: { type: String, unique: true, sparse: true },
   email: { type: String, unique: true, sparse: true },
   phone: { type: String, unique: true, sparse: true },
 

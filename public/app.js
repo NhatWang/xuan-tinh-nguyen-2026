@@ -45,6 +45,44 @@ async function login() {
 }
 
 /* =====================================================
+   ADMIN LOGIN (qua tài khoản Admin của SV5T)
+===================================================== */
+async function adminLogin() {
+  const username = document.getElementById("adminUsername")?.value.trim();
+  const password = document.getElementById("adminPassword")?.value.trim();
+
+  if (!username || !password) {
+    showToast("Vui lòng nhập username và mật khẩu!", "warning");
+    return;
+  }
+
+  try {
+    const res = await fetch(`${API}/admin-login`, {
+      method: "POST",
+      headers: { "Content-Type": "application/json" },
+      credentials: "include",
+      body: JSON.stringify({ username, password })
+    });
+
+    const data = await res.json();
+
+    if (!res.ok) {
+      showToast(data.msg || "Sai username hoặc mật khẩu!", "error");
+      return;
+    }
+
+    showToast("Đăng nhập thành công!", "success");
+
+    setTimeout(() => {
+      window.location.href = "admin-dashboard.html";
+    }, 800);
+
+  } catch {
+    showToast("Không thể kết nối đến server!", "warning");
+  }
+}
+
+/* =====================================================
    HOÀN TẤT HỒ SƠ (lần đầu đăng nhập)
 ===================================================== */
 async function completeProfile() {

@@ -8,8 +8,11 @@ const auth = require("../middleware/auth");
       (đăng nhập qua tài khoản SV5T)
 ===================================== */
 
-// Đăng nhập
+// Đăng nhập (participant - MSSV)
 router.post("/login", authCtrl.login);
+
+// Đăng nhập admin (tài khoản Admin của SV5T)
+router.post("/admin-login", authCtrl.adminLogin);
 
 // Hoàn tất hồ sơ (email/phone/faculty/university) lần đầu đăng nhập
 router.put("/complete-profile", auth, authCtrl.completeProfile);

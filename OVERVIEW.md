@@ -34,7 +34,8 @@ server.js
 - Nếu đúng: tự tạo (lần đầu) hoặc đồng bộ lại `fullName`/`className` cho `User` trong DB của app này theo `studentId`, rồi phát JWT cookie như cũ.
 - Phía SV5T (repo riêng `CODE/SV5T`) có route tích hợp tương ứng: `Routes/integrationRoutes.js`, bảo vệ bằng secret dùng chung `INTEGRATION_SECRET` (SV5T) ↔ `SV5T_INTEGRATION_SECRET` (app này) — **hai biến này phải có cùng giá trị**.
 - Nếu `User.profileCompleted = false` (chưa có email/phone — SV5T không có 2 field này) → frontend chuyển sang `complete-profile.html` để điền bổ sung trước khi vào dashboard.
-- Admin cũng đăng nhập qua SV5T giống participant; `role: "admin"` được gán thủ công trong MongoDB của app này theo `studentId`, không qua UI.
+- **Admin dùng tài khoản Admin của SV5T** (không phải Student): `admin-login.html` → `POST /api/auth/admin-login` nhận `{username, password}` → gọi `POST <SV5T_API_URL>/api/integration/verify-admin` (route riêng bên SV5T, dùng chung Admin model `Models/Admin.js`). Đăng nhập đúng → tự tạo/promote `User` theo `username` (không phải `studentId`) với `role: "admin"` ngay lập tức, không cần set tay trong DB.
+- `User.studentId` và `User.username` đều `unique+sparse` — participant có `studentId`, admin có `username`, không trùng nhau.
 - Các trang/route cũ (`register.html`, `forgot.html`, `reset.html`, `verified-email.html`, email xác minh qua Mailtrap) đã bị xoá bỏ hoàn toàn.
 
 ## 2. Luồng người dùng (candidate)
@@ -67,7 +68,8 @@ server.js
 ### `/api/auth`
 | Method | Path | Mô tả |
 |---|---|---|
-| POST | `/login` | Đăng nhập bằng MSSV+password SV5T (gọi API SV5T xác thực), set cookie JWT |
+| POST | `/login` | Đăng nhập participant bằng MSSV+password SV5T (gọi API `verify-student`), set cookie JWT |
+| POST | `/admin-login` | Đăng nhập admin bằng username+password Admin SV5T (gọi API `verify-admin`), set cookie JWT |
 | PUT | `/complete-profile` | Bổ sung email/phone/faculty/university lần đầu đăng nhập *(auth)* |
 | POST | `/logout` | Xoá cookie |
 | GET | `/me` | Lấy thông tin user hiện tại *(auth)* |
@@ -122,7 +124,7 @@ server.js
 
 ## 5. Data models (MongoDB)
 
-**User**: `fullName, className` (đồng bộ từ SV5T mỗi lần đăng nhập), `faculty, university, studentId(unique, required), email(unique, sparse), phone(unique, sparse), profileCompleted, role(participant|admin), photo3x4`
+**User**: `fullName, className` (đồng bộ từ SV5T mỗi lần đăng nhập, participant), `faculty, university, studentId(unique, sparse — participant), username(unique, sparse — admin), email(unique, sparse), phone(unique, sparse), profileCompleted, role(participant|admin), photo3x4`
 *(không còn lưu password — xác thực uỷ quyền hoàn toàn cho SV5T)*
 
 **Registration** (Hậu cần, unique theo `userId`):
@@ -138,7 +140,8 @@ server.js
 
 | File | Vai trò |
 |---|---|
-| `login.html` | Đăng nhập bằng tài khoản SV5T (MSSV + password) |
+| `login.html` | Đăng nhập participant bằng tài khoản SV5T (MSSV + password) |
+| `admin-login.html` | Đăng nhập admin bằng tài khoản Admin SV5T (username + password) |
 | `complete-profile.html` | Bổ sung email/phone/khoa/trường lần đầu đăng nhập |
 | `dashboard.html` | Trang chính của ứng viên: hồ sơ, nộp đơn, feedback |
 | `admin-dashboard.html` | Toàn bộ công cụ quản trị |

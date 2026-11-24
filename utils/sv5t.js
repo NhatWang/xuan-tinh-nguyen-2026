@@ -20,3 +20,24 @@ exports.verifyStudentViaSV5T = async (studentId, password) => {
     return { ok: false, status: err.response?.status || 503, message: msg };
   }
 };
+
+exports.verifyAdminViaSV5T = async (username, password) => {
+  try {
+    const res = await axios.post(
+      `${process.env.SV5T_API_URL}/api/integration/verify-admin`,
+      { username, password },
+      {
+        headers: {
+          "Content-Type": "application/json",
+          "x-integration-key": process.env.SV5T_INTEGRATION_SECRET
+        },
+        timeout: 10000
+      }
+    );
+
+    return { ok: true, admin: res.data.admin };
+  } catch (err) {
+    const msg = err.response?.data?.message || "Không thể kết nối hệ thống SV5T";
+    return { ok: false, status: err.response?.status || 503, message: msg };
+  }
+};
