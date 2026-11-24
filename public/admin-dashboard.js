@@ -1185,8 +1185,15 @@ function downloadAllPhotos() {
     window.open("/api/admin/photos/download", "_blank");
 }
 
-window.openPhotoModal = openPhotoModal;
-window.closePhotoModal = closePhotoModal;
+function openPhotoModal(photoUrl) {
+    document.getElementById("photoModalImg").src = photoUrl;
+    document.getElementById("photoModal").style.display = "flex";
+}
+
+function closePhotoModal() {
+    document.getElementById("photoModal").style.display = "none";
+    document.getElementById("photoModalImg").src = "";
+}
 
 /* =====================================================
    INIT
