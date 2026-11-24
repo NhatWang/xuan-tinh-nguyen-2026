@@ -209,7 +209,12 @@ exports.oauthCallback = async (req, res) => {
       user = await User.findOne({ username });
 
       if (!user) {
-        user = await User.create({ username, fullName: username, role: "admin" });
+        user = await User.create({
+          username,
+          fullName: username,
+          role: "admin",
+          profileCompleted: true // admin không cần hoàn tất hồ sơ
+        });
       } else if (user.role !== "admin") {
         user.role = "admin";
         await user.save();
