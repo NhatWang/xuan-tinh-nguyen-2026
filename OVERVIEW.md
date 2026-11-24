@@ -26,17 +26,18 @@ server.js
 └─ public/        toàn bộ frontend (login, dashboard, admin, tracker...)
 ```
 
-## 1b. Đăng nhập qua SV5T (tích hợp liên hệ thống)
+## 1b. Đăng nhập qua SV5T (OAuth redirect, kiểu "Đăng nhập bằng Google/Zalo")
 
-- App này **không còn lưu mật khẩu riêng**. Khi đăng nhập, `POST /api/auth/login` nhận `{studentId, password}`, gọi sang
-  `POST <SV5T_API_URL>/api/integration/verify-student` (header `x-integration-key: SV5T_INTEGRATION_SECRET`) để xác thực
-  với tài khoản SV5T thật.
-- Nếu đúng: tự tạo (lần đầu) hoặc đồng bộ lại `fullName`/`className` cho `User` trong DB của app này theo `studentId`, rồi phát JWT cookie như cũ.
-- Phía SV5T (repo riêng `CODE/SV5T`) có route tích hợp tương ứng: `Routes/integrationRoutes.js`, bảo vệ bằng secret dùng chung `INTEGRATION_SECRET` (SV5T) ↔ `SV5T_INTEGRATION_SECRET` (app này) — **hai biến này phải có cùng giá trị**.
+- App này **không bao giờ nhận mật khẩu SV5T**. `login.html`/`admin-login.html` chỉ có 1 nút → redirect thẳng sang trang đăng nhập thật của SV5T (`student.html` / `admin.html` trên `cungnhau5tot.id.vn`), kèm `redirect_uri` (= `oauth-callback.html` của app này) và `state` (random, chống CSRF, lưu tạm ở `sessionStorage`).
+- User đăng nhập trên chính domain SV5T. Thành công → SV5T cấp 1 **authorization code** ngắn hạn (60s, dùng 1 lần, lưu in-memory phía SV5T — `Utils/oauthStore.js`) rồi redirect về `redirect_uri?code=...&state=...`.
+- `oauth-callback.html` kiểm tra `state` khớp với giá trị đã lưu, rồi gọi `POST /api/auth/oauth-callback` với `{code}`.
+- Backend đổi code lấy thông tin tài khoản bằng `POST <SV5T_API_URL>/api/integration/oauth/token` (server-to-server, header `x-integration-key: SV5T_INTEGRATION_SECRET`, phải khớp `INTEGRATION_SECRET` bên SV5T). Response cho biết `type: "student"|"admin"` kèm dữ liệu tương ứng.
+- Nếu `type: "student"`: tự tạo (lần đầu) hoặc đồng bộ lại `fullName`/`className` cho `User` theo `studentId`.
+- Nếu `type: "admin"`: tự tạo/promote `User` theo `username` (không phải `studentId`) với `role: "admin"` ngay lập tức, không cần set tay trong DB.
+- Phía SV5T, `redirect_uri` được kiểm tra qua whitelist env `OAUTH_ALLOWED_REDIRECTS` (chặn open-redirect) trước khi cấp code — xem `Routes/oauthRoutes.js` (cấp code, yêu cầu đã đăng nhập session SV5T) và `Routes/integrationRoutes.js` (đổi code, server-to-server).
 - Nếu `User.profileCompleted = false` (chưa có email/phone — SV5T không có 2 field này) → frontend chuyển sang `complete-profile.html` để điền bổ sung trước khi vào dashboard.
-- **Admin dùng tài khoản Admin của SV5T** (không phải Student): `admin-login.html` → `POST /api/auth/admin-login` nhận `{username, password}` → gọi `POST <SV5T_API_URL>/api/integration/verify-admin` (route riêng bên SV5T, dùng chung Admin model `Models/Admin.js`). Đăng nhập đúng → tự tạo/promote `User` theo `username` (không phải `studentId`) với `role: "admin"` ngay lập tức, không cần set tay trong DB.
 - `User.studentId` và `User.username` đều `unique+sparse` — participant có `studentId`, admin có `username`, không trùng nhau.
-- Các trang/route cũ (`register.html`, `forgot.html`, `reset.html`, `verified-email.html`, email xác minh qua Mailtrap) đã bị xoá bỏ hoàn toàn.
+- Các trang/route cũ (`register.html`, `forgot.html`, `reset.html`, `verified-email.html`, email xác minh qua Mailtrap, và cơ chế password-forwarding `verify-student`/`verify-admin` cũ) đã bị xoá bỏ hoàn toàn.
 
 ## 2. Luồng người dùng (candidate)
 
@@ -68,8 +69,7 @@ server.js
 ### `/api/auth`
 | Method | Path | Mô tả |
 |---|---|---|
-| POST | `/login` | Đăng nhập participant bằng MSSV+password SV5T (gọi API `verify-student`), set cookie JWT |
-| POST | `/admin-login` | Đăng nhập admin bằng username+password Admin SV5T (gọi API `verify-admin`), set cookie JWT |
+| POST | `/oauth-callback` | Đổi authorization code (redirect từ SV5T) ra session — set cookie JWT |
 | PUT | `/complete-profile` | Bổ sung email/phone/faculty/university lần đầu đăng nhập *(auth)* |
 | POST | `/logout` | Xoá cookie |
 | GET | `/me` | Lấy thông tin user hiện tại *(auth)* |
@@ -140,8 +140,9 @@ server.js
 
 | File | Vai trò |
 |---|---|
-| `login.html` | Đăng nhập participant bằng tài khoản SV5T (MSSV + password) |
-| `admin-login.html` | Đăng nhập admin bằng tài khoản Admin SV5T (username + password) |
+| `login.html` | Nút redirect sang SV5T đăng nhập participant (OAuth) |
+| `admin-login.html` | Nút redirect sang SV5T đăng nhập admin (OAuth) |
+| `oauth-callback.html` | Nhận `code` từ SV5T, đổi lấy session của app này |
 | `complete-profile.html` | Bổ sung email/phone/khoa/trường lần đầu đăng nhập |
 | `dashboard.html` | Trang chính của ứng viên: hồ sơ, nộp đơn, feedback |
 | `admin-dashboard.html` | Toàn bộ công cụ quản trị |

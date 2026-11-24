@@ -1,29 +1,57 @@
 const API = "/api/auth";
+const SV5T_BASE_URL = "https://cungnhau5tot.id.vn";
 
 /* =====================================================
-   LOGIN (qua tài khoản SV5T - Hành trình cùng nhau 5 Tốt)
+   ĐĂNG NHẬP QUA SV5T (kiểu "Đăng nhập bằng Google/Zalo")
+   Redirect sang trang đăng nhập thật của SV5T, SV5T redirect
+   ngược về oauth-callback.html kèm 1 authorization code.
 ===================================================== */
-async function login() {
-  const studentId = document.getElementById("studentId")?.value.trim();
-  const password = document.getElementById("password")?.value.trim();
+function buildOAuthRedirectUrl(sv5tLoginPath) {
+  const state = crypto.randomUUID();
+  sessionStorage.setItem("sv5t_oauth_state", state);
 
-  if (!studentId || !password) {
-    showToast("Vui lòng nhập MSSV và mật khẩu!", "warning");
+  const redirectUri = `${window.location.origin}/oauth-callback.html`;
+  const url = new URL(sv5tLoginPath, SV5T_BASE_URL);
+  url.searchParams.set("redirect_uri", redirectUri);
+  url.searchParams.set("state", state);
+
+  return url.toString();
+}
+
+function startSV5TLogin() {
+  window.location.href = buildOAuthRedirectUrl("/student.html");
+}
+
+function startSV5TAdminLogin() {
+  window.location.href = buildOAuthRedirectUrl("/admin.html");
+}
+
+async function handleOAuthCallback() {
+  const params = new URLSearchParams(window.location.search);
+  const code = params.get("code");
+  const state = params.get("state");
+  const expectedState = sessionStorage.getItem("sv5t_oauth_state");
+  sessionStorage.removeItem("sv5t_oauth_state");
+
+  if (!code || !state || state !== expectedState) {
+    showToast("Phiên đăng nhập không hợp lệ, vui lòng thử lại!", "error");
+    setTimeout(() => (window.location.href = "login.html"), 1500);
     return;
   }
 
   try {
-    const res = await fetch(`${API}/login`, {
+    const res = await fetch(`${API}/oauth-callback`, {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ studentId, password })
+      body: JSON.stringify({ code })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.msg || "Sai MSSV hoặc mật khẩu!", "error");
+      showToast(data.msg || "Đăng nhập thất bại!", "error");
+      setTimeout(() => (window.location.href = "login.html"), 1500);
       return;
     }
 
@@ -37,48 +65,11 @@ async function login() {
       } else {
         window.location.href = "dashboard.html";
       }
-    }, 800);
+    }, 600);
 
   } catch {
     showToast("Không thể kết nối đến server!", "warning");
-  }
-}
-
-/* =====================================================
-   ADMIN LOGIN (qua tài khoản Admin của SV5T)
-===================================================== */
-async function adminLogin() {
-  const username = document.getElementById("adminUsername")?.value.trim();
-  const password = document.getElementById("adminPassword")?.value.trim();
-
-  if (!username || !password) {
-    showToast("Vui lòng nhập username và mật khẩu!", "warning");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/admin-login`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ username, password })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showToast(data.msg || "Sai username hoặc mật khẩu!", "error");
-      return;
-    }
-
-    showToast("Đăng nhập thành công!", "success");
-
-    setTimeout(() => {
-      window.location.href = "admin-dashboard.html";
-    }, 800);
-
-  } catch {
-    showToast("Không thể kết nối đến server!", "warning");
+    setTimeout(() => (window.location.href = "login.html"), 1500);
   }
 }
 
@@ -131,26 +122,6 @@ async function completeProfile() {
 
   } catch {
     showToast("Không thể kết nối server!", "warning");
-  }
-}
-
-
-/* =====================================================
-   UNIVERSAL PASSWORD TOGGLE (Fix lỗi all pages)
-===================================================== */
-function togglePassword(btn) {
-  const targetId = btn.dataset.target;
-  const input = document.getElementById(targetId);
-  const icon = btn.querySelector("img");
-
-  if (!input) return;
-
-  if (input.type === "password") {
-    input.type = "text";
-    icon.src = "icons/eye.svg";
-  } else {
-    input.type = "password";
-    icon.src = "icons/eye-slash.svg";
   }
 }
 

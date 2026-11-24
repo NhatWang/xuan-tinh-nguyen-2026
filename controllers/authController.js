@@ -1,98 +1,63 @@
 const User = require("../models/User");
 const generateToken = require("../utils/generateToken");
-const { verifyStudentViaSV5T, verifyAdminViaSV5T } = require("../utils/sv5t");
+const { exchangeOAuthCode } = require("../utils/sv5t");
+
+function setAuthCookie(res, user) {
+  const token = generateToken(user);
+  res.cookie("token", token, {
+    httpOnly: true,
+    secure: true,
+    sameSite: "none",
+    maxAge: 7 * 24 * 60 * 60 * 1000
+  });
+}
 
 /* ======================================================
-   LOGIN — xác thực qua tài khoản SV5T (Hành trình cùng nhau 5 Tốt)
+   OAUTH CALLBACK — đổi code lấy từ SV5T ra session của app này
+   (đăng nhập qua SV5T theo kiểu "Đăng nhập bằng Google/Zalo")
 ====================================================== */
-exports.login = async (req, res) => {
+exports.oauthCallback = async (req, res) => {
   try {
-    const { studentId, password } = req.body;
+    const { code } = req.body;
 
-    if (!studentId || !password)
-      return res.status(400).json({ msg: "Vui lòng nhập MSSV và mật khẩu" });
+    if (!code)
+      return res.status(400).json({ msg: "Thiếu code" });
 
-    const result = await verifyStudentViaSV5T(studentId.trim(), password);
+    const result = await exchangeOAuthCode(code);
 
     if (!result.ok) {
       return res.status(result.status).json({ msg: result.message });
     }
 
-    const { fullName, className } = result.student;
+    const { type } = result.data;
+    let user;
 
-    let user = await User.findOne({ studentId: studentId.trim() });
+    if (type === "admin") {
+      const { username } = result.data;
 
-    if (!user) {
-      user = await User.create({
-        studentId: studentId.trim(),
-        fullName,
-        className
-      });
+      user = await User.findOne({ username });
+
+      if (!user) {
+        user = await User.create({ username, fullName: username, role: "admin" });
+      } else if (user.role !== "admin") {
+        user.role = "admin";
+        await user.save();
+      }
     } else {
-      // Đồng bộ lại họ tên/lớp mới nhất từ SV5T mỗi lần đăng nhập
-      user.fullName = fullName;
-      user.className = className;
-      await user.save();
+      const { studentId, fullName, className } = result.data;
+
+      user = await User.findOne({ studentId });
+
+      if (!user) {
+        user = await User.create({ studentId, fullName, className });
+      } else {
+        user.fullName = fullName;
+        user.className = className;
+        await user.save();
+      }
     }
 
-    const token = generateToken(user);
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
-
-    res.json({
-      msg: "Đăng nhập thành công",
-      role: user.role,
-      profileCompleted: user.profileCompleted
-    });
-
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
-
-/* ======================================================
-   ADMIN LOGIN — xác thực qua tài khoản Admin của SV5T
-====================================================== */
-exports.adminLogin = async (req, res) => {
-  try {
-    const { username, password } = req.body;
-
-    if (!username || !password)
-      return res.status(400).json({ msg: "Vui lòng nhập username và mật khẩu" });
-
-    const result = await verifyAdminViaSV5T(username.trim(), password);
-
-    if (!result.ok) {
-      return res.status(result.status).json({ msg: result.message });
-    }
-
-    let user = await User.findOne({ username: username.trim() });
-
-    if (!user) {
-      user = await User.create({
-        username: username.trim(),
-        fullName: username.trim(),
-        role: "admin"
-      });
-    } else if (user.role !== "admin") {
-      user.role = "admin";
-      await user.save();
-    }
-
-    const token = generateToken(user);
-
-    res.cookie("token", token, {
-      httpOnly: true,
-      secure: true,
-      sameSite: "none",
-      maxAge: 7 * 24 * 60 * 60 * 1000
-    });
+    setAuthCookie(res, user);
 
     res.json({
       msg: "Đăng nhập thành công",
