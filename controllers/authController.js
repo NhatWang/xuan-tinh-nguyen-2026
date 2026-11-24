@@ -41,53 +41,15 @@ exports.register = async (req, res) => {
       return res.status(400).json({ msg: "Số điện thoại đã tồn tại" });
 
     const hashed = await bcrypt.hash(password, 10);
-    const verifyToken = crypto.randomBytes(32).toString("hex");
 
     await User.create({
       fullName, className, faculty, university,
       studentId, email, phone,
       password: hashed,
-      profileCompleted: true, // đã có email/phone ngay từ lúc đăng ký
-      verifyEmailToken: verifyToken,
-      verifyEmailExpire: Date.now() + 3600000 // 1 giờ
+      profileCompleted: true // đã có email/phone ngay từ lúc đăng ký
     });
 
-    const verifyUrl = `${process.env.CLIENT_URL}/verified-email.html?token=${verifyToken}`;
-
-    await sendEmail(email, "Xác minh tài khoản",
-      `<p>Nhấn để xác minh tài khoản:</p><a href="${verifyUrl}">${verifyUrl}</a>`
-    );
-
-    res.json({ msg: "Đăng ký thành công! Hãy kiểm tra email để xác minh." });
-
-  } catch (err) {
-    res.status(500).json({ msg: err.message });
-  }
-};
-
-
-/* ======================================================
-   VERIFY EMAIL
-====================================================== */
-exports.verifyEmail = async (req, res) => {
-  try {
-    const token = req.params.token;
-
-    const user = await User.findOne({
-      verifyEmailToken: token,
-      verifyEmailExpire: { $gt: Date.now() }
-    });
-
-    if (!user)
-      return res.status(400).json({ msg: "Token không hợp lệ hoặc đã hết hạn" });
-
-    user.isVerified = true;
-    user.verifyEmailToken = undefined;
-    user.verifyEmailExpire = undefined;
-
-    await user.save();
-
-    res.json({ msg: "Xác minh email thành công!" });
+    res.json({ msg: "Đăng ký thành công! Bạn có thể đăng nhập ngay." });
 
   } catch (err) {
     res.status(500).json({ msg: err.message });
@@ -105,9 +67,6 @@ exports.login = async (req, res) => {
     const user = await User.findOne({ email });
     if (!user || !user.password)
       return res.status(404).json({ msg: "Không tìm thấy tài khoản" });
-
-    if (!user.isVerified)
-      return res.status(400).json({ msg: "Email chưa được xác minh" });
 
     const match = await bcrypt.compare(password, user.password);
     if (!match) return res.status(400).json({ msg: "Sai mật khẩu" });

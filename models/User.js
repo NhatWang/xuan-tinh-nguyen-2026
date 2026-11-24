@@ -10,7 +10,6 @@ const userSchema = new mongoose.Schema({
   email: { type: String, unique: true, sparse: true },
   phone: { type: String, unique: true, sparse: true },
   password: { type: String },
-  isVerified: { type: Boolean, default: false },
 
   // Đăng nhập nhanh qua SV5T (chỉ khoa Hóa) — participant dùng studentId, admin dùng username
   studentId: { type: String, unique: true, sparse: true },
@@ -27,9 +26,6 @@ const userSchema = new mongoose.Schema({
 
   resetPasswordToken: String,
   resetPasswordExpire: Date,
-
-  verifyEmailToken: String,
-  verifyEmailExpire: Date,
 
   photo3x4: {
   type: String, // /uploads/3x4/abc.jpg

@@ -11,9 +11,6 @@ const auth = require("../middleware/auth");
 // Đăng ký
 router.post("/register", authCtrl.register);
 
-// Xác minh email
-router.get("/verify-email/:token", authCtrl.verifyEmail);
-
 // Đăng nhập
 router.post("/login", authCtrl.login);
 

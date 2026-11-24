@@ -90,7 +90,7 @@ async function register() {
       return;
     }
 
-    showToast("Đăng ký thành công! Hãy kiểm tra email để xác minh.", "success");
+    showToast("Đăng ký thành công! Bạn có thể đăng nhập ngay.", "success");
 
     setTimeout(() => {
       window.location.href = "login.html";
