@@ -38,7 +38,7 @@ sinh viên khoa Hóa đã có tài khoản SV5T; mọi sinh viên khác bắt bu
 **A. Đăng ký thủ công (`register.html` → `login.html`, mọi khoa/trường)**
 - `POST /api/auth/register`: nhận `fullName, className, faculty, university, studentId, email, phone, password` (bcrypt hash), set `profileCompleted: true` ngay (đã đủ email/phone). **Không xác minh email** — dùng được ngay.
 - `POST /api/auth/login`: email + password.
-- `POST /api/auth/forgot-password` + `PUT /api/auth/reset-password/:token`: luồng quên mật khẩu qua email (`forgot.html`/`reset.html`).
+- `POST /api/auth/forgot-password` + `PUT /api/auth/reset-password/:token`: luồng quên mật khẩu qua email (`forgot.html`/`reset.html`). Chỉ áp dụng cho tài khoản có `password` (đăng ký thủ công) — tài khoản vào qua SV5T (chỉ có `studentId`/`username`, không có `password`) bị chặn với thông báo rõ ràng, tránh vô tình mở thêm 1 cách đăng nhập email+password ngoài ý muốn cho tài khoản đó.
 
 **B. Đăng nhập nhanh qua SV5T (tùy chọn, nút trên `login.html`/`admin-login.html`, chỉ khoa Hóa)**
 - Kiểu "Đăng nhập bằng Google/Zalo" — app này **không bao giờ nhận mật khẩu SV5T**. Nút redirect sang trang đăng nhập thật của SV5T (`student.html`/`admin.html` trên `cungnhau5tot.id.vn`), kèm `redirect_uri` (= `oauth-callback.html` của app này) và `state` (random, chống CSRF, lưu tạm ở `sessionStorage`).

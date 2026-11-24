@@ -98,6 +98,9 @@ exports.forgotPassword = async (req, res) => {
     const user = await User.findOne({ email: req.body.email });
     if (!user) return res.status(404).json({ msg: "Không tìm thấy email" });
 
+    if (!user.password)
+      return res.status(400).json({ msg: "Tài khoản này đăng nhập qua SV5T, không đặt lại mật khẩu ở đây được" });
+
     const resetToken = crypto.randomBytes(32).toString("hex");
 
     user.resetPasswordToken = resetToken;
