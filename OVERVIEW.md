@@ -8,11 +8,11 @@ Daily.co (video call), upload ảnh 3x4 sau khi đậu, và tính năng feedback
 ## 1. Kiến trúc tổng thể
 
 - **Backend**: Node.js + Express 5, MongoDB (Mongoose), Socket.io (real-time), JWT (cookie httpOnly) cho auth.
+- **Đăng nhập**: không còn tài khoản riêng — xác thực qua hệ thống **SV5T** (Hành trình cùng nhau 5 Tốt, `cungnhau5tot.id.vn`) bằng API server-to-server.
 - **Frontend**: HTML/CSS/JS thuần, phục vụ tĩnh từ `public/`.
 - **PDF export**: Puppeteer render HTML template (`templates/`) ra PDF.
 - **Ảnh 3x4**: Multer (nhận upload) + Sharp (resize/crop 300x400).
 - **Video call**: Daily.co REST API tạo room, Socket.io báo realtime "có người gọi"/"kết thúc".
-- **Email**: Mailtrap API (xác minh email, quên mật khẩu).
 
 ```
 server.js
@@ -21,15 +21,26 @@ server.js
 ├─ controllers/   logic xử lý
 ├─ models/        schema Mongoose
 ├─ middleware/    auth, admin-only, upload ảnh 3x4
-├─ utils/         JWT, gửi email, Daily.co
+├─ utils/         JWT, gọi API SV5T, Daily.co
 ├─ templates/     HTML dùng để render PDF
 └─ public/        toàn bộ frontend (login, dashboard, admin, tracker...)
 ```
 
+## 1b. Đăng nhập qua SV5T (tích hợp liên hệ thống)
+
+- App này **không còn lưu mật khẩu riêng**. Khi đăng nhập, `POST /api/auth/login` nhận `{studentId, password}`, gọi sang
+  `POST <SV5T_API_URL>/api/integration/verify-student` (header `x-integration-key: SV5T_INTEGRATION_SECRET`) để xác thực
+  với tài khoản SV5T thật.
+- Nếu đúng: tự tạo (lần đầu) hoặc đồng bộ lại `fullName`/`className` cho `User` trong DB của app này theo `studentId`, rồi phát JWT cookie như cũ.
+- Phía SV5T (repo riêng `CODE/SV5T`) có route tích hợp tương ứng: `Routes/integrationRoutes.js`, bảo vệ bằng secret dùng chung `INTEGRATION_SECRET` (SV5T) ↔ `SV5T_INTEGRATION_SECRET` (app này) — **hai biến này phải có cùng giá trị**.
+- Nếu `User.profileCompleted = false` (chưa có email/phone — SV5T không có 2 field này) → frontend chuyển sang `complete-profile.html` để điền bổ sung trước khi vào dashboard.
+- Admin cũng đăng nhập qua SV5T giống participant; `role: "admin"` được gán thủ công trong MongoDB của app này theo `studentId`, không qua UI.
+- Các trang/route cũ (`register.html`, `forgot.html`, `reset.html`, `verified-email.html`, email xác minh qua Mailtrap) đã bị xoá bỏ hoàn toàn.
+
 ## 2. Luồng người dùng (candidate)
 
-1. **Đăng ký tài khoản** (`register.html`) → nhận email xác minh → `verified-email.html`.
-2. **Đăng nhập** (`login.html`) → JWT lưu cookie.
+1. **Đăng nhập** (`login.html`) bằng MSSV + mật khẩu tài khoản SV5T → JWT lưu cookie.
+2. **Lần đầu đăng nhập** (chưa có email/phone): chuyển sang `complete-profile.html` để bổ sung email, phone, khoa, trường.
 3. **Dashboard** (`dashboard.html`):
    - Điền hồ sơ ứng tuyển **Hậu cần** (nv1–nv6: nguyện vọng xếp hạng, kỹ năng, size áo, xe/license, sức khỏe...).
    - Điền hồ sơ ứng tuyển **Truyền thông** (vai trò: Tư liệu/Thiết kế/Content, địa điểm team).
@@ -38,6 +49,8 @@ server.js
    - Gửi **feedback** (đánh giá sao 1–5 + bình luận).
 4. **Nếu đậu** (`interviewResult` bắt đầu bằng "Đậu NV"): được phép **upload ảnh 3x4** (crop/resize tự động).
 5. **Theo dõi lượt phỏng vấn** (`tracker.html`): trang công khai, không cần đăng nhập, hiển thị thứ tự hàng đợi theo team/địa điểm.
+
+> Lưu ý: bước 1–2 đã thay đổi so với trước — xem mục 1b.
 
 ## 3. Luồng admin
 
@@ -54,11 +67,8 @@ server.js
 ### `/api/auth`
 | Method | Path | Mô tả |
 |---|---|---|
-| POST | `/register` | Tạo tài khoản, gửi email xác minh |
-| GET | `/verify-email/:token` | Xác minh email |
-| POST | `/login` | Đăng nhập, set cookie JWT |
-| POST | `/forgot-password` | Gửi email đặt lại mật khẩu |
-| PUT | `/reset-password/:token` | Đặt mật khẩu mới |
+| POST | `/login` | Đăng nhập bằng MSSV+password SV5T (gọi API SV5T xác thực), set cookie JWT |
+| PUT | `/complete-profile` | Bổ sung email/phone/faculty/university lần đầu đăng nhập *(auth)* |
 | POST | `/logout` | Xoá cookie |
 | GET | `/me` | Lấy thông tin user hiện tại *(auth)* |
 
@@ -112,7 +122,8 @@ server.js
 
 ## 5. Data models (MongoDB)
 
-**User**: `fullName, className, faculty, university, studentId, email, phone, password(hash), isVerified, role(participant|admin), photo3x4, resetPasswordToken/Expire, verifyEmailToken/Expire`
+**User**: `fullName, className` (đồng bộ từ SV5T mỗi lần đăng nhập), `faculty, university, studentId(unique, required), email(unique, sparse), phone(unique, sparse), profileCompleted, role(participant|admin), photo3x4`
+*(không còn lưu password — xác thực uỷ quyền hoàn toàn cho SV5T)*
 
 **Registration** (Hậu cần, unique theo `userId`):
 `dob, gender, facebook, address, nv1–nv6, major, skills[], size, bio, health, cdtn, vehicle, license, lab, interviewLocation, interviewNote, interviewResult, interviewer, attendance, interviewOrder, interviewStatus(idle|waiting|calling|ended), interviewRoomId, interviewStartedAt, interviewEndedAt`
@@ -127,14 +138,12 @@ server.js
 
 | File | Vai trò |
 |---|---|
-| `login.html` | Đăng nhập |
-| `register.html` | Đăng ký tài khoản |
+| `login.html` | Đăng nhập bằng tài khoản SV5T (MSSV + password) |
+| `complete-profile.html` | Bổ sung email/phone/khoa/trường lần đầu đăng nhập |
 | `dashboard.html` | Trang chính của ứng viên: hồ sơ, nộp đơn, feedback |
 | `admin-dashboard.html` | Toàn bộ công cụ quản trị |
 | `online-interview-room.html` | Phòng phỏng vấn video (Daily.co) |
 | `tracker.html` | Theo dõi hàng đợi phỏng vấn (công khai) |
-| `forgot.html` / `reset.html` | Quên / đặt lại mật khẩu |
-| `verified-email.html` | Trang xác nhận đã verify email |
 
 ## 7. Điểm cần lưu ý
 
@@ -153,8 +162,8 @@ server.js
 |---|---|
 | `MONGO_URI` | Kết nối MongoDB Atlas |
 | `JWT_SECRET` | Ký/verify JWT |
-| `MAILTRAP_TOKEN`, `FROM_EMAIL` | Gửi email xác minh / quên mật khẩu |
+| `SV5T_API_URL` | Base URL hệ thống SV5T (vd `https://cungnhau5tot.id.vn`) để gọi API xác thực đăng nhập |
+| `SV5T_INTEGRATION_SECRET` | Secret dùng chung với `INTEGRATION_SECRET` bên SV5T — phải khớp giá trị |
 | `DAILY_API_KEY` | Tạo phòng video call Daily.co |
-| `CLIENT_URL` | URL frontend (dùng trong link email) |
 | `REGISTRATION_CLOSED` | Đóng/mở nhận đăng ký mới *(hiện bị override cứng ở 1 endpoint — xem mục 7)* |
 | `PORT` | Cổng server (Render tự set) |
