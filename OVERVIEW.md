@@ -45,9 +45,9 @@ sinh viên khoa Hóa đã có tài khoản SV5T; mọi sinh viên khác bắt bu
 - User đăng nhập trên chính domain SV5T. Thành công → SV5T cấp 1 **authorization code** ngắn hạn (60s, dùng 1 lần, lưu in-memory phía SV5T — `Utils/oauthStore.js`) rồi redirect về `redirect_uri?code=...&state=...`.
 - `oauth-callback.html` kiểm tra `state` khớp, gọi `POST /api/auth/oauth-callback` với `{code}`.
 - Backend đổi code lấy thông tin tài khoản bằng `POST <SV5T_API_URL>/api/integration/oauth/token` (server-to-server, header `x-integration-key: SV5T_INTEGRATION_SECRET`, phải khớp `INTEGRATION_SECRET` bên SV5T). Response cho biết `type: "student"|"admin"` kèm dữ liệu tương ứng.
-- `type: "student"` → tự tạo/đồng bộ `fullName`/`className` cho `User` theo `studentId`. `type: "admin"` → tự tạo/promote `User` theo `username` với `role: "admin"` ngay lập tức.
+- `type: "student"` → tự tạo/đồng bộ `fullName`/`className` cho `User` theo `studentId`; `faculty`/`university` tự điền cứng `"Hóa học"` / `"Trường Đại học Khoa học tự nhiên, ĐHQG-HCM"` (vì SV5T chỉ quản lý đúng nhóm này, không cần hỏi lại). `type: "admin"` → tự tạo/promote `User` theo `username` với `role: "admin"`, `profileCompleted: true` ngay (admin không cần hoàn tất hồ sơ).
 - Phía SV5T, `redirect_uri` được kiểm tra qua whitelist env `OAUTH_ALLOWED_REDIRECTS` (chặn open-redirect) — xem `Routes/oauthRoutes.js` (cấp code) và `Routes/integrationRoutes.js` (đổi code).
-- Tài khoản vào qua SV5T chưa có email/phone (`profileCompleted: false`) → chuyển sang `complete-profile.html` để bổ sung trước khi vào dashboard.
+- Tài khoản participant vào qua SV5T chưa có email/phone (`profileCompleted: false`) → chuyển sang `complete-profile.html` chỉ hỏi 2 trường này (khoa/trường đã tự điền sẵn).
 
 **Chung cho cả 2 luồng:**
 - `User.email/phone` (đăng ký thủ công) và `User.studentId/username` (SV5T) đều `unique+sparse` — một `User` chỉ có 1 trong 2 bộ định danh tùy theo cách đăng nhập, không bắt buộc có cả 2.

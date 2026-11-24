@@ -271,9 +271,7 @@ async function handleOAuthCallback() {
 async function completeProfile() {
   const body = {
     email: document.getElementById("email")?.value.trim(),
-    phone: document.getElementById("phone")?.value.trim(),
-    faculty: document.getElementById("faculty")?.value.trim(),
-    university: document.getElementById("university")?.value.trim()
+    phone: document.getElementById("phone")?.value.trim()
   };
 
   if (!body.email || !body.phone) {

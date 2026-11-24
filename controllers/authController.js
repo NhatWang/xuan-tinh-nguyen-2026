@@ -5,6 +5,11 @@ const sendEmail = require("../utils/sendEmail");
 const generateToken = require("../utils/generateToken");
 const { exchangeOAuthCode } = require("../utils/sv5t");
 
+// SV5T chỉ quản lý sinh viên khoa Hóa của HCMUS, nên tài khoản vào qua
+// SV5T luôn thuộc khoa/trường này — không cần hỏi lại ở complete-profile.
+const SV5T_FACULTY = "Hóa học";
+const SV5T_UNIVERSITY = "Trường Đại học Khoa học tự nhiên, ĐHQG-HCM";
+
 function setAuthCookie(res, user) {
   const token = generateToken(user);
   res.cookie("token", token, {
@@ -184,10 +189,16 @@ exports.oauthCallback = async (req, res) => {
       user = await User.findOne({ studentId });
 
       if (!user) {
-        user = await User.create({ studentId, fullName, className });
+        user = await User.create({
+          studentId, fullName, className,
+          faculty: SV5T_FACULTY,
+          university: SV5T_UNIVERSITY
+        });
       } else {
         user.fullName = fullName;
         user.className = className;
+        if (!user.faculty) user.faculty = SV5T_FACULTY;
+        if (!user.university) user.university = SV5T_UNIVERSITY;
         await user.save();
       }
     }
@@ -212,7 +223,7 @@ exports.oauthCallback = async (req, res) => {
 ====================================================== */
 exports.completeProfile = async (req, res) => {
   try {
-    const { email, phone, faculty, university } = req.body;
+    const { email, phone } = req.body;
 
     if (!email || !phone)
       return res.status(400).json({ msg: "Thiếu thông tin bắt buộc" });
@@ -226,8 +237,6 @@ exports.completeProfile = async (req, res) => {
     const user = await User.findById(req.user.id);
     user.email = email;
     user.phone = phone;
-    if (faculty) user.faculty = faculty;
-    if (university) user.university = university;
     user.profileCompleted = true;
 
     await user.save();
