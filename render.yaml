@@ -15,7 +15,7 @@ services:
         sync: false
       - key: DAILY_API_KEY
         sync: false
-      - key: MAILTRAP_TOKEN
+      - key: RESEND_API_KEY
         sync: false
       - key: FROM_EMAIL
         sync: false

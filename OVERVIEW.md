@@ -15,7 +15,7 @@ Daily.co (video call), upload ảnh 3x4 sau khi đậu, và tính năng feedback
 - **PDF export**: Puppeteer render HTML template (`templates/`) ra PDF.
 - **Ảnh 3x4**: Multer (nhận upload) + Sharp (resize/crop 300x400).
 - **Video call**: Daily.co REST API tạo room, Socket.io báo realtime "có người gọi"/"kết thúc".
-- **Email**: Mailtrap API (quên mật khẩu) — chỉ dùng cho luồng đăng ký thủ công. Đăng ký **không yêu cầu xác minh email** (dùng được ngay sau khi đăng ký).
+- **Email**: Resend API (quên mật khẩu) — chỉ dùng cho luồng đăng ký thủ công. Đăng ký **không yêu cầu xác minh email** (dùng được ngay sau khi đăng ký). Resend free tier (100 email/ngày, 3.000/tháng) yêu cầu verify domain gửi (`xtnhoahoc2026.id.vn`) qua vài DNS record.
 
 ```
 server.js
@@ -189,7 +189,7 @@ sinh viên khoa Hóa đã có tài khoản SV5T; mọi sinh viên khác bắt bu
 |---|---|
 | `MONGO_URI` | Kết nối MongoDB Atlas |
 | `JWT_SECRET` | Ký/verify JWT |
-| `MAILTRAP_TOKEN`, `FROM_EMAIL` | Gửi email quên mật khẩu (đăng ký thủ công) |
+| `RESEND_API_KEY`, `FROM_EMAIL` | Gửi email quên mật khẩu qua Resend (đăng ký thủ công) — `FROM_EMAIL` phải thuộc domain đã verify trên Resend |
 | `CLIENT_URL` | URL frontend, dùng trong link email reset mật khẩu |
 | `SV5T_API_URL` | Base URL hệ thống SV5T (vd `https://cungnhau5tot.id.vn`) — cho đăng nhập nhanh tùy chọn (chỉ khoa Hóa) |
 | `SV5T_INTEGRATION_SECRET` | Secret dùng chung với `INTEGRATION_SECRET` bên SV5T — phải khớp giá trị |
