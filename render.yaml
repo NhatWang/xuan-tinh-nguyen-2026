@@ -1,0 +1,25 @@
+services:
+  - type: web
+    name: xuan-tinh-nguyen-2026
+    runtime: node
+    plan: free
+    region: singapore
+    buildCommand: npm install
+    startCommand: node server.js
+    envVars:
+      - key: NODE_VERSION
+        value: 20
+      - key: MONGO_URI
+        sync: false
+      - key: JWT_SECRET
+        sync: false
+      - key: MAILTRAP_TOKEN
+        sync: false
+      - key: FROM_EMAIL
+        sync: false
+      - key: DAILY_API_KEY
+        sync: false
+      - key: CLIENT_URL
+        sync: false
+      - key: REGISTRATION_CLOSED
+        value: "false"
