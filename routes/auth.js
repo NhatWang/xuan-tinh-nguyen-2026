@@ -5,22 +5,14 @@ const auth = require("../middleware/auth");
 
 /* =====================================
       AUTHENTICATION ROUTES
+      (đăng nhập qua tài khoản SV5T)
 ===================================== */
-
-// Đăng ký
-router.post("/register", authCtrl.register);
-
-// Xác minh email
-router.get("/verify-email/:token", authCtrl.verifyEmail);
 
 // Đăng nhập
 router.post("/login", authCtrl.login);
 
-// Quên mật khẩu
-router.post("/forgot-password", authCtrl.forgotPassword);
-
-// Reset mật khẩu
-router.put("/reset-password/:token", authCtrl.resetPassword);
+// Hoàn tất hồ sơ (email/phone/faculty/university) lần đầu đăng nhập
+router.put("/complete-profile", auth, authCtrl.completeProfile);
 
 // Đăng xuất
 router.post("/logout", authCtrl.logout);

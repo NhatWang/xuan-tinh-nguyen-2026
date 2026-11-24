@@ -76,6 +76,11 @@ async function loadProfile() {
     const user = await userRes.json();
     currentUserId = user._id;
 
+    if (!user.profileCompleted) {
+        window.location.href = "complete-profile.html";
+        return;
+    }
+
     // Hiển thị thông tin tài khoản
     document.getElementById("pf_name").innerText = user.fullName;
     document.getElementById("pf_studentId").innerText = user.studentId;

@@ -1,0 +1,48 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>HOÀN TẤT HỒ SƠ</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+  <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon.png">
+  <link rel="apple-touch-icon" href="/images/favicon.png">
+  <link rel="manifest" href="/manifest.json">
+  <meta name="theme-color" content="#8b5a2b">
+</head>
+
+<body>
+  <div class="main-wrapper">
+  <img src="images/typo.png" alt="Title" class="login-title-img">
+  <div class="container">
+    <h2>HOÀN TẤT HỒ SƠ</h2>
+    <p style="text-align:center; margin-top:-8px; opacity:0.8;">
+      Vui lòng bổ sung thông tin liên hệ trước khi tiếp tục
+    </p>
+    <div class="input-group">
+      <input id="email" placeholder="Email">
+    </div>
+    <div class="input-group">
+      <input type="text" id="phone" placeholder="Số điện thoại">
+    </div>
+    <div class="input-group">
+      <input id="faculty" placeholder="Khoa">
+    </div>
+    <div class="input-group">
+      <input id="university" placeholder="Trường">
+    </div>
+
+    <div id="errorBox" class="error-message"></div>
+
+    <button onclick="completeProfile()">TIẾP TỤC</button>
+  </div>
+  </div>
+  <div id="toast"></div>
+
+  <footer class="footer">
+    <strong>© 2025 Liên chi Hội khoa Hoá học,<br>
+    Trường Đại học Khoa học tự nhiên, ĐHQG-HCM</strong>
+  </footer>
+</body>
+</html>

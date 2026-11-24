@@ -6,13 +6,13 @@ const userSchema = new mongoose.Schema({
   faculty: { type: String },
   university: { type: String },
 
-  studentId: { type: String, unique: true, sparse: true },
-  email: { type: String, unique: true, required: true },
+  // Đăng nhập qua tài khoản SV5T — studentId là định danh chính
+  studentId: { type: String, unique: true, required: true },
+  email: { type: String, unique: true, sparse: true },
   phone: { type: String, unique: true, sparse: true },
 
-  password: { type: String },
-
-  isVerified: { type: Boolean, default: false },
+  // true sau khi user điền bổ sung email/phone/faculty/university lần đầu
+  profileCompleted: { type: Boolean, default: false },
 
   role: {
     type: String,
@@ -23,13 +23,7 @@ const userSchema = new mongoose.Schema({
   photo3x4: {
   type: String, // /uploads/3x4/abc.jpg
   default: null
-},
-
-  resetPasswordToken: String,
-  resetPasswordExpire: Date,
-
-  verifyEmailToken: String,
-  verifyEmailExpire: Date
+}
 });
 
 module.exports = mongoose.model("User", userSchema);

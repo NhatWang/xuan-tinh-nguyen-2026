@@ -1,14 +1,14 @@
 const API = "/api/auth";
 
 /* =====================================================
-   LOGIN
+   LOGIN (qua tài khoản SV5T - Hành trình cùng nhau 5 Tốt)
 ===================================================== */
 async function login() {
-  const email = document.getElementById("email")?.value.trim();
+  const studentId = document.getElementById("studentId")?.value.trim();
   const password = document.getElementById("password")?.value.trim();
 
-  if (!email || !password) {
-    showToast("Vui lòng nhập email và mật khẩu!", "warning");
+  if (!studentId || !password) {
+    showToast("Vui lòng nhập MSSV và mật khẩu!", "warning");
     return;
   }
 
@@ -17,21 +17,22 @@ async function login() {
       method: "POST",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
-      body: JSON.stringify({ email, password })
+      body: JSON.stringify({ studentId, password })
     });
 
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.msg || "Sai email hoặc mật khẩu!", "error");
+      showToast(data.msg || "Sai MSSV hoặc mật khẩu!", "error");
       return;
     }
 
     showToast("Đăng nhập thành công!", "success");
 
     setTimeout(() => {
-      // ⭐ Điều hướng theo ROLE
-      if (data.role === "admin") {
+      if (!data.profileCompleted) {
+        window.location.href = "complete-profile.html";
+      } else if (data.role === "admin") {
         window.location.href = "admin-dashboard.html";
       } else {
         window.location.href = "dashboard.html";
@@ -44,42 +45,34 @@ async function login() {
 }
 
 /* =====================================================
-   REGISTER
+   HOÀN TẤT HỒ SƠ (lần đầu đăng nhập)
 ===================================================== */
-async function register() {
+async function completeProfile() {
   const body = {
-    fullName: fullName?.value.trim(),
-    className: className?.value.trim(),
-    faculty: faculty?.value.trim(),
-    university: university?.value.trim(),
-    studentId: studentId?.value.trim(),
-    email: email?.value.trim(),
-    phone: phone?.value.trim(),
-    password: password?.value.trim()
+    email: document.getElementById("email")?.value.trim(),
+    phone: document.getElementById("phone")?.value.trim(),
+    faculty: document.getElementById("faculty")?.value.trim(),
+    university: document.getElementById("university")?.value.trim()
   };
 
-  for (let key in body) {
-    if (!body[key]) {
-      showToast("Vui lòng nhập đầy đủ thông tin!", "warning");
-      return;
-    }
+  if (!body.email || !body.phone) {
+    showToast("Vui lòng nhập đầy đủ email và số điện thoại!", "warning");
+    return;
   }
 
-  // Email format check
   if (!/^\S+@\S+\.\S+$/.test(body.email)) {
     showToast("Email không hợp lệ!", "error");
     return;
   }
 
-  // Phone check
   if (!/^\d{9,11}$/.test(body.phone)) {
     showToast("Số điện thoại không hợp lệ!", "error");
     return;
   }
 
   try {
-    const res = await fetch(`${API}/register`, {
-      method: "POST",
+    const res = await fetch(`${API}/complete-profile`, {
+      method: "PUT",
       headers: { "Content-Type": "application/json" },
       credentials: "include",
       body: JSON.stringify(body)
@@ -88,93 +81,18 @@ async function register() {
     const data = await res.json();
 
     if (!res.ok) {
-      showToast(data.msg || "Đăng ký thất bại!", "error");
+      showToast(data.msg || "Cập nhật hồ sơ thất bại!", "error");
       return;
     }
 
-    showToast("Đăng ký thành công! Hãy kiểm tra email để xác minh.", "success");
+    showToast("Cập nhật hồ sơ thành công!", "success");
 
     setTimeout(() => {
-      window.location.href = "login.html";
-    }, 1200);
+      window.location.href = "dashboard.html";
+    }, 800);
 
   } catch {
     showToast("Không thể kết nối server!", "warning");
-  }
-}
-
-
-/* =====================================================
-   FORGOT PASSWORD
-===================================================== */
-async function forgotPassword() {
-  const email = document.getElementById("forgotEmail")?.value.trim();
-
-  if (!email) return showToast("Vui lòng nhập email!", "warning");
-
-  try {
-    const res = await fetch(`${API}/forgot-password`, {
-      method: "POST",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ email })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showToast(data.msg || "Không gửi được email reset!", "error");
-      return;
-    }
-
-    showToast("Đã gửi email đặt lại mật khẩu!", "success");
-
-  } catch {
-    showToast("Không thể kết nối server!", "warning");
-  }
-}
-
-
-/* =====================================================
-   RESET PASSWORD
-===================================================== */
-async function resetPassword() {
-  const url = new URL(window.location.href);
-  const token = url.searchParams.get("token");
-
-  if (!token) {
-    showToast("Link reset mật khẩu không hợp lệ!", "error");
-    return;
-  }
-
-  const password = document.getElementById("newPassword")?.value.trim();
-
-  if (!password) {
-    showToast("Mật khẩu mới không được để trống!", "warning");
-    return;
-  }
-
-  try {
-    const res = await fetch(`${API}/reset-password/${token}`, {
-      method: "PUT",
-      headers: { "Content-Type": "application/json" },
-      credentials: "include",
-      body: JSON.stringify({ password })
-    });
-
-    const data = await res.json();
-
-    if (!res.ok) {
-      showToast(data.msg || "Không thể đặt lại mật khẩu!", "error");
-      return;
-    }
-
-    showToast("Đặt mật khẩu mới thành công!", "success");
-
-    setTimeout(() => window.location.href = "login.html", 1200);
-
-  } catch {
-    showToast("Lỗi kết nối server!", "warning");
   }
 }
 
