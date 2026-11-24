@@ -1,6 +1,7 @@
 # Xuân Tình Nguyện 2026 — Tổng quan hệ thống
 
-Hệ thống đăng ký & tuyển thành viên CLB (khoa Hóa học) — "Xuân Tình Nguyện 2026".
+Hệ thống đăng ký & tuyển tình nguyện viên — "Xuân Tình Nguyện 2026", do Liên chi Hội
+khoa Hóa học tổ chức nhưng **mở cho sinh viên mọi khoa/trường**, không giới hạn khoa Hóa.
 Gồm: đăng ký tài khoản, 2 nhánh ứng tuyển (Hậu cần/địa phương & Truyền thông),
 dashboard admin duyệt hồ sơ, xếp hàng phỏng vấn trực tiếp, phỏng vấn online qua
 Daily.co (video call), upload ảnh 3x4 sau khi đậu, và tính năng feedback sao.
@@ -8,11 +9,13 @@ Daily.co (video call), upload ảnh 3x4 sau khi đậu, và tính năng feedback
 ## 1. Kiến trúc tổng thể
 
 - **Backend**: Node.js + Express 5, MongoDB (Mongoose), Socket.io (real-time), JWT (cookie httpOnly) cho auth.
-- **Đăng nhập**: không còn tài khoản riêng — xác thực qua hệ thống **SV5T** (Hành trình cùng nhau 5 Tốt, `cungnhau5tot.id.vn`) bằng API server-to-server.
+- **Đăng nhập**: đăng ký thủ công (email+password, mọi khoa/trường) là luồng chính; đăng nhập nhanh qua
+  **SV5T** (Hành trình cùng nhau 5 Tốt, `cungnhau5tot.id.vn`) là **tùy chọn**, chỉ áp dụng được cho sinh viên khoa Hóa vì đó là phạm vi của SV5T — xem mục 1b.
 - **Frontend**: HTML/CSS/JS thuần, phục vụ tĩnh từ `public/`.
 - **PDF export**: Puppeteer render HTML template (`templates/`) ra PDF.
 - **Ảnh 3x4**: Multer (nhận upload) + Sharp (resize/crop 300x400).
 - **Video call**: Daily.co REST API tạo room, Socket.io báo realtime "có người gọi"/"kết thúc".
+- **Email**: Mailtrap API (xác minh email đăng ký, quên mật khẩu) — chỉ dùng cho luồng đăng ký thủ công.
 
 ```
 server.js
@@ -21,29 +24,40 @@ server.js
 ├─ controllers/   logic xử lý
 ├─ models/        schema Mongoose
 ├─ middleware/    auth, admin-only, upload ảnh 3x4
-├─ utils/         JWT, gọi API SV5T, Daily.co
+├─ utils/         JWT, gửi email, gọi API SV5T, Daily.co
 ├─ templates/     HTML dùng để render PDF
 └─ public/        toàn bộ frontend (login, dashboard, admin, tracker...)
 ```
 
-## 1b. Đăng nhập qua SV5T (OAuth redirect, kiểu "Đăng nhập bằng Google/Zalo")
+## 1b. Hai cách đăng nhập: đăng ký thủ công (mặc định) + SV5T (tùy chọn, chỉ khoa Hóa)
 
-- App này **không bao giờ nhận mật khẩu SV5T**. `login.html`/`admin-login.html` chỉ có 1 nút → redirect thẳng sang trang đăng nhập thật của SV5T (`student.html` / `admin.html` trên `cungnhau5tot.id.vn`), kèm `redirect_uri` (= `oauth-callback.html` của app này) và `state` (random, chống CSRF, lưu tạm ở `sessionStorage`).
+**Quan trọng:** XTN dành cho sinh viên mọi khoa/trường, còn SV5T chỉ quản lý sinh viên khoa Hóa.
+Vì vậy KHÔNG thể bắt buộc đăng nhập qua SV5T — nó chỉ là một lối tắt tiện lợi cho đúng nhóm
+sinh viên khoa Hóa đã có tài khoản SV5T; mọi sinh viên khác bắt buộc dùng đăng ký thủ công.
+
+**A. Đăng ký thủ công (`register.html` → `login.html`, mọi khoa/trường)**
+- `POST /api/auth/register`: nhận `fullName, className, faculty, university, studentId, email, phone, password` (bcrypt hash), set `profileCompleted: true` ngay (đã đủ email/phone), gửi email xác minh qua Mailtrap tới `verified-email.html`.
+- `POST /api/auth/login`: email + password, yêu cầu `isVerified = true`.
+- `POST /api/auth/forgot-password` + `PUT /api/auth/reset-password/:token`: luồng quên mật khẩu qua email (`forgot.html`/`reset.html`).
+
+**B. Đăng nhập nhanh qua SV5T (tùy chọn, nút trên `login.html`/`admin-login.html`, chỉ khoa Hóa)**
+- Kiểu "Đăng nhập bằng Google/Zalo" — app này **không bao giờ nhận mật khẩu SV5T**. Nút redirect sang trang đăng nhập thật của SV5T (`student.html`/`admin.html` trên `cungnhau5tot.id.vn`), kèm `redirect_uri` (= `oauth-callback.html` của app này) và `state` (random, chống CSRF, lưu tạm ở `sessionStorage`).
 - User đăng nhập trên chính domain SV5T. Thành công → SV5T cấp 1 **authorization code** ngắn hạn (60s, dùng 1 lần, lưu in-memory phía SV5T — `Utils/oauthStore.js`) rồi redirect về `redirect_uri?code=...&state=...`.
-- `oauth-callback.html` kiểm tra `state` khớp với giá trị đã lưu, rồi gọi `POST /api/auth/oauth-callback` với `{code}`.
+- `oauth-callback.html` kiểm tra `state` khớp, gọi `POST /api/auth/oauth-callback` với `{code}`.
 - Backend đổi code lấy thông tin tài khoản bằng `POST <SV5T_API_URL>/api/integration/oauth/token` (server-to-server, header `x-integration-key: SV5T_INTEGRATION_SECRET`, phải khớp `INTEGRATION_SECRET` bên SV5T). Response cho biết `type: "student"|"admin"` kèm dữ liệu tương ứng.
-- Nếu `type: "student"`: tự tạo (lần đầu) hoặc đồng bộ lại `fullName`/`className` cho `User` theo `studentId`.
-- Nếu `type: "admin"`: tự tạo/promote `User` theo `username` (không phải `studentId`) với `role: "admin"` ngay lập tức, không cần set tay trong DB.
-- Phía SV5T, `redirect_uri` được kiểm tra qua whitelist env `OAUTH_ALLOWED_REDIRECTS` (chặn open-redirect) trước khi cấp code — xem `Routes/oauthRoutes.js` (cấp code, yêu cầu đã đăng nhập session SV5T) và `Routes/integrationRoutes.js` (đổi code, server-to-server).
-- Nếu `User.profileCompleted = false` (chưa có email/phone — SV5T không có 2 field này) → frontend chuyển sang `complete-profile.html` để điền bổ sung trước khi vào dashboard.
-- `User.studentId` và `User.username` đều `unique+sparse` — participant có `studentId`, admin có `username`, không trùng nhau.
-- Các trang/route cũ (`register.html`, `forgot.html`, `reset.html`, `verified-email.html`, email xác minh qua Mailtrap, và cơ chế password-forwarding `verify-student`/`verify-admin` cũ) đã bị xoá bỏ hoàn toàn.
+- `type: "student"` → tự tạo/đồng bộ `fullName`/`className` cho `User` theo `studentId`. `type: "admin"` → tự tạo/promote `User` theo `username` với `role: "admin"` ngay lập tức.
+- Phía SV5T, `redirect_uri` được kiểm tra qua whitelist env `OAUTH_ALLOWED_REDIRECTS` (chặn open-redirect) — xem `Routes/oauthRoutes.js` (cấp code) và `Routes/integrationRoutes.js` (đổi code).
+- Tài khoản vào qua SV5T chưa có email/phone (`profileCompleted: false`) → chuyển sang `complete-profile.html` để bổ sung trước khi vào dashboard.
+
+**Chung cho cả 2 luồng:**
+- `User.email/phone` (đăng ký thủ công) và `User.studentId/username` (SV5T) đều `unique+sparse` — một `User` chỉ có 1 trong 2 bộ định danh tùy theo cách đăng nhập, không bắt buộc có cả 2.
+- 2 luồng tạo ra các `User` document độc lập (không tự động liên kết) — một sinh viên khoa Hóa đăng ký thủ công rồi sau đó đăng nhập qua SV5T sẽ có 2 tài khoản riêng nếu dùng email khác MSSV.
 
 ## 2. Luồng người dùng (candidate)
 
-1. **Đăng nhập** (`login.html`) bằng MSSV + mật khẩu tài khoản SV5T → JWT lưu cookie.
-2. **Lần đầu đăng nhập** (chưa có email/phone): chuyển sang `complete-profile.html` để bổ sung email, phone, khoa, trường.
-3. **Dashboard** (`dashboard.html`):
+1. **Đăng ký** (`register.html`, mọi khoa/trường) → xác minh email → **đăng nhập** (`login.html`) bằng email+password → JWT lưu cookie.
+   - Riêng sinh viên khoa Hóa có thêm lựa chọn **đăng nhập nhanh qua SV5T** (nút trên `login.html`) — vào thẳng, không cần đăng ký trước; nếu chưa có email/phone sẽ được yêu cầu bổ sung ở `complete-profile.html`.
+2. **Dashboard** (`dashboard.html`):
    - Điền hồ sơ ứng tuyển **Hậu cần** (nv1–nv6: nguyện vọng xếp hạng, kỹ năng, size áo, xe/license, sức khỏe...).
    - Điền hồ sơ ứng tuyển **Truyền thông** (vai trò: Tư liệu/Thiết kế/Content, địa điểm team).
    - Theo dõi trạng thái hồ sơ, kết quả phỏng vấn.
@@ -69,8 +83,13 @@ server.js
 ### `/api/auth`
 | Method | Path | Mô tả |
 |---|---|---|
-| POST | `/oauth-callback` | Đổi authorization code (redirect từ SV5T) ra session — set cookie JWT |
-| PUT | `/complete-profile` | Bổ sung email/phone/faculty/university lần đầu đăng nhập *(auth)* |
+| POST | `/register` | Đăng ký thủ công (mọi khoa/trường), gửi email xác minh |
+| GET | `/verify-email/:token` | Xác minh email |
+| POST | `/login` | Đăng nhập email+password, set cookie JWT |
+| POST | `/forgot-password` | Gửi email đặt lại mật khẩu |
+| PUT | `/reset-password/:token` | Đặt mật khẩu mới |
+| POST | `/oauth-callback` | Đổi authorization code (redirect từ SV5T, tùy chọn — khoa Hóa) ra session — set cookie JWT |
+| PUT | `/complete-profile` | Bổ sung email/phone/faculty/university (cho tài khoản vào qua SV5T) *(auth)* |
 | POST | `/logout` | Xoá cookie |
 | GET | `/me` | Lấy thông tin user hiện tại *(auth)* |
 
@@ -124,7 +143,7 @@ server.js
 
 ## 5. Data models (MongoDB)
 
-**User**: `fullName, className` (đồng bộ từ SV5T mỗi lần đăng nhập, participant), `faculty, university, studentId(unique, sparse — participant), username(unique, sparse — admin), email(unique, sparse), phone(unique, sparse), profileCompleted, role(participant|admin), photo3x4`
+**User**: `fullName, className, faculty, university` — `email(unique, sparse), phone(unique, sparse), password(hash), isVerified` (đăng ký thủ công) — `studentId(unique, sparse), username(unique, sparse — admin)` (đồng bộ từ SV5T mỗi lần đăng nhập qua SV5T) — `profileCompleted, role(participant|admin), photo3x4, resetPasswordToken/Expire, verifyEmailToken/Expire`
 *(không còn lưu password — xác thực uỷ quyền hoàn toàn cho SV5T)*
 
 **Registration** (Hậu cần, unique theo `userId`):
@@ -140,10 +159,13 @@ server.js
 
 | File | Vai trò |
 |---|---|
-| `login.html` | Nút redirect sang SV5T đăng nhập participant (OAuth) |
-| `admin-login.html` | Nút redirect sang SV5T đăng nhập admin (OAuth) |
+| `login.html` | Đăng nhập email+password + nút tùy chọn "Đăng nhập nhanh bằng SV5T" |
+| `register.html` | Đăng ký tài khoản thủ công (mọi khoa/trường) |
+| `forgot.html` / `reset.html` | Quên / đặt lại mật khẩu |
+| `verified-email.html` | Trang xác nhận đã verify email |
+| `admin-login.html` | Nút redirect sang SV5T đăng nhập admin (OAuth, tùy chọn — khoa Hóa) |
 | `oauth-callback.html` | Nhận `code` từ SV5T, đổi lấy session của app này |
-| `complete-profile.html` | Bổ sung email/phone/khoa/trường lần đầu đăng nhập |
+| `complete-profile.html` | Bổ sung email/phone/khoa/trường (cho tài khoản vào qua SV5T) |
 | `dashboard.html` | Trang chính của ứng viên: hồ sơ, nộp đơn, feedback |
 | `admin-dashboard.html` | Toàn bộ công cụ quản trị |
 | `online-interview-room.html` | Phòng phỏng vấn video (Daily.co) |
@@ -159,6 +181,7 @@ server.js
 - **`config/adminAvatar.js` là dead code** — mapping email→avatar admin bị trùng lặp viết thẳng trong `public/admin-dashboard.js` thay vì dùng file config này.
 - **Socket.io** chỉ dùng cho báo hiệu phỏng vấn online (`interview:calling`, `interview:ended`), không dùng cho chat hay cập nhật hàng đợi real-time.
 - **PDF xuất bằng Puppeteer** (headless Chrome) render HTML có nhúng font tiếng Việt base64, không dùng thư viện PDF riêng — cần Chromium khi deploy (xem `render.yaml`).
+- **2 luồng đăng nhập tạo `User` độc lập, không tự liên kết**: một sinh viên khoa Hóa đăng ký thủ công (email X) rồi sau đó bấm "Đăng nhập nhanh bằng SV5T" sẽ có 2 tài khoản khác nhau trong DB (trừ khi chủ động không dùng SV5T, hoặc về sau có cơ chế liên kết tài khoản).
 
 ## 8. Biến môi trường cần thiết
 
@@ -166,7 +189,9 @@ server.js
 |---|---|
 | `MONGO_URI` | Kết nối MongoDB Atlas |
 | `JWT_SECRET` | Ký/verify JWT |
-| `SV5T_API_URL` | Base URL hệ thống SV5T (vd `https://cungnhau5tot.id.vn`) để gọi API xác thực đăng nhập |
+| `MAILTRAP_TOKEN`, `FROM_EMAIL` | Gửi email xác minh / quên mật khẩu (đăng ký thủ công) |
+| `CLIENT_URL` | URL frontend, dùng trong link email xác minh/reset |
+| `SV5T_API_URL` | Base URL hệ thống SV5T (vd `https://cungnhau5tot.id.vn`) — cho đăng nhập nhanh tùy chọn (chỉ khoa Hóa) |
 | `SV5T_INTEGRATION_SECRET` | Secret dùng chung với `INTEGRATION_SECRET` bên SV5T — phải khớp giá trị |
 | `DAILY_API_KEY` | Tạo phòng video call Daily.co |
 | `REGISTRATION_CLOSED` | Đóng/mở nhận đăng ký mới *(hiện bị override cứng ở 1 endpoint — xem mục 7)* |

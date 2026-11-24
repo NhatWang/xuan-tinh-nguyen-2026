@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>ĐĂNG KÝ</title>
+  <link rel="stylesheet" href="style.css">
+  <script src="app.js" defer></script>
+  <!-- Favicon for all devices -->
+    <link rel="icon" type="image/png" sizes="16x16" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="32x32" href="/images/favicon.png">
+    <link rel="icon" type="image/png" sizes="48x48" href="/images/favicon.png">
+
+    <!-- For iPhone/iPad (Home screen icon) -->
+    <link rel="apple-touch-icon" href="/images/favicon.png">
+
+    <!-- For Android Chrome -->
+    <link rel="manifest" href="/manifest.json">
+
+    <!-- Theme color for mobile browsers -->
+    <meta name="theme-color" content="#8b5a2b">
+</head>
+
+<body>
+  <div class="main-wrapper">
+  <img src="images/typo.png" alt="Title" class="login-title-img">
+  <div class="container">
+    <h2>ĐĂNG KÝ</h2>
+    <div class="input-group">
+      <input id="fullName" placeholder="Họ và tên">
+    </div>
+    <div class="input-group">
+      <input id="className" placeholder="Lớp">
+    </div>
+    <div class="input-group">
+      <input id="faculty" placeholder="Khoa">
+    </div>
+    <div class="input-group">
+      <input id="university" placeholder="Trường">
+    </div>
+    <div class="input-group">
+      <input id="studentId" placeholder="Mã số sinh viên">
+    </div>
+    <div class="input-group">
+      <input id="email" placeholder="Email">
+    </div>
+    <div class="input-group">
+    <input type="text" id="phone" placeholder="Số điện thoại">
+    </div>
+    <div class="input-group">
+      <div class="input-group password-wrapper">
+        <input id="password" type="password" placeholder="Mật khẩu">
+        <span class="toggle-password" data-target="password" onclick="togglePassword(this)">
+          <img id="passwordIcon" src="icons/eye-slash.svg" alt="toggle">
+        </span>
+      </div>
+    </div>
+
+    <button onclick="register()">ĐĂNG KÝ</button>
+
+    <br>
+    <a class="link" href="login.html">Đã có tài khoản?</a>
+  </div>
+  </div>
+  <div id="toast"></div>
+
+  <footer class="footer">
+    <strong>© 2025 Liên chi Hội khoa Hoá học,<br>
+    Trường Đại học Khoa học tự nhiên, ĐHQG-HCM</strong>
+  </footer>
+</body>
+</html>

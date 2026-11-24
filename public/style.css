@@ -124,6 +124,39 @@ button:hover {
   color: #cc7e22 !important;
 }
 
+/* ===== DIVIDER "HOẶC" ===== */
+.divider-or {
+  display: flex;
+  align-items: center;
+  text-align: center;
+  color: #a86b1f;
+  font-size: 13px;
+  margin: 20px 0 10px;
+}
+
+.divider-or::before,
+.divider-or::after {
+  content: "";
+  flex: 1;
+  border-bottom: 1px solid #e0c08f;
+}
+
+.divider-or::before { margin-right: 10px; }
+.divider-or::after { margin-left: 10px; }
+
+/* ===== NÚT PHỤ (vd đăng nhập nhanh qua SV5T) ===== */
+button.btn-secondary {
+  background: #ffffff;
+  color: #a86b1f;
+  border: 1.5px solid #d99227;
+}
+
+button.btn-secondary:hover {
+  background: #fff6e9;
+  transform: translateY(-2px);
+  box-shadow: none;
+}
+
 /* ===== PASSWORD TOGGLE ===== */
 .password-wrapper {
   position: relative;
